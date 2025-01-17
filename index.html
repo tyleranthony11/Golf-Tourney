@@ -3,9 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terra Nova Annual Golf Tournament</title>
+    <title>Golf Tournament App</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <main>
+    <header>
+    <div class="topnav">
+        <a class="active" href="#home" onclick="switchTab('home', event)">Home</a>
+        <a href="#handicap-calculator" onclick="switchTab('handicap-calculator', event)">Handicap Calculator</a>
+        <a href="#rankings" onclick="switchTab('rankings', event)">Rankings</a>
+        <a href="#scorecard" onclick="switchTab('scorecard', event)">Scorecard</a>
+        <a href="#history" onclick="switchTab('history', event)">History</a>
+    </div>
+    </header>
+   
+    <section>
+   <div id="home" class="tab tab-active">
+    <h1>Welcome to the Golf Tournament App</h1> <!--add image--> 
+    <p>This app allows you to track your rounds, calculate your handicap and create tournaments for you and your friends. </p>
+   </div>
+   </section>
+
+   <section>
+   <div id="handicap-calculator" class="tab">
+    <h1>Handicap Calculator</h1>
+    <p>Calculate your handicap by posting scores from your rounds.</p>
+    <button id="post-score-btn">Post Score</button>
+
+    <div id="post-score-form" style="display: none;">
+        <h2>Enter Round Information</h2>
+        <div class="round-info-container">
+        <form id="score-form">
+            <div>
+                <strong><label for="golfer">Golfer Name:</label></strong>
+                <input type="text" id="golfer" placeholder="Enter Golfer Name" required>
+            </div><br>
+            <div>
+                <strong><label for="date-played">Date Played:</label></strong>
+                <input type="date" id="date-played">
+            </div><br>
+            <div>
+                <strong><label for="course">Course:</label></strong>
+                <select id="course" name="course" required>
+                    <option value="">Select a Course</option>
+                    <option value="grandFallsGolfClub">Grand Falls Golf Club</option>
+                    <option value="terraNovaTwinRivers">Terra Nova Golf Resort - Twin Rivers</option>
+                </select>
+            </div><br>
+            <div>
+                <strong><label for="tees">Tees:</label></strong>
+                <select id="tees" name="tees" required>
+                    <option value="">Select Tees</option>
+                </select>
+            </div><br>
+            <div>
+                <strong><label for="holes">Holes:</label></strong>
+                <select id="holes" name="holes" required>
+                    <option value="">Select Holes Played</option>
+                    <option value="18">18 Holes</option>
+                    <option value="front9">Front 9</option>
+                    <option value="back9">Back 9</option>
+                </select>
+            </div><br>
+            <div>
+                <strong><label for="score">Score:</label></strong>
+                <input type="number" id="score" min="0" max="1000" placeholder="Enter Score" required>
+            </div>
+        </form>
+        </div>
+
+    </div>
+   </section>
+
+   <section>
+   <div id="rankings" class="tab">
+    <h1>Rankings</h1>
+    <p>Here are the current handicap ratings for all players</p>
+   </div>
+   </section>
+
+   <section>
+   <div id="scorecard" class="tab">
+    <h1>Scorecard</h1>
+    <div class="scorecard-container">
+
+    </div>
+   </div>
+   </section>
+
+   <section>
+   <div id="history" class="tab">
+    <h1>History</h1>
+    <p>Here is where history content will be stored</p>
+   </div>
+   </section>
+   
+   
     
+    </main>
+    <script src="script.js"></script>
 </body>
 </html>
