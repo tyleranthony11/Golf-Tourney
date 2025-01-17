@@ -43,3 +43,17 @@ function updateDropdown(){
 courseDropdown.addEventListener("change", updateDropdown);
 
 
+    const postScoreBtn = document.getElementById("post-score-btn");
+    const postScoreForm =  document.getElementById("post-score-form");
+
+    postScoreBtn.addEventListener("click", () => {
+        if (postScoreForm.style.display === "none") {
+            postScoreForm.style.display = "block";
+            postScoreBtn.textContent = "Cancel"
+        } else {
+            postScoreForm.style.display = "none";
+            postScoreBtn.textContent = "Post Score"
+        }
+    });
+
+    
