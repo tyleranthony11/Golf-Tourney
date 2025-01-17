@@ -36,8 +36,8 @@
         <div class="round-info-container">
         <form id="score-form">
             <div>
-                <strong><label for="golfer">Golfer Name:</label></strong>
-                <input type="text" id="golfer" placeholder="Enter Golfer Name" required>
+                <strong><label for="golfer-name">Golfer Name:</label></strong>
+                <input type="text" id="golfer-name" placeholder="Enter Golfer Name" required>
             </div><br>
             <div>
                 <strong><label for="date-played">Date Played:</label></strong>
@@ -49,6 +49,12 @@
                     <option value="">Select a Course</option>
                     <option value="grandFallsGolfClub">Grand Falls Golf Club</option>
                     <option value="terraNovaTwinRivers">Terra Nova Golf Resort - Twin Rivers</option>
+                    <option value="terraNovaEagleCreek">Terra Nova Golf Resort - Eagle Creek</option>
+                    <option value="ganderGolfClub">Gander Golf Club</option>
+                    <option value="humberValleyResort">Humber Valley Resort</option>
+                    <option value="glenDenning">GlenDenning</option>
+                    <option value="ballyHalyCountryClubNorth">Bally Haly Country Club - North</option>
+                    <option value="ballyHalyCountryClubSouth">Bally Haly Country Club - South</option>
                 </select>
             </div><br>
             <div>
@@ -69,11 +75,21 @@
             <div>
                 <strong><label for="score">Score:</label></strong>
                 <input type="number" id="score" min="0" max="1000" placeholder="Enter Score" required>
-            </div>
+            </div><br>
+            <button type="submit-round-btn">Submit Round</button>
+
         </form>
         </div>
 
+    </div><br>
+
+    <div id="rounds-display">
+        <h2>Recent Rounds:</h2>
+        <ul id="rounds-list">
+
+        </ul>
     </div>
+
    </section>
 
    <section>
