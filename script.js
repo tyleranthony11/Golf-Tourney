@@ -1,7 +1,6 @@
 function switchTab (tabName, event){
     event.preventDefault();
 
-    console.log("Switching to tab:", tabName);
 
     const tabs = document.querySelectorAll(".tab");
     tabs.forEach(tab => {
@@ -15,7 +14,6 @@ function switchTab (tabName, event){
 
     const selectedTab = document.getElementById(tabName);
     if (selectedTab) {
-        console.log("Activating tab:", selectedTab);
         selectedTab.classList.add("tab-active");
     }
 
@@ -87,8 +85,22 @@ const courseData = {
           
         }
     },
+    pippyParkAdmiralsGreen: {
+        tees: {
+            Red: {yardage: 4220, par: 65, courseRating: 62.8, slopeRating: 97},
+            "Silver/Red": {yardage: 4628, par: 66, courseRating: 64.1, slopeRating: 98},
+            Silver: {yardage: 5042, par: 68, courseRating: 65.6, slopeRating: 106},
+            "Gold/Silver": {yardage: 5439, par: 71, courseRating: 67.5, slopeRating: 113},
+            Gold: {yardage: 5784, par: 71, courseRating: 120, slopeRating: 120},
+            Black: {yardage: 6263, par: 71, courseRating: 71.4, slopeRating: 125},
+        }
+    }
     
 };
+
+const golferNameDropdown = document.getElementById("golfer-name");
+const newGolferInput = document.getElementById("new-golfer")
+
 
 
 function updateDropdown(){
@@ -133,20 +145,13 @@ courseDropdown.addEventListener("change", updateDropdown);
         const golferName = document.getElementById("golfer-name").value;
         const datePlayed = document.getElementById("date-played").value;
         const course = document.getElementById("course").options[document.getElementById("course").selectedIndex].text;
-        const tees = document.getElementById("tees").options[document.getElementById("tees").selectedIndex].text;
+        const tees = document.getElementById("tees").value.charAt(0).toUpperCase() + document.getElementById("tees").value.slice(1);
         const holes = document.getElementById("holes").value;
         const score = Number(document.getElementById("score").value);
-
-        const round = {
-            golferName,
-            datePlayed,
-            course,
-            tees,
-            holes,
-            score,
-        };
-        rounds.push(round);
-        
+        const courseKey = document.getElementById("course").value;
+        const selectedCourseData = courseData[courseKey];
+        const selectedTeeData = selectedCourseData.tees[tees];
+        const strokesAbovePar = score - selectedTeeData.par;
 
         const roundItem = document.createElement("li");
         roundItem.innerHTML = `
@@ -155,11 +160,29 @@ courseDropdown.addEventListener("change", updateDropdown);
             <strong>Course:</strong> ${course}<br>
             <strong>Tees:</strong> ${tees}<br>
             <strong>Holes Played:</strong> ${holes}<br>
-            <strong>Score:</strong> ${score}`;
+            <strong>Score:</strong> ${score} (${strokesAbovePar >= 0 ? "+" : ""}${strokesAbovePar})`;
         
             roundsList.appendChild(roundItem);
             scoreForm.reset();
+
+            const round = {
+                golferName,
+                datePlayed,
+                course,
+                tees,
+                holes,
+                score,
+            };
+            rounds.push(round);
     });
+
+    
+
+    
+
+
+   
+    
 
 
   
