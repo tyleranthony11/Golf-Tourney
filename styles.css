@@ -58,3 +58,8 @@ body {
     cursor: pointer;
     
 }
+
+#rounds-display {
+    text-align: left;
+    padding-left: 10px;
+}
