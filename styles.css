@@ -48,11 +48,6 @@ body {
     margin-right: auto;
 }
 
-.round-info-container {
-    border: 2px solid black;
-    padding: 10px;
-    
-}
 
 #post-score-btn:hover {
     cursor: pointer;
@@ -62,4 +57,114 @@ body {
 #rounds-display {
     text-align: left;
     padding-left: 10px;
+}
+
+#handicap-calculator {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    text-align: left;
+}
+
+#handicap-calculator h1 {
+    color: #000000;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#handicap-calculator p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#post-score-btn {
+    display: block;
+    margin: 10px auto 20px;
+    background-color: #04AA6D;
+    color: white;
+    padding 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+#post-score-btn:hover {
+    background-color: #037a4d;
+}
+
+#post-score-form {
+    margin-top: 20px;
+}
+
+#score-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#score-form div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#score-form label {
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+}
+
+#score-form button {
+    background-color: #04AA6D;
+    color: white;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    align-self: center;
+}
+
+#score-form button:hover {
+    background-color: #037a4d;
+}
+
+#rounds-display {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 2px solid #04AA6D;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    text-align: left;
+}
+
+#rounds-display h2 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+#rounds-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#rounds-list li {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    line-height: 1.6;
 }

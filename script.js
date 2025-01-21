@@ -98,8 +98,8 @@ const courseData = {
     
 };
 
-const golferNameDropdown = document.getElementById("golfer-name");
-const newGolferInput = document.getElementById("new-golfer")
+/*const golferNameDropdown = document.getElementById("golfer-name");
+const newGolferInput = document.getElementById("new-golfer") */
 
 
 
