@@ -50,8 +50,8 @@ const courseData = {
     ballyHalyCountryClubNorth: { 
         tees: {
             Silver: {yardage: 2826, par: 61, courseRating: 56.4, slopeRating: 83}, 
-            Blue: {yardage: 5662, par: 70, courseRating: 58.1, slopeRating: 85},
-            Black: {yardage: 6137, par: 70, courseRating: 59.3, slopeRating: 94}
+            Blue: {yardage: 5662, par: 61, courseRating: 58.1, slopeRating: 85},
+            Black: {yardage: 6137, par: 61, courseRating: 59.3, slopeRating: 94}
         }
     },
     ballyHalyCountryClubSouth: { 
@@ -98,12 +98,48 @@ const courseData = {
     
 };
 
-/*const golferNameDropdown = document.getElementById("golfer-name");
-const newGolferInput = document.getElementById("new-golfer") */
+const golferSelect = document.getElementById("golfer-name-dropdown");
+const addGolferBtn = document.getElementById("add-golfer-btn");
+const roundsList = document.getElementById("rounds-list");
+const scoreForm = document.getElementById("score-form");
+const newGolferInput = document.getElementById("new-golfer-input");
+const submitNewGolferBtn = document.getElementById("submit-new-golfer");
+const newGolferNameInput = document.getElementById("new-golfer-name");
+const rounds = [];
+const golfers = [];
 
 
 
-function updateDropdown(){
+function updateGolferDropdown(){
+    golferSelect.innerHTML = '<option value="">Select Golfer</option>';
+    golfers.forEach(golfer => {
+        const option = document.createElement("option");
+        option.value = golfer;
+        option.textContent = golfer;
+        golferSelect.appendChild(option);
+    });
+}
+
+function addGolfer(golferName) {
+    golfers.push(golferName);
+    updateGolferDropdown();
+}
+
+addGolferBtn.addEventListener("click", () => {
+   newGolferInput.style.display = "block";
+})
+
+submitNewGolferBtn.addEventListener("click", () => {
+    const golferName = newGolferNameInput.value;
+    if(golferName) {
+        addGolfer(golferName);
+        newGolferInput.value = "";
+        newGolferInput.style.display = "none";
+    }
+})
+
+
+function updateTeesDropdown(){
     teesDropdown.innerHTML = "<option value=''>Select Tees Played </option>";
     const selectedCourse = courseDropdown.value; 
 
@@ -120,11 +156,11 @@ function updateDropdown(){
     }
 }
 
-courseDropdown.addEventListener("change", updateDropdown);
+courseDropdown.addEventListener("change", updateTeesDropdown);
 
 
-    const postScoreBtn = document.getElementById("post-score-btn");
-    const postScoreForm =  document.getElementById("post-score-form");
+const postScoreBtn = document.getElementById("post-score-btn");
+const postScoreForm =  document.getElementById("post-score-form");
 
     postScoreBtn.addEventListener("click", () => {
         if (postScoreForm.style.display === "none") {
@@ -136,13 +172,12 @@ courseDropdown.addEventListener("change", updateDropdown);
         }
     });
 
-    const roundsList = document.getElementById("rounds-list");
-    const scoreForm = document.getElementById("score-form");
-    const rounds = [];
+    
+    
 
     scoreForm.addEventListener("submit", (event) => {
         event.preventDefault();
-        const golferName = document.getElementById("golfer-name").value;
+        const golferName = document.getElementById("golfer-name-dropdown").value;
         const datePlayed = document.getElementById("date-played").value;
         const course = document.getElementById("course").options[document.getElementById("course").selectedIndex].text;
         const tees = document.getElementById("tees").value.charAt(0).toUpperCase() + document.getElementById("tees").value.slice(1);
@@ -163,7 +198,12 @@ courseDropdown.addEventListener("change", updateDropdown);
             <strong>Score:</strong> ${score} (${strokesAbovePar >= 0 ? "+" : ""}${strokesAbovePar})`;
         
             roundsList.appendChild(roundItem);
-            scoreForm.reset();
+
+            const roundsDisplay = document.getElementById("rounds-display");
+            if (roundsDisplay.style.display === "none") {
+                roundsDisplay.style.display = "block";
+            }           
+           
 
             const round = {
                 golferName,
@@ -174,6 +214,8 @@ courseDropdown.addEventListener("change", updateDropdown);
                 score,
             };
             rounds.push(round);
+
+            scoreForm.reset();
     });
 
     

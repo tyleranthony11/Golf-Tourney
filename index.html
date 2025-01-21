@@ -35,10 +35,19 @@
         <h2>Enter Round Information</h2>
         <div class="round-info-container">
         <form id="score-form">
+            <div id="new-golfer-input" style="display: none;">
+                <label for="new-golfer-input">Enter New Golfer Name:</label>
+                <input type="text" id="new-golfer-name" placeholder="Enter Golfer Name">
+                <button id="submit-new-golfer">Add Golfer</button>
+            </div>
             <div>
-                <strong><label for="golfer-name">Golfer Name:</label></strong> <!--add dropdown functionality-->
-                <input type="text" id="golfer-name" placeholder="Enter Golfer Name" required>
-            </div><br>
+                <button id="add-golfer-btn">Add New Golfer</button>
+                <select id="golfer-name-dropdown">
+                    <option value="">Select Golfer</option>
+                </select>
+            </div>
+           
+            <br>
             <div>
                 <strong><label for="date-played">Date Played:</label></strong>
                 <input type="date" id="date-played">
@@ -76,7 +85,7 @@
                 <strong><label for="score">Score:</label></strong>
                 <input type="number" id="score" min="0" max="1000" placeholder="Enter Score" required>
             </div><br>
-            <button type="submit-round-btn">Submit Round</button>
+            <button type="submit">Submit Round</button>
 
         </form>
         </div>
