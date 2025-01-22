@@ -47,14 +47,14 @@ const courseData = {
             Blue: {yardage: 6137, par: 70, courseRating: 71.2, slopeRating: 136}
         }
     },
-    ballyHalyCountryClubNorth: { 
+    ballyHallyCountryClubNorth: { 
         tees: {
             Silver: {yardage: 2826, par: 61, courseRating: 56.4, slopeRating: 83}, 
             Blue: {yardage: 5662, par: 61, courseRating: 58.1, slopeRating: 85},
             Black: {yardage: 6137, par: 61, courseRating: 59.3, slopeRating: 94}
         }
     },
-    ballyHalyCountryClubSouth: { 
+    ballyHallyCountryClubSouth: { 
         tees: {
             Silver: {yardage: 5082, par: 72, courseRating: 66.4, slopeRating: 105}, 
             "Green/Silver": {yardage: 5339, par: 72, courseRating: 67.5, slopeRating: 109}, 
@@ -105,18 +105,10 @@ const scoreForm = document.getElementById("score-form");
 const newGolferInput = document.getElementById("new-golfer-input");
 const submitNewGolferBtn = document.getElementById("submit-new-golfer");
 const newGolferNameInput = document.getElementById("new-golfer-name");
-const rounds = [
-    {golferName: "Tyler Anthony", score: 93, course: "grandFallsGolfClub", tees: "White", datePlayed: "2024-08-08"},
-    {golferName: "Tyler Anthony", score: 91, course: "grandFallsGolfClub", tees: "White", datePlayed: "2024-08-09"},
-    {golferName: "Tyler Anthony", score: 91, course: "grandFallsGolfClub", tees: "White", datePlayed: "2024-08-10"},
-    {golferName: "Tyler Anthony", score: 92, course: "grandFallsGolfClub", tees: "White", datePlayed: "2024-08-10"},
-    {golferName: "Tyler Anthony", score: 92, course: "grandFallsGolfClub", tees: "White", datePlayed: "2024-08-10"},
-    {golferName: "Tyler Anthony", score: 89, course: "grandFallsGolfClub", tees: "White", datePlayed: "2024-08-10"},
-    {golferName: "Tyler Anthony", score: 90, course: "grandFallsGolfClub", tees: "White", datePlayed: "2024-08-10"},
-    {golferName: "Tyler Anthony", score: 93, course: "grandFallsGolfClub", tees: "White", datePlayed: "2024-08-10"}
+const rounds = [];
 
-];
 const golfers = [];
+
 
 
 
@@ -189,7 +181,7 @@ const postScoreForm =  document.getElementById("post-score-form");
         event.preventDefault();
         const golferName = document.getElementById("golfer-name-dropdown").value;
         const datePlayed = document.getElementById("date-played").value;
-        const course = document.getElementById("course").options[document.getElementById("course").selectedIndex].text;
+        const course = document.getElementById("course").value;
         const tees = document.getElementById("tees").value.charAt(0).toUpperCase() + document.getElementById("tees").value.slice(1);
         const holes = document.getElementById("holes").value;
         const score = Number(document.getElementById("score").value);
@@ -215,7 +207,7 @@ const postScoreForm =  document.getElementById("post-score-form");
             }           
            
 
-            /*const round = {
+            const round = {
                 golferName,
                 datePlayed,
                 course,
@@ -224,8 +216,12 @@ const postScoreForm =  document.getElementById("post-score-form");
                 score,
             };
             rounds.push(round);
+            const golferHandicap = calculateHandicap(golferName);
+            const handicapDisplay = document.getElementById("handicap-display");
+            handicapDisplay.innerText = `Handicap for ${golferName}: ${golferHandicap}`;
+            
 
-            scoreForm.reset();*/
+            scoreForm.reset();
     });
 
 
@@ -256,10 +252,7 @@ const postScoreForm =  document.getElementById("post-score-form");
         
     }
 
-    const golferName = "Tyler Anthony";
-    const handicap = calculateHandicap(golferName);
 
-    console.log(`Handicap for ${golferName}: ${handicap}`);
     
    
     
