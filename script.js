@@ -19,12 +19,9 @@ function switchTab (tabName, event){
 
     const selectedLink = event.target;
     selectedLink.classList.add("active");
-
-
 }
 
-const courseDropdown = document.getElementById("course");
-const teesDropdown = document.getElementById("tees");
+
 const courseData = {
     grandFallsGolfClub: { 
         tees: {
@@ -47,14 +44,14 @@ const courseData = {
             Blue: {yardage: 6137, par: 70, courseRating: 71.2, slopeRating: 136}
         }
     },
-    ballyHallyCountryClubNorth: { 
+    ballyHalyCountryClubNorth: { 
         tees: {
             Silver: {yardage: 2826, par: 61, courseRating: 56.4, slopeRating: 83}, 
             Blue: {yardage: 5662, par: 61, courseRating: 58.1, slopeRating: 85},
             Black: {yardage: 6137, par: 61, courseRating: 59.3, slopeRating: 94}
         }
     },
-    ballyHallyCountryClubSouth: { 
+    ballyHalyCountryClubSouth: { 
         tees: {
             Silver: {yardage: 5082, par: 72, courseRating: 66.4, slopeRating: 105}, 
             "Green/Silver": {yardage: 5339, par: 72, courseRating: 67.5, slopeRating: 109}, 
@@ -97,6 +94,16 @@ const courseData = {
     }
     
 };
+const courseNames = {
+    ballyHalyCountryClubNorth: "Bally Haly Country Club - North",
+    ballyHalyCountryClubSouth: "Bally Haly Country Club - South",
+    ganderGolfClub: "Gander Golf Club",
+    glenDenning: "Glendenning Golf",
+    grandFallsGolfClub: "Grand Falls Golf Club",
+    humberValleyResort: "Humber Valley Resort",
+    pippyParkAdmiralsGreen: "Pippy Park Golf Club - Admiral's Green",
+    terraNovaTwinRivers: "Terra Nova Golf Resort - Twin Rivers"
+};
 
 const golferSelect = document.getElementById("golfer-name-dropdown");
 const addGolferBtn = document.getElementById("add-golfer-btn");
@@ -105,8 +112,10 @@ const scoreForm = document.getElementById("score-form");
 const newGolferInput = document.getElementById("new-golfer-input");
 const submitNewGolferBtn = document.getElementById("submit-new-golfer");
 const newGolferNameInput = document.getElementById("new-golfer-name");
-const rounds = [];
+const courseDropdown = document.getElementById("course");
+const teesDropdown = document.getElementById("tees");
 
+const rounds = [];
 const golfers = [];
 
 
@@ -175,13 +184,12 @@ const postScoreForm =  document.getElementById("post-score-form");
     });
 
     
-    
-
     scoreForm.addEventListener("submit", (event) => {
         event.preventDefault();
         const golferName = document.getElementById("golfer-name-dropdown").value;
         const datePlayed = document.getElementById("date-played").value;
-        const course = document.getElementById("course").value;
+        const courseValue = document.getElementById("course").value;
+        const course = courseNames[courseValue];
         const tees = document.getElementById("tees").value.charAt(0).toUpperCase() + document.getElementById("tees").value.slice(1);
         const holes = document.getElementById("holes").value;
         const score = Number(document.getElementById("score").value);
@@ -210,7 +218,7 @@ const postScoreForm =  document.getElementById("post-score-form");
             const round = {
                 golferName,
                 datePlayed,
-                course,
+                courseValue,
                 tees,
                 holes,
                 score,
@@ -232,8 +240,8 @@ const postScoreForm =  document.getElementById("post-score-form");
         const recentRounds = golferRounds.slice(0,20);
 
        const differentials = recentRounds.map(round => {
-        const { score, course, tees } = round;
-        const courseInfo = courseData[course];
+        const { score, courseValue, tees } = round;
+        const courseInfo = courseData[courseValue];
         const teeInfo = courseInfo.tees[tees];
         const { courseRating, slopeRating } = teeInfo;
         const differential = (113 / slopeRating) * (score - courseRating);
