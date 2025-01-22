@@ -105,7 +105,17 @@ const scoreForm = document.getElementById("score-form");
 const newGolferInput = document.getElementById("new-golfer-input");
 const submitNewGolferBtn = document.getElementById("submit-new-golfer");
 const newGolferNameInput = document.getElementById("new-golfer-name");
-const rounds = [];
+const rounds = [
+    {golferName: "Tyler Anthony", score: 93, course: "grandFallsGolfClub", tees: "White", datePlayed: "2024-08-08"},
+    {golferName: "Tyler Anthony", score: 91, course: "grandFallsGolfClub", tees: "White", datePlayed: "2024-08-09"},
+    {golferName: "Tyler Anthony", score: 91, course: "grandFallsGolfClub", tees: "White", datePlayed: "2024-08-10"},
+    {golferName: "Tyler Anthony", score: 92, course: "grandFallsGolfClub", tees: "White", datePlayed: "2024-08-10"},
+    {golferName: "Tyler Anthony", score: 92, course: "grandFallsGolfClub", tees: "White", datePlayed: "2024-08-10"},
+    {golferName: "Tyler Anthony", score: 89, course: "grandFallsGolfClub", tees: "White", datePlayed: "2024-08-10"},
+    {golferName: "Tyler Anthony", score: 90, course: "grandFallsGolfClub", tees: "White", datePlayed: "2024-08-10"},
+    {golferName: "Tyler Anthony", score: 93, course: "grandFallsGolfClub", tees: "White", datePlayed: "2024-08-10"}
+
+];
 const golfers = [];
 
 
@@ -205,7 +215,7 @@ const postScoreForm =  document.getElementById("post-score-form");
             }           
            
 
-            const round = {
+            /*const round = {
                 golferName,
                 datePlayed,
                 course,
@@ -215,8 +225,47 @@ const postScoreForm =  document.getElementById("post-score-form");
             };
             rounds.push(round);
 
-            scoreForm.reset();
+            scoreForm.reset();*/
     });
+
+
+
+    function calculateHandicap(golferName) {
+        const golferRounds = rounds.filter(round => round.golferName === golferName);
+        golferRounds.sort((a,b) => new Date(b.datePlayed) - new Date(a.datePlayed));
+        const recentRounds = golferRounds.slice(0,20);
+
+       const differentials = recentRounds.map(round => {
+        const { score, course, tees } = round;
+        const courseInfo = courseData[course];
+        const teeInfo = courseInfo.tees[tees];
+        const { courseRating, slopeRating } = teeInfo;
+        const differential = (113 / slopeRating) * (score - courseRating);
+        return differential;
+       });
+
+       differentials.sort((a, b) => a - b );
+       const lowestDifferentials = differentials.slice(0,8);
+       let total = 0;
+       for (let i = 0; i < lowestDifferentials.length; i++){
+        total += lowestDifferentials[i];
+       }
+    const averageDifferential = total / lowestDifferentials.length;
+
+    return averageDifferential.toFixed(1);
+        
+    }
+
+    const golferName = "Tyler Anthony";
+    const handicap = calculateHandicap(golferName);
+
+    console.log(`Handicap for ${golferName}: ${handicap}`);
+    
+   
+    
+    
+
+    
 
     
 
