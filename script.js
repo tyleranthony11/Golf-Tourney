@@ -21,7 +21,6 @@ function switchTab (tabName, event){
     selectedLink.classList.add("active");
 }
 
-
 const courseData = {
     grandFallsGolfClub: { 
         tees: {
@@ -114,11 +113,12 @@ const submitNewGolferBtn = document.getElementById("submit-new-golfer");
 const newGolferNameInput = document.getElementById("new-golfer-name");
 const courseDropdown = document.getElementById("course");
 const teesDropdown = document.getElementById("tees");
+const postScoreBtn = document.getElementById("post-score-btn");
+const postScoreForm =  document.getElementById("post-score-form");
 
 const rounds = [];
 const golfers = [];
-
-
+const golferHandicaps = [];
 
 
 function updateGolferDropdown(){
@@ -133,6 +133,7 @@ function updateGolferDropdown(){
 
 function addGolfer(golferName) {
     golfers.push(golferName);
+    updateGolferHandicap(golferName);
     updateGolferDropdown();
 }
 
@@ -159,21 +160,17 @@ function updateTeesDropdown(){
         for (const teeName in courseInfo.tees){
             const teeData = courseInfo.tees[teeName];
             const newTees = document.createElement("option");
-            newTees.value = teeName.toLowerCase();
+            newTees.value = teeName;
             newTees.textContent = `${teeName} (${teeData.yardage} yds) - Par ${teeData.par}, Rating ${teeData.courseRating}, Slope ${teeData.slopeRating}`;
             teesDropdown.appendChild(newTees);
         }
         
     }
 }
-
 courseDropdown.addEventListener("change", updateTeesDropdown);
 
 
-const postScoreBtn = document.getElementById("post-score-btn");
-const postScoreForm =  document.getElementById("post-score-form");
-
-    postScoreBtn.addEventListener("click", () => {
+postScoreBtn.addEventListener("click", () => {
         if (postScoreForm.style.display === "none") {
             postScoreForm.style.display = "block";
             postScoreBtn.textContent = "Cancel"
@@ -183,67 +180,16 @@ const postScoreForm =  document.getElementById("post-score-form");
         }
     });
 
-    
-    scoreForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const golferName = document.getElementById("golfer-name-dropdown").value;
-        const datePlayed = document.getElementById("date-played").value;
-        const courseValue = document.getElementById("course").value;
-        const course = courseNames[courseValue];
-        const tees = document.getElementById("tees").value.charAt(0).toUpperCase() + document.getElementById("tees").value.slice(1);
-        const holes = document.getElementById("holes").value;
-        const score = Number(document.getElementById("score").value);
-        const courseKey = document.getElementById("course").value;
-        const selectedCourseData = courseData[courseKey];
-        const selectedTeeData = selectedCourseData.tees[tees];
-        const strokesAbovePar = score - selectedTeeData.par;
-
-        const roundItem = document.createElement("li");
-        roundItem.innerHTML = `
-            <strong>Golfer:</strong> ${golferName}<br>
-            <strong>Date Played:</strong> ${datePlayed}<br>
-            <strong>Course:</strong> ${course}<br>
-            <strong>Tees:</strong> ${tees}<br>
-            <strong>Holes Played:</strong> ${holes}<br>
-            <strong>Score:</strong> ${score} (${strokesAbovePar >= 0 ? "+" : ""}${strokesAbovePar})`;
-        
-            roundsList.appendChild(roundItem);
-
-            const roundsDisplay = document.getElementById("rounds-display");
-            if (roundsDisplay.style.display === "none") {
-                roundsDisplay.style.display = "block";
-            }           
-           
-
-            const round = {
-                golferName,
-                datePlayed,
-                courseValue,
-                tees,
-                holes,
-                score,
-            };
-            rounds.push(round);
-            const golferHandicap = calculateHandicap(golferName);
-            const handicapDisplay = document.getElementById("handicap-display");
-            handicapDisplay.innerText = `Handicap for ${golferName}: ${golferHandicap}`;
-            
-
-            scoreForm.reset();
-    });
-
-
-
-    function calculateHandicap(golferName) {
+function calculateHandicap(golferName) {
         const golferRounds = rounds.filter(round => round.golferName === golferName);
         golferRounds.sort((a,b) => new Date(b.datePlayed) - new Date(a.datePlayed));
         const recentRounds = golferRounds.slice(0,20);
 
-       const differentials = recentRounds.map(round => {
-        const { score, courseValue, tees } = round;
+        const differentials = recentRounds.map(round => {
+        const {score, courseValue, tees} = round;
         const courseInfo = courseData[courseValue];
         const teeInfo = courseInfo.tees[tees];
-        const { courseRating, slopeRating } = teeInfo;
+        const {courseRating, slopeRating} = teeInfo;
         const differential = (113 / slopeRating) * (score - courseRating);
         return differential;
        });
@@ -259,13 +205,92 @@ const postScoreForm =  document.getElementById("post-score-form");
     return averageDifferential.toFixed(1);
         
     }
-
-
+   
     
+
+function updateRankingsTable() {
+    const rankingsTable = document.getElementById("rankings-table-body");
+    rankingsTable.innerHTML = "";
+
+    golferHandicaps.sort((a, b) => a.handicap - b.handicap);
+
+    golferHandicaps.forEach((golfer, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${golfer.name}</td>
+            <td>${golfer.handicap}</td>
+            `;
+            rankingsTable.appendChild(row);
+    })
+}
+
+function updateGolferHandicap(golferName) {
+    const handicap = calculateHandicap(golferName);
+    const golferIndex = golferHandicaps.findIndex(golfer => golfer.name === golferName);
+        if (golferIndex !== -1){
+            golferHandicaps[golferIndex].handicap = handicap;
+        } else {
+            golferHandicaps.push({name: golferName, handicap});
+        }
+        updateRankingsTable();
+        }
+    
+
+        scoreForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const golferName = document.getElementById("golfer-name-dropdown").value;
+            const datePlayed = document.getElementById("date-played").value;
+            const courseValue = document.getElementById("course").value;
+            const course = courseNames[courseValue];
+            const tees = document.getElementById("tees").value.charAt(0).toUpperCase() + document.getElementById("tees").value.slice(1);
+            const holes = document.getElementById("holes").value;
+            const score = Number(document.getElementById("score").value);
+            const courseKey = document.getElementById("course").value;
+            const selectedCourseData = courseData[courseKey];
+            const selectedTeeData = selectedCourseData.tees[tees];
+            const strokesAbovePar = score - selectedTeeData.par;
+            
+    
+            const roundItem = document.createElement("li");
+            roundItem.innerHTML = `
+                <strong>Golfer:</strong> ${golferName}<br>
+                <strong>Date Played:</strong> ${datePlayed}<br>
+                <strong>Course:</strong> ${course}<br>
+                <strong>Tees:</strong> ${tees}<br>
+                <strong>Holes Played:</strong> ${holes}<br>
+                <strong>Score:</strong> ${score} (${strokesAbovePar >= 0 ? "+" : ""}${strokesAbovePar})`;
+            
+                roundsList.appendChild(roundItem);
+    
+                const roundsDisplay = document.getElementById("rounds-display");
+                if (roundsDisplay.style.display === "none") {
+                    roundsDisplay.style.display = "block";
+                }           
+               
+    
+                const round = {
+                    golferName,
+                    datePlayed,
+                    courseValue,
+                    tees,
+                    holes,
+                    score,
+                };
+                rounds.push(round);
+                updateGolferHandicap(golferName);
+                updateRankingsTable();
+        
+                scoreForm.reset();
+        });
+
+
+
+
+
    
     
     
-
     
 
     

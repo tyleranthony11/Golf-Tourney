@@ -176,3 +176,44 @@ body {
     margin-bottom: 20px;
 }
 
+#rankings {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+#rankings h1 {
+    font-size: 24px;
+    
+}
+
+#handicap-table {
+    width: 100%;
+    margin-top: 20px;
+    max-width: 700px;
+    margin: 0 auto;
+    margin-top: 30px;
+    
+    
+}
+
+#handicap-table th, #handicap-table td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+#handicap-table th {
+    background-color: #04AA6D;
+    color: white;
+    font-size: 18px;
+}
+
+#rankings-table-body tr td:first-child {
+    font-weight: bold;
+    
+}
+
+#handicap-table th, #handicap-table td {
+    padding: 8px 10px;
+}
+
+
