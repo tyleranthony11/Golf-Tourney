@@ -104,7 +104,7 @@
    <section>
    <div id="rankings" class="tab">
     <h1>Rankings</h1>
-    <p>Here are the current handicap ratings for all players</p>
+    <p>Current Handicap Index for all Golfers:</p>
     <table id="handicap-table">
         <thead>
             <tr>
@@ -125,9 +125,136 @@
    <section>
    <div id="scorecard" class="tab">
     <h1>Scorecard</h1>
-    <div class="scorecard-container">
-
+    <button id="start-round-btn">Start Round</button>
+    <div id="start-round-form">
+        <form id="new-round-form">
+            <div>
+            <select id="new-round-course" required>
+                <option value="">Select a Course</option>
+                <option value="ballyHalyCountryClubNorth">Bally Haly Country Club - North</option>
+                <option value="ballyHalyCountryClubSouth">Bally Haly Country Club - South</option>
+                <option value="ganderGolfClub">Gander Golf Club</option>
+                <option value="glenDenning">GlenDenning</option>
+                <option value="grandFallsGolfClub">Grand Falls Golf Club</option>
+                <option value="humberValleyResort">Humber Valley Resort</option>
+                <option value="pippyParkAdmiralsGreen">Pippy Park Golf Club - Admiral's Green</option>
+                <option value="terraNovaTwinRivers">Terra Nova Golf Resort - Twin Rivers</option>
+            </select>
+            </div>
+            <div>
+                <select id="new-round-tees" required>
+                    <option value="">Select Tees</option>
+                </select>
+            </div>
+        </form>
     </div>
+    <div id="scorecard-container">
+    <table id="scorecard-table">
+        <thead>
+            <tr id="scorecard-row">
+                <th>HOLE</th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>OUT</th>
+                <th>10</th>
+                <th>11</th>
+                <th>12</th>
+                <th>13</th>
+                <th>14</th>
+                <th>15</th>
+                <th>16</th>
+                <th>17</th>
+                <th>18</th>
+                <th>IN</th>
+                <th>TOTAL</th>
+            </tr>
+        </thead>
+        <tbody id="scorecard-body">
+            <tr>
+                <td>YDS</td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+                <td class="yardage-cell"></td>
+            </tr>
+            <tr>
+                <td>PAR</td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+                <td class="hole-cell"></td>
+            </tr>
+            <tr>
+                <td>Player</td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+                <td class="player-cell"></td>
+            
+
+        </tbody>
+    </table>
+    </div>
+
+
    </div>
    </section>
 

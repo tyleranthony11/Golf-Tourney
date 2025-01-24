@@ -103,6 +103,80 @@ const courseNames = {
     pippyParkAdmiralsGreen: "Pippy Park Golf Club - Admiral's Green",
     terraNovaTwinRivers: "Terra Nova Golf Resort - Twin Rivers"
 };
+const scorecardData = {
+    grandFallsGolfClub: {
+        Red: [
+            {holeNumber: 1, par: 5, yardage: 446},
+            {holeNumber: 2, par: 3, yardage: 203},
+            {holeNumber: 3, par: 3, yardage: 130},
+            {holeNumber: 4, par: 5, yardage: 483},
+            {holeNumber: 5, par: 4, yardage: 250},
+            {holeNumber: 6, par: 4, yardage: 283},
+            {holeNumber: 7, par: 4, yardage: 356},
+            {holeNumber: 8, par: 3, yardage: 145},
+            {holeNumber: 9, par: 4, yardage: 382},
+            {holeNumber: "front", par: 35, yardage: 2678},
+            {holeNumber: 10, par: 5, yardage: 325},
+            {holeNumber: 11, par: 4, yardage: 332},
+            {holeNumber: 12, par: 3, yardage: 130},
+            {holeNumber: 13, par: 4, yardage: 309},
+            {holeNumber: 14, par: 4, yardage: 350},
+            {holeNumber: 15, par: 5, yardage: 444},
+            {holeNumber: 16, par: 3, yardage: 158},
+            {holeNumber: 17, par: 4, yardage: 343},
+            {holeNumber: 18, par: 4, yardage: 132},
+            {holeNumber: "back", par: 36, yardage: 2523},
+            {holeNumber: "total", par: 71, yardage: 5201}
+        ],
+        White: [
+            {holeNumber: 1, par: 5, yardage: 446},
+            {holeNumber: 2, par: 3, yardage: 203},
+            {holeNumber: 3, par: 3, yardage: 130},
+            {holeNumber: 4, par: 5, yardage: 483},
+            {holeNumber: 5, par: 4, yardage: 261},
+            {holeNumber: 6, par: 4, yardage: 321},
+            {holeNumber: 7, par: 4, yardage: 356},
+            {holeNumber: 8, par: 3, yardage: 145},
+            {holeNumber: 9, par: 4, yardage: 382},
+            {holeNumber: "front", par: 35, yardage: 2727},
+            {holeNumber: 10, par: 5, yardage: 470},
+            {holeNumber: 11, par: 4, yardage: 338},
+            {holeNumber: 12, par: 3, yardage: 149},
+            {holeNumber: 13, par: 4, yardage: 315},
+            {holeNumber: 14, par: 4, yardage: 368},
+            {holeNumber: 15, par: 5, yardage: 500},
+            {holeNumber: 16, par: 3, yardage: 165},
+            {holeNumber: 17, par: 4, yardage: 359},
+            {holeNumber: 18, par: 4, yardage: 351},
+            {holeNumber: "back", par: 36, yardage: 3015},
+            {holeNumber: "total", par: 71, yardage: 5742}
+        ],
+        Blue: [
+            {holeNumber: 1, par: 5, yardage: 446},
+            {holeNumber: 2, par: 3, yardage: 213},
+            {holeNumber: 3, par: 3, yardage: 140},
+            {holeNumber: 4, par: 5, yardage: 493},
+            {holeNumber: 5, par: 4, yardage: 271},
+            {holeNumber: 6, par: 4, yardage: 331},
+            {holeNumber: 7, par: 4, yardage: 366},
+            {holeNumber: 8, par: 3, yardage: 155},
+            {holeNumber: 9, par: 4, yardage: 392},
+            {holeNumber: "front", par: 35, yardage: 2817},
+            {holeNumber: 10, par: 5, yardage: 499},
+            {holeNumber: 11, par: 4, yardage: 359},
+            {holeNumber: 12, par: 3, yardage: 180},
+            {holeNumber: 13, par: 4, yardage: 339},
+            {holeNumber: 14, par: 4, yardage: 391},
+            {holeNumber: 15, par: 5, yardage: 526},
+            {holeNumber: 16, par: 3, yardage: 183},
+            {holeNumber: 17, par: 4, yardage: 386},
+            {holeNumber: 18, par: 4, yardage: 373},
+            {holeNumber: "back", par: 36, yardage: 3236},
+            {holeNumber: "total", par: 71, yardage: 6053}
+        ]
+    
+    }
+};
 
 const golferSelect = document.getElementById("golfer-name-dropdown");
 const addGolferBtn = document.getElementById("add-golfer-btn");
@@ -285,8 +359,22 @@ function updateGolferHandicap(golferName) {
         });
 
 
+function populateScorecard(courseName, teeColor) {
+    const course = scorecardData[courseName];
+    const tee = course[teeColor];
+    const parCells = document.querySelectorAll(".hole-cell");
+    const yardageCells = document.querySelectorAll(".yardage-cell");
+
+    tee.forEach((hole, index) => {
+        if (parCells[index]) {
+            parCells[index].innerText = hole.par;
+            yardageCells[index].innerText = hole.yardage;
+        }
+    })
+}
 
 
+populateScorecard("grandFallsGolfClub", "Blue");
 
    
     
