@@ -56,14 +56,6 @@
                 <strong><label for="course">Course:</label></strong>
                 <select id="course" name="course" required>
                     <option value="">Select a Course</option>
-                    <option value="ballyHalyCountryClubNorth">Bally Haly Country Club - North</option>
-                    <option value="ballyHalyCountryClubSouth">Bally Haly Country Club - South</option>
-                    <option value="ganderGolfClub">Gander Golf Club</option>
-                    <option value="glenDenning">GlenDenning</option>
-                    <option value="grandFallsGolfClub">Grand Falls Golf Club</option>
-                    <option value="humberValleyResort">Humber Valley Resort</option>
-                    <option value="pippyParkAdmiralsGreen">Pippy Park Golf Club - Admiral's Green</option>
-                    <option value="terraNovaTwinRivers">Terra Nova Golf Resort - Twin Rivers</option>
                 </select>
             </div><br>
             <div>
@@ -124,30 +116,49 @@
 
    <section>
    <div id="scorecard" class="tab">
-    <h1>Scorecard</h1>
-    <button id="start-round-btn">Start Round</button>
-    <div id="start-round-form">
-        <form id="new-round-form">
-            <div>
-            <select id="new-round-course" required>
-                <option value="">Select a Course</option>
-                <option value="ballyHalyCountryClubNorth">Bally Haly Country Club - North</option>
-                <option value="ballyHalyCountryClubSouth">Bally Haly Country Club - South</option>
-                <option value="ganderGolfClub">Gander Golf Club</option>
-                <option value="glenDenning">GlenDenning</option>
-                <option value="grandFallsGolfClub">Grand Falls Golf Club</option>
-                <option value="humberValleyResort">Humber Valley Resort</option>
-                <option value="pippyParkAdmiralsGreen">Pippy Park Golf Club - Admiral's Green</option>
-                <option value="terraNovaTwinRivers">Terra Nova Golf Resort - Twin Rivers</option>
-            </select>
-            </div>
-            <div>
-                <select id="new-round-tees" required>
-                    <option value="">Select Tees</option>
-                </select>
-            </div>
-        </form>
+    
+    <button id="create-tournament-btn">Create Tournament</button>
+  
+    <div id="tournament-form" class="hidden">
+        <h3>Create Tournament</h3>
+        <label for="tournament-players">Number of Players/Teams:</label>
+        <input type="number" id="tournament-players" min="1" required>
+
+        <label for="tournament-golfers">Select Golfer(s):</label>
+        <select id="tournament-golfers" multiple></select>
+
+        <label for="tournament-new-golfer">Add New Golfer:</label>
+        <input type="text" id="tournament-new-golfer" placeholder="Enter new golfer name">
+
+        <label for="tournament-course">Course:</label>
+        <select id="tournament-course"></select>
+
+        <label for="tournament-tees">Tees Played:</label>
+        <select id="tournament-tees"></select>
+
+        <label for="tournament-rounds">Number of Rounds:</label>
+        <input type="number" id="tournament-rounds" min="1" required>
+
+        <label for="tournament-match-type">Match Type:</label>
+        <div id="tournament-match-type">
+            <label>
+                <input type="radio" name="match-type" value="stroke" checked> Stroke Play
+            </label>
+            <label>
+                <input type="radio" name="match-type" value="match"> Match Play
+            </label>
+        </div>
+
+        <button id="start-tournament-btn">Start Tournament</button>
+
+
+
+
+
     </div>
+
+
+
     <div id="scorecard-container">
     <table id="scorecard-table">
         <thead>

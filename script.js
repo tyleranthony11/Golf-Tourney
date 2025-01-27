@@ -22,27 +22,6 @@ function switchTab (tabName, event){
 }
 
 const courseData = {
-    grandFallsGolfClub: { 
-        tees: {
-            Red: {yardage: 5201, par: 71, courseRating: 65.7, slopeRating: 113}, 
-            White: {yardage: 5742, par: 71, courseRating: 68.6, slopeRating: 125},
-            Blue: {yardage: 6053, par: 71, courseRating: 70.7, slopeRating: 127}
-        }
-    },
-    terraNovaTwinRivers: { 
-        tees: {
-            Front: {yardage: 5423, par: 71, courseRating: 66.5, slopeRating: 119}, 
-            Intermediate: {yardage: 6066, par: 71, courseRating: 69.6, slopeRating: 123},
-            Championship: {yardage: 6546, par: 71, courseRating: 72.5, slopeRating: 126}
-        }
-    },
-    ganderGolfClub: { 
-        tees: {
-            Red: {yardage: 5164, par: 70, courseRating: 66.1, slopeRating: 122}, 
-            White: {yardage: 5662, par: 70, courseRating: 68.8, slopeRating: 131},
-            Blue: {yardage: 6137, par: 70, courseRating: 71.2, slopeRating: 136}
-        }
-    },
     ballyHalyCountryClubNorth: { 
         tees: {
             Silver: {yardage: 2826, par: 61, courseRating: 56.4, slopeRating: 83}, 
@@ -59,6 +38,37 @@ const courseData = {
             Blue: {yardage: 6100, par: 72, courseRating: 70.4, slopeRating: 126}, 
             "Black/Blue": {yardage: 6344, par: 72, courseRating: 71.4, slopeRating: 131}, 
             Black: {yardage: 6581, par: 72, courseRating: 72.9, slopeRating: 128} 
+        }
+    },
+    blomidonGolfClub: {
+        tees: {
+            Red: {yardage: 5193, par: 70, courseRating: 65.2, slopeRating: 111},
+            White: {yardage: 5526, par: 70, courseRating: 68.2, slopeRating: 120},
+            Blue: {yardage: 5729, par: 70, courseRating: 69.9, slopeRating: 119}
+        }
+    },
+    ganderGolfClub: { 
+        tees: {
+            Red: {yardage: 5164, par: 70, courseRating: 66.1, slopeRating: 122}, 
+            White: {yardage: 5662, par: 70, courseRating: 68.8, slopeRating: 131},
+            Blue: {yardage: 6137, par: 70, courseRating: 71.2, slopeRating: 136}
+        }
+    },
+    grandFallsGolfClub: { 
+        tees: {
+            Red: {yardage: 5201, par: 71, courseRating: 65.7, slopeRating: 113}, 
+            White: {yardage: 5742, par: 71, courseRating: 68.6, slopeRating: 125},
+            Blue: {yardage: 6053, par: 71, courseRating: 70.7, slopeRating: 127}
+        }
+    },
+    grandeMeadowsGolfClub: { 
+        tees: {
+            Red: {yardage: 4960, par: 72, courseRating: 66.4, slopeRating: 121}, 
+            "Red/Yellow": {yardage: 5219, par: 72, courseRating: 66.7, slopeRating: 122},
+            Yellow: {yardage: 4678, par: 72, courseRating: 67.0, slopeRating: 119},
+            White: {yardage: 5868, par: 72, courseRating: 69.6, slopeRating: 111},
+            Blue: {yardage: 5888, par: 72, courseRating: 69.6, slopeRating: 111},
+            "White/Blue": {yardage: 5921, par: 72, courseRating: 69.6, slopeRating: 111}
         }
     },
     glenDenning: { 
@@ -90,18 +100,36 @@ const courseData = {
             Gold: {yardage: 5784, par: 71, courseRating: 120, slopeRating: 120},
             Black: {yardage: 6263, par: 71, courseRating: 71.4, slopeRating: 125},
         }
+    },
+    terraNovaTwinRivers: { 
+        tees: {
+            Front: {yardage: 5423, par: 71, courseRating: 66.5, slopeRating: 119}, 
+            Intermediate: {yardage: 6066, par: 71, courseRating: 69.6, slopeRating: 123},
+            Championship: {yardage: 6546, par: 71, courseRating: 72.5, slopeRating: 126}
+        }
+    },
+    theWildsGolfResort: { 
+        tees: {
+            White: {yardage: 6074, par: 72, courseRating: 70.6, slopeRating: 127}, 
+            Blue: {yardage: 6365, par: 72, courseRating: 71.8, slopeRating: 130},
+            Gold: {yardage: 6772, par: 72, courseRating: 73.7, slopeRating: 138}
+        }
     }
-    
+   
+   
 };
 const courseNames = {
     ballyHalyCountryClubNorth: "Bally Haly Country Club - North",
     ballyHalyCountryClubSouth: "Bally Haly Country Club - South",
+    blomidonGolfClub: "Blomidon Golf Club",
     ganderGolfClub: "Gander Golf Club",
     glenDenning: "Glendenning Golf",
     grandFallsGolfClub: "Grand Falls Golf Club",
+    grandeMeadowsGolfClub: "Grande Meadows Golf Club",
     humberValleyResort: "Humber Valley Resort",
     pippyParkAdmiralsGreen: "Pippy Park Golf Club - Admiral's Green",
-    terraNovaTwinRivers: "Terra Nova Golf Resort - Twin Rivers"
+    terraNovaTwinRivers: "Terra Nova Golf Resort - Twin Rivers",
+    theWildsGolfResort: "The Wilds Golf Resort"
 };
 const scorecardData = {
     grandFallsGolfClub: {
@@ -195,6 +223,33 @@ const golfers = [];
 const golferHandicaps = [];
 
 
+function populateCourseDropdown () {
+    Object.keys(courseData).forEach(courseKey => {
+        const option = document.createElement("option");
+        option.value = courseKey;
+        option.textContent = courseNames[courseKey];
+        courseDropdown.appendChild(option);
+    })
+}
+populateCourseDropdown();
+
+function updateTeesDropdown(){
+    teesDropdown.innerHTML = "<option value=''>Select Tees Played </option>";
+    const selectedCourse = courseDropdown.value; 
+
+    if (courseData[selectedCourse]){
+        const courseInfo = courseData[selectedCourse];
+        for (const teeName in courseInfo.tees){
+            const teeData = courseInfo.tees[teeName];
+            const newTees = document.createElement("option");
+            newTees.value = teeName;
+            newTees.textContent = `${teeName} (${teeData.yardage} yds) - Par ${teeData.par}, Rating ${teeData.courseRating}, Slope ${teeData.slopeRating}`;
+            teesDropdown.appendChild(newTees);
+        }
+        
+    }
+}
+
 function updateGolferDropdown(){
     golferSelect.innerHTML = '<option value="">Select Golfer</option>';
     golfers.forEach(golfer => {
@@ -225,22 +280,7 @@ submitNewGolferBtn.addEventListener("click", () => {
 })
 
 
-function updateTeesDropdown(){
-    teesDropdown.innerHTML = "<option value=''>Select Tees Played </option>";
-    const selectedCourse = courseDropdown.value; 
 
-    if (courseData[selectedCourse]){
-        const courseInfo = courseData[selectedCourse];
-        for (const teeName in courseInfo.tees){
-            const teeData = courseInfo.tees[teeName];
-            const newTees = document.createElement("option");
-            newTees.value = teeName;
-            newTees.textContent = `${teeName} (${teeData.yardage} yds) - Par ${teeData.par}, Rating ${teeData.courseRating}, Slope ${teeData.slopeRating}`;
-            teesDropdown.appendChild(newTees);
-        }
-        
-    }
-}
 courseDropdown.addEventListener("change", updateTeesDropdown);
 
 
@@ -373,8 +413,16 @@ function populateScorecard(courseName, teeColor) {
     })
 }
 
+const createTournamentBtn = document.getElementById("create-tournament-btn");
+const tournamentForm = document.getElementById("tournament-form");
 
-populateScorecard("grandFallsGolfClub", "Blue");
+createTournamentBtn.addEventListener("click", () => {
+    tournamentForm.classList.toggle("hidden");
+    
+});
+
+
+//populateScorecard("grandFallsGolfClub", "White");
 
    
     

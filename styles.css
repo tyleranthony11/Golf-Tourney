@@ -226,3 +226,51 @@ body {
     padding: 8px;
     text-align: center;
 }
+
+#tournament-form.hidden {
+    display: none;
+}
+
+#tournament-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    
+}
+
+#create-tournament-btn,
+#start-tournament-btn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 10px 20px;
+    margin: 10px auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    border: none;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+#create-tournament-btn:hover,
+#start-tournament-btn:hover {
+    background-color: #037a4d;
+}
+
+#tournament-form input,
+#tournament-form select {
+    width: 100%;
+    max-width: 400px;
+    padding: 2px;
+    margin: 10px auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+}
+
+#tournament-match-type {
+    display: flex;
+    flex-direction: row;
+}
