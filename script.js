@@ -217,23 +217,38 @@ const courseDropdown = document.getElementById("course");
 const teesDropdown = document.getElementById("tees");
 const postScoreBtn = document.getElementById("post-score-btn");
 const postScoreForm =  document.getElementById("post-score-form");
+const createTournamentBtn = document.getElementById("create-tournament-btn");
+const tournamentForm = document.getElementById("tournament-form");
+const tournamentCourseDropdown = document.getElementById("tournament-course");
+const tournamentTeesDropdown = document.getElementById("tournament-tees");
+
 
 const rounds = [];
 const golfers = [];
 const golferHandicaps = [];
 
 
-function populateCourseDropdown () {
+function populateCourseDropdown (dropdown) {
+    dropdown.innerHTML = '<option value="">Select a Course</option>';
     Object.keys(courseData).forEach(courseKey => {
         const option = document.createElement("option");
         option.value = courseKey;
         option.textContent = courseNames[courseKey];
-        courseDropdown.appendChild(option);
+        dropdown.appendChild(option);
     })
 }
-populateCourseDropdown();
+populateCourseDropdown(courseDropdown);
+populateCourseDropdown(tournamentCourseDropdown);
 
-function updateTeesDropdown(){
+courseDropdown.addEventListener("change", () => {
+    populateTeesDropdown(courseDropdown, teesDropdown);
+});
+
+tournamentCourseDropdown.addEventListener("change", () => {
+    populateTeesDropdown(tournamentCourseDropdown, tournamentTeesDropdown);
+});
+
+function populateTeesDropdown(courseDropdown, teesDropdown){
     teesDropdown.innerHTML = "<option value=''>Select Tees Played </option>";
     const selectedCourse = courseDropdown.value; 
 
@@ -241,16 +256,16 @@ function updateTeesDropdown(){
         const courseInfo = courseData[selectedCourse];
         for (const teeName in courseInfo.tees){
             const teeData = courseInfo.tees[teeName];
-            const newTees = document.createElement("option");
-            newTees.value = teeName;
-            newTees.textContent = `${teeName} (${teeData.yardage} yds) - Par ${teeData.par}, Rating ${teeData.courseRating}, Slope ${teeData.slopeRating}`;
-            teesDropdown.appendChild(newTees);
+            const newOption = document.createElement("option");
+            newOption.value = teeName;
+            newOption.textContent = `${teeName} (${teeData.yardage} yds) - Par ${teeData.par}, Rating ${teeData.courseRating}, Slope ${teeData.slopeRating}`;
+            teesDropdown.appendChild(newOption);
         }
         
     }
 }
 
-function updateGolferDropdown(){
+function updateGolferDropdowns(){
     golferSelect.innerHTML = '<option value="">Select Golfer</option>';
     golfers.forEach(golfer => {
         const option = document.createElement("option");
@@ -258,14 +273,25 @@ function updateGolferDropdown(){
         option.textContent = golfer;
         golferSelect.appendChild(option);
     });
+
+    const tournamentGolfers = document.getElementById("tournament-golfers");
+    golfers.forEach(golfer => {
+        const option = document.createElement("option");
+        option.value = golfer;
+        option.textContent = golfer;
+        tournamentGolfers.appendChild(option);
+    })
 }
 
 function addGolfer(golferName) {
+    if (!golfers.includes(golferName)){
     golfers.push(golferName);
     updateGolferHandicap(golferName);
-    updateGolferDropdown();
+    updateGolferDropdowns();
+} else {
+    alert("This golfer already exists. Please enter a new golfer.")
 }
-
+}
 addGolferBtn.addEventListener("click", () => {
    newGolferInput.style.display = "block";
 })
@@ -281,7 +307,6 @@ submitNewGolferBtn.addEventListener("click", () => {
 
 
 
-courseDropdown.addEventListener("change", updateTeesDropdown);
 
 
 postScoreBtn.addEventListener("click", () => {
@@ -351,7 +376,7 @@ function updateGolferHandicap(golferName) {
         }
     
 
-        scoreForm.addEventListener("submit", (event) => {
+ scoreForm.addEventListener("submit", (event) => {
             event.preventDefault();
             const golferName = document.getElementById("golfer-name-dropdown").value;
             const datePlayed = document.getElementById("date-played").value;
@@ -413,8 +438,7 @@ function populateScorecard(courseName, teeColor) {
     })
 }
 
-const createTournamentBtn = document.getElementById("create-tournament-btn");
-const tournamentForm = document.getElementById("tournament-form");
+
 
 createTournamentBtn.addEventListener("click", () => {
     tournamentForm.classList.toggle("hidden");
