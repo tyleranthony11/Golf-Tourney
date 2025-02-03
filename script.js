@@ -450,7 +450,7 @@ createTournamentBtn.addEventListener("click", () => {
 //populateScorecard("grandFallsGolfClub", "White");
 
    
-function generateScorecard(courseName, teeColor/*, golfers, roundNumber*/) {
+function generateScorecard(courseName, teeColor, golfers, roundNumber) {
     const course = scorecardData[courseName];
     const tee = course[teeColor];
 
@@ -496,7 +496,7 @@ function generateScorecard(courseName, teeColor/*, golfers, roundNumber*/) {
 
 startTournamentBtn.addEventListener("click", () => {
     const table = generateScorecard("grandFallsGolfClub", "White");
-    document.getElementById('scorecard-container').appendChild(table);  // Append the generated table to the container
+    document.getElementById('scorecard-container').appendChild(table); 
 });
 
    
