@@ -218,6 +218,7 @@ const teesDropdown = document.getElementById("tees");
 const postScoreBtn = document.getElementById("post-score-btn");
 const postScoreForm =  document.getElementById("post-score-form");
 const createTournamentBtn = document.getElementById("create-tournament-btn");
+const startTournamentBtn = document.getElementById("start-tournament-btn");
 const tournamentForm = document.getElementById("tournament-form");
 const tournamentCourseDropdown = document.getElementById("tournament-course");
 const tournamentTeesDropdown = document.getElementById("tournament-tees");
@@ -424,7 +425,7 @@ function updateGolferHandicap(golferName) {
         });
 
 
-function populateScorecard(courseName, teeColor) {
+/*function populateScorecard(courseName, teeColor) {
     const course = scorecardData[courseName];
     const tee = course[teeColor];
     const parCells = document.querySelectorAll(".hole-cell");
@@ -436,7 +437,7 @@ function populateScorecard(courseName, teeColor) {
             yardageCells[index].innerText = hole.yardage;
         }
     })
-}
+}*/
 
 
 
@@ -449,14 +450,54 @@ createTournamentBtn.addEventListener("click", () => {
 //populateScorecard("grandFallsGolfClub", "White");
 
    
-    
-    
-    
+function generateScorecard(courseName, teeColor/*, golfers, roundNumber*/) {
+    const course = scorecardData[courseName];
+    const tee = course[teeColor];
 
-    
+    const table = document.createElement("table");
+    table.classList.add("scorecard-table");
 
-    
+    const headerRow = document.createElement("tr");
+    const holes = [ "HOLE", "1", "2", "3", "4", "5", "6", "7", "8", "9", "OUT", "10", "11", "12", "13", "14", "15", "16", "17", "18", "IN", "TOTAL"];
+    holes.forEach(hole => {
+        const th = document.createElement("th");
+        th.textContent = hole;
+        headerRow.appendChild(th);
+    });
+    table.appendChild(headerRow);
 
+    const yardageRow = document.createElement("tr");
+    yardageRow.classList.add("yardage-row");
+    yardageRow.innerHTML = `<td>YDS</td>`;
+
+    tee.forEach(hole => {
+        const td = document.createElement("td");
+        td.textContent = hole.yardage;
+        yardageRow.appendChild(td);
+    });
+    table.appendChild(yardageRow);
+
+    const parRow = document.createElement("tr");
+    parRow.classList.add("par-row");
+    parRow.innerHTML = `<td>PAR</td>`;
+
+    tee.forEach(hole => {
+        const td = document.createElement("td");
+        td.textContent = hole.par;
+        parRow.appendChild(td);
+    });
+    table.appendChild(parRow);
+
+    return table;
+    
+}    
+    
+ 
+
+startTournamentBtn.addEventListener("click", () => {
+    const table = generateScorecard("grandFallsGolfClub", "White");
+    document.getElementById('scorecard-container').appendChild(table);  // Append the generated table to the container
+});
 
    
     
