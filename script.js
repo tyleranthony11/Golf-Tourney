@@ -436,9 +436,6 @@ createTournamentBtn.addEventListener("click", () => {
 });
 
 
-
-
-   
 function generateScorecard(courseName, teeColor, golfers, roundNumber) {
     const course = scorecardData[courseName];
     const tee = course[teeColor];
@@ -524,51 +521,36 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
     return table;
 }
 
-function createTotalCell(tee, start, end, type = "yardage") {
-    const td = document.createElement("td");
-    td.textContent = tee.slice(start, end).reduce((sum, hole) => sum + hole[type], 0);
-    return td;
-}
+
 
 function updateTotals(event) {
     const input = event.target;
-    const hole = input.dataset.hole;
+    const hole = parseInt(input.dataset.hole) - 1;
     const golfer = input.dataset.golfer;
     const round = input.dataset.round;
     const score = parseInt(input.value) || 0;
 
     tournamentScores[golfer][round][hole] = score;
 
-    const outTotal = calculateTotal(golfer, round, 1, 9);
-    document.querySelector(`.out-total[data-golfer="${golfer}"][data-round="${round}"]`).textContent = outTotal;
+    const outTotal = Object.values(tournamentScores[golfer][round]).slice(0, 9).reduce((sum, val) => sum + (val || 0), 0);
+    const outTotalElement = document.querySelector(`.out-total[data-golfer="${golfer}"][data-round="${round}"]`);
+    if (outTotalElement) outTotalElement.textContent = outTotal;
 
-    const inTotal = calculateTotal(golfer, round, 10, 18);
+    const inTotal = tournamentScores[golfer][round].slice(9, 18).reduce((sum, val) => sum + val, 0);
     document.querySelector(`.in-total[data-golfer="${golfer}"][data-round="${round}"]`).textContent = inTotal;
 
     const roundTotal = outTotal + inTotal;
     document.querySelector(`.round-total[data-golfer="${golfer}"][data-round="${round}"]`).textContent = roundTotal;
 
-    const tournamentTotal = calculateTournamentTotal(golfer);
-    document.querySelector(`.tournament-total[data-golfer="${golfer}"]`).textContent = tournamentTotal;
+    let tournamentTotal = 0;
+    for (let i in tournamentScores[golfer]) {
+        tournamentTotal += tournamentScores[golfer][i].reduce((sum, val) => sum + val, 0);
+    }
+    document.querySelectorAll(`.tournament-total[data-golfer="${golfer}"]`).forEach(cell => {
+        cell.textContent =  tournamentTotal;
+    });
 }
 
-function calculateTotal(golfer, round, startHole, endHole) {
-    let total = 0;
-    for (let i = startHole; i <= endHole; i++) {
-        total += tournamentScores[golfer][round][i] || 0;
-    }
-    return total;
-}
-
-function calculateTournamentTotal(golfer) {
-    let total = 0;
-    for (let round in tournamentScores[golfer]) {
-        for (let hole in tournamentScores[golfer][round]) {
-            total += tournamentScores[golfer][round][hole] || 0;
-        }
-    }
-    return total;
-}
 
 function createTournament() {
     const golfers = Array.from(document.getElementById("tournament-golfers").selectedOptions).map(option => option.value);
@@ -578,6 +560,13 @@ function createTournament() {
 
     const scorecardContainer = document.getElementById("scorecard-container");
     scorecardContainer.innerHTML = ""; 
+
+    golfers.forEach(golfer => {
+        if (!tournamentScores[golfer]) tournamentScores[golfer] = {};
+        for (let i = 1; i <= rounds; i++) {
+            tournamentScores[golfer][i] = new Array(18).fill(0);
+        }
+    })
 
     for (let i = 1; i <= rounds; i++) {
         const scorecard = generateScorecard(course, tees, golfers, i);
