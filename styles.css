@@ -208,24 +208,6 @@ body {
     padding: 8px 10px;
 }
 
-#scorecard-container {
-    margin: 20px auto;
-    max-width: 800px;
-    text-align: center;
-    font-weight: bold;
-}
-
-#scorecard-table {
-    width: 100%;
-    border-collapse: collapse;
-    
-}
-
-#scorecard-table th, #scorecard-table td {
-    border: 1px solid black;
-    padding: 8px;
-    text-align: center;
-}
 
 #tournament-form.hidden {
     display: none;
@@ -269,3 +251,73 @@ body {
     font-size: 16px;
     background-color: #f9f9f9;
 }
+
+#scorecard-container {
+    margin: 20px auto;
+    max-width: 1000px;
+    padding: 20px;
+    min-width: fit-content;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.scorecard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #f9f9f9;
+   
+}
+
+.scorecard-table th, .scorecard-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    
+}
+
+.scorecard-table th {
+    background-color: #04AA6D;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+
+}
+
+.scorecard-table td{
+    font-size: 14px;
+}
+
+.scorecard-table input {
+    width: 40px;
+    padding: 5px;
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.scorecard-table td input {
+    text-align: center;
+}
+
+.yardage-row, .par-row {
+    background-color: #f1f1f1;
+}
+
+.out-total, .in-total, .round-total, .tournament-total {
+    font-weight: bold;
+    background-color: #e9f9e9;
+}
+
+.golfer-row {
+    font-size: 14px;
+}
+
+.golfer-row td {
+    padding: 5px;
+    text-align: center;
+}
+

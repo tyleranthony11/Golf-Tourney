@@ -143,7 +143,7 @@ const scorecardData = {
             {holeNumber: 7, par: 4, yardage: 356},
             {holeNumber: 8, par: 3, yardage: 145},
             {holeNumber: 9, par: 4, yardage: 382},
-            {holeNumber: "front", par: 35, yardage: 2678},
+            {holeNumber: "out", par: 35, yardage: 2678},
             {holeNumber: 10, par: 5, yardage: 325},
             {holeNumber: 11, par: 4, yardage: 332},
             {holeNumber: 12, par: 3, yardage: 130},
@@ -153,7 +153,7 @@ const scorecardData = {
             {holeNumber: 16, par: 3, yardage: 158},
             {holeNumber: 17, par: 4, yardage: 343},
             {holeNumber: 18, par: 4, yardage: 132},
-            {holeNumber: "back", par: 36, yardage: 2523},
+            {holeNumber: "in", par: 36, yardage: 2523},
             {holeNumber: "total", par: 71, yardage: 5201}
         ],
         White: [
@@ -166,7 +166,7 @@ const scorecardData = {
             {holeNumber: 7, par: 4, yardage: 356},
             {holeNumber: 8, par: 3, yardage: 145},
             {holeNumber: 9, par: 4, yardage: 382},
-            {holeNumber: "front", par: 35, yardage: 2727},
+            {holeNumber: "out", par: 35, yardage: 2727},
             {holeNumber: 10, par: 5, yardage: 470},
             {holeNumber: 11, par: 4, yardage: 338},
             {holeNumber: 12, par: 3, yardage: 149},
@@ -176,7 +176,7 @@ const scorecardData = {
             {holeNumber: 16, par: 3, yardage: 165},
             {holeNumber: 17, par: 4, yardage: 359},
             {holeNumber: 18, par: 4, yardage: 351},
-            {holeNumber: "back", par: 36, yardage: 3015},
+            {holeNumber: "in", par: 36, yardage: 3015},
             {holeNumber: "total", par: 71, yardage: 5742}
         ],
         Blue: [
@@ -189,7 +189,7 @@ const scorecardData = {
             {holeNumber: 7, par: 4, yardage: 366},
             {holeNumber: 8, par: 3, yardage: 155},
             {holeNumber: 9, par: 4, yardage: 392},
-            {holeNumber: "front", par: 35, yardage: 2817},
+            {holeNumber: "out", par: 35, yardage: 2817},
             {holeNumber: 10, par: 5, yardage: 499},
             {holeNumber: 11, par: 4, yardage: 359},
             {holeNumber: 12, par: 3, yardage: 180},
@@ -199,7 +199,7 @@ const scorecardData = {
             {holeNumber: 16, par: 3, yardage: 183},
             {holeNumber: 17, par: 4, yardage: 386},
             {holeNumber: 18, par: 4, yardage: 373},
-            {holeNumber: "back", par: 36, yardage: 3236},
+            {holeNumber: "in", par: 36, yardage: 3236},
             {holeNumber: "total", par: 71, yardage: 6053}
         ]
     
@@ -227,6 +227,7 @@ const tournamentTeesDropdown = document.getElementById("tournament-tees");
 const rounds = [];
 const golfers = [];
 const golferHandicaps = [];
+let tournamentScores = {};
 
 
 function populateCourseDropdown (dropdown) {
@@ -425,19 +426,7 @@ function updateGolferHandicap(golferName) {
         });
 
 
-/*function populateScorecard(courseName, teeColor) {
-    const course = scorecardData[courseName];
-    const tee = course[teeColor];
-    const parCells = document.querySelectorAll(".hole-cell");
-    const yardageCells = document.querySelectorAll(".yardage-cell");
 
-    tee.forEach((hole, index) => {
-        if (parCells[index]) {
-            parCells[index].innerText = hole.par;
-            yardageCells[index].innerText = hole.yardage;
-        }
-    })
-}*/
 
 
 
@@ -447,7 +436,7 @@ createTournamentBtn.addEventListener("click", () => {
 });
 
 
-//populateScorecard("grandFallsGolfClub", "White");
+
 
    
 function generateScorecard(courseName, teeColor, golfers, roundNumber) {
@@ -458,7 +447,7 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
     table.classList.add("scorecard-table");
 
     const headerRow = document.createElement("tr");
-    const holes = [ "HOLE", "1", "2", "3", "4", "5", "6", "7", "8", "9", "OUT", "10", "11", "12", "13", "14", "15", "16", "17", "18", "IN", "TOTAL"];
+    const holes = [ "HOLE", "1", "2", "3", "4", "5", "6", "7", "8", "9", "OUT", "10", "11", "12", "13", "14", "15", "16", "17", "18", "IN", "ROUND", "TOTAL"];
     holes.forEach(hole => {
         const th = document.createElement("th");
         th.textContent = hole;
@@ -470,34 +459,133 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
     yardageRow.classList.add("yardage-row");
     yardageRow.innerHTML = `<td>YDS</td>`;
 
-    tee.forEach(hole => {
+    for (let i = 0; i < 21; i++) {
         const td = document.createElement("td");
-        td.textContent = hole.yardage;
+        td.textContent = tee[i].yardage;
         yardageRow.appendChild(td);
-    });
+    }
+    
     table.appendChild(yardageRow);
 
     const parRow = document.createElement("tr");
     parRow.classList.add("par-row");
     parRow.innerHTML = `<td>PAR</td>`;
-
-    tee.forEach(hole => {
+    for (let i = 0; i < 21; i++) {
         const td = document.createElement("td");
-        td.textContent = hole.par;
+        td.textContent = tee[i].par;
         parRow.appendChild(td);
-    });
+    }
+   
     table.appendChild(parRow);
 
-    return table;
-    
-}    
-    
- 
+    golfers.forEach(golfer => {
+        const golferRow = document.createElement("tr");
+        golferRow.classList.add("golfer-row");
+        golferRow.innerHTML = `<td>${golfer}</td>`;
+        
+        for (let i = 1; i <= 18; i++) {
+            const td = document.createElement("td");
+            const input = document.createElement("input");
+            input.type = "number";
+            input.min = "1";
+            input.classList.add("hole-score");
+            input.dataset.hole = i;
+            input.dataset.golfer = golfer;
+            input.dataset.round = roundNumber;
+            input.addEventListener("input", updateTotals);
+            td.appendChild(input);
+            golferRow.appendChild(td);
+            if (i === 9 || i === 18) {
+                const totalTd = document.createElement("td");
+                totalTd.classList.add(i === 9 ? "out-total" : "in-total");
+                totalTd.dataset.golfer = golfer;
+                totalTd.dataset.round = roundNumber;
+                totalTd.textContent = "0";
+                golferRow.appendChild(totalTd);
+            }
+        }
 
-startTournamentBtn.addEventListener("click", () => {
-    const table = generateScorecard("grandFallsGolfClub", "White");
-    document.getElementById('scorecard-container').appendChild(table); 
-});
+        const roundTotal = document.createElement("td");
+        roundTotal.classList.add("round-total");
+        roundTotal.dataset.golfer = golfer;
+        roundTotal.dataset.round = roundNumber;
+        roundTotal.textContent = "0";
+        golferRow.appendChild(roundTotal);
+        
+        const tournamentTotal = document.createElement("td");
+        tournamentTotal.classList.add("tournament-total");
+        tournamentTotal.dataset.golfer = golfer;
+        tournamentTotal.textContent = "0";
+        golferRow.appendChild(tournamentTotal);
+        
+        table.appendChild(golferRow);
+    });
+
+    return table;
+}
+
+function createTotalCell(tee, start, end, type = "yardage") {
+    const td = document.createElement("td");
+    td.textContent = tee.slice(start, end).reduce((sum, hole) => sum + hole[type], 0);
+    return td;
+}
+
+function updateTotals(event) {
+    const input = event.target;
+    const hole = input.dataset.hole;
+    const golfer = input.dataset.golfer;
+    const round = input.dataset.round;
+    const score = parseInt(input.value) || 0;
+
+    tournamentScores[golfer][round][hole] = score;
+
+    const outTotal = calculateTotal(golfer, round, 1, 9);
+    document.querySelector(`.out-total[data-golfer="${golfer}"][data-round="${round}"]`).textContent = outTotal;
+
+    const inTotal = calculateTotal(golfer, round, 10, 18);
+    document.querySelector(`.in-total[data-golfer="${golfer}"][data-round="${round}"]`).textContent = inTotal;
+
+    const roundTotal = outTotal + inTotal;
+    document.querySelector(`.round-total[data-golfer="${golfer}"][data-round="${round}"]`).textContent = roundTotal;
+
+    const tournamentTotal = calculateTournamentTotal(golfer);
+    document.querySelector(`.tournament-total[data-golfer="${golfer}"]`).textContent = tournamentTotal;
+}
+
+function calculateTotal(golfer, round, startHole, endHole) {
+    let total = 0;
+    for (let i = startHole; i <= endHole; i++) {
+        total += tournamentScores[golfer][round][i] || 0;
+    }
+    return total;
+}
+
+function calculateTournamentTotal(golfer) {
+    let total = 0;
+    for (let round in tournamentScores[golfer]) {
+        for (let hole in tournamentScores[golfer][round]) {
+            total += tournamentScores[golfer][round][hole] || 0;
+        }
+    }
+    return total;
+}
+
+function createTournament() {
+    const golfers = Array.from(document.getElementById("tournament-golfers").selectedOptions).map(option => option.value);
+    const course = document.getElementById("tournament-course").value;
+    const tees = document.getElementById("tournament-tees").value;
+    const rounds = parseInt(document.getElementById("tournament-rounds").value);
+
+    const scorecardContainer = document.getElementById("scorecard-container");
+    scorecardContainer.innerHTML = ""; 
+
+    for (let i = 1; i <= rounds; i++) {
+        const scorecard = generateScorecard(course, tees, golfers, i);
+        scorecardContainer.appendChild(scorecard);
+    }
+}
+
+startTournamentBtn.addEventListener("click", createTournament);
 
    
     
