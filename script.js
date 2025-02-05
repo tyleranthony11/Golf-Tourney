@@ -255,76 +255,75 @@ const scorecardData = {
   },
   terraNovaTwinRivers: {
     Front: [
-      { holeNumber: 1, par: 4, yardage: 357},
-      { holeNumber: 2, par: 5, yardage: 440},
-      { holeNumber: 3, par: 3, yardage: 160},
-      { holeNumber: 4, par: 4, yardage: 340},
-      { holeNumber: 5, par: 4, yardage: 339},
-      { holeNumber: 6, par: 4, yardage: 355},
-      { holeNumber: 7, par: 4, yardage: 348},
-      { holeNumber: 8, par: 3, yardage: 125},
-      { holeNumber: 9, par: 5, yardage: 387},
-      { holeNumber: "out", par: 36, yardage: 2851},
-      { holeNumber: 10, par: 4, yardage: 283},
-      { holeNumber: 11, par: 3, yardage: 113},
-      { holeNumber: 12, par: 3, yardage: 134},
-      { holeNumber: 13, par: 4, yardage: 284},
-      { holeNumber: 14, par: 4, yardage: 371},
-      { holeNumber: 15, par: 5, yardage: 454},
-      { holeNumber: 16, par: 5, yardage: 358},
-      { holeNumber: 17, par: 4, yardage: 365},
-      { holeNumber: 18, par: 3, yardage: 110},
-      { holeNumber: "in", par: 35, yardage: 2572},
-      { holeNumber: "total", par: 71, yardage: 5423},
+      { holeNumber: 1, par: 4, yardage: 357 },
+      { holeNumber: 2, par: 5, yardage: 440 },
+      { holeNumber: 3, par: 3, yardage: 160 },
+      { holeNumber: 4, par: 4, yardage: 340 },
+      { holeNumber: 5, par: 4, yardage: 339 },
+      { holeNumber: 6, par: 4, yardage: 355 },
+      { holeNumber: 7, par: 4, yardage: 348 },
+      { holeNumber: 8, par: 3, yardage: 125 },
+      { holeNumber: 9, par: 5, yardage: 387 },
+      { holeNumber: "out", par: 36, yardage: 2851 },
+      { holeNumber: 10, par: 4, yardage: 283 },
+      { holeNumber: 11, par: 3, yardage: 113 },
+      { holeNumber: 12, par: 3, yardage: 134 },
+      { holeNumber: 13, par: 4, yardage: 284 },
+      { holeNumber: 14, par: 4, yardage: 371 },
+      { holeNumber: 15, par: 5, yardage: 454 },
+      { holeNumber: 16, par: 5, yardage: 358 },
+      { holeNumber: 17, par: 4, yardage: 365 },
+      { holeNumber: 18, par: 3, yardage: 110 },
+      { holeNumber: "in", par: 35, yardage: 2572 },
+      { holeNumber: "total", par: 71, yardage: 5423 },
     ],
     Intermediate: [
-      { holeNumber: 1, par: 4, yardage: 396},
-      { holeNumber: 2, par: 5, yardage: 468},
-      { holeNumber: 3, par: 3, yardage: 177},
-      { holeNumber: 4, par: 4, yardage: 416},
-      { holeNumber: 5, par: 4, yardage: 368},
-      { holeNumber: 6, par: 4, yardage: 373},
-      { holeNumber: 7, par: 4, yardage: 372},
-      { holeNumber: 8, par: 3, yardage: 141},
-      { holeNumber: 9, par: 5, yardage: 442},
-      { holeNumber: "out", par: 36, yardage: 3153},
-      { holeNumber: 10, par: 4, yardage: 304},
-      { holeNumber: 11, par: 3, yardage: 214},
-      { holeNumber: 12, par: 3, yardage: 144},
-      { holeNumber: 13, par: 4, yardage: 321},
-      { holeNumber: 14, par: 4, yardage: 410},
-      { holeNumber: 15, par: 5, yardage: 492},
-      { holeNumber: 16, par: 5, yardage: 504},
-      { holeNumber: 17, par: 4, yardage: 389},
-      { holeNumber: 18, par: 3, yardage: 135},
-      { holeNumber: "in", par: 35, yardage: 2913},
-      { holeNumber: "total", par: 71, yardage: 6066},
+      { holeNumber: 1, par: 4, yardage: 396 },
+      { holeNumber: 2, par: 5, yardage: 468 },
+      { holeNumber: 3, par: 3, yardage: 177 },
+      { holeNumber: 4, par: 4, yardage: 416 },
+      { holeNumber: 5, par: 4, yardage: 368 },
+      { holeNumber: 6, par: 4, yardage: 373 },
+      { holeNumber: 7, par: 4, yardage: 372 },
+      { holeNumber: 8, par: 3, yardage: 141 },
+      { holeNumber: 9, par: 5, yardage: 442 },
+      { holeNumber: "out", par: 36, yardage: 3153 },
+      { holeNumber: 10, par: 4, yardage: 304 },
+      { holeNumber: 11, par: 3, yardage: 214 },
+      { holeNumber: 12, par: 3, yardage: 144 },
+      { holeNumber: 13, par: 4, yardage: 321 },
+      { holeNumber: 14, par: 4, yardage: 410 },
+      { holeNumber: 15, par: 5, yardage: 492 },
+      { holeNumber: 16, par: 5, yardage: 504 },
+      { holeNumber: 17, par: 4, yardage: 389 },
+      { holeNumber: 18, par: 3, yardage: 135 },
+      { holeNumber: "in", par: 35, yardage: 2913 },
+      { holeNumber: "total", par: 71, yardage: 6066 },
     ],
     Championship: [
-      { holeNumber: 1, par: 4, yardage: 423},
-      { holeNumber: 2, par: 5, yardage: 521},
-      { holeNumber: 3, par: 3, yardage: 212},
-      { holeNumber: 4, par: 4, yardage: 431},
-      { holeNumber: 5, par: 4, yardage: 390},
-      { holeNumber: 6, par: 4, yardage: 394},
-      { holeNumber: 7, par: 4, yardage: 383},
-      { holeNumber: 8, par: 3, yardage: 161},
-      { holeNumber: 9, par: 5, yardage: 480},
-      { holeNumber: "out", par: 36, yardage: 3395},
-      { holeNumber: 10, par: 4, yardage: 319},
-      { holeNumber: 11, par: 3, yardage: 243},
-      { holeNumber: 12, par: 3, yardage: 157},
-      { holeNumber: 13, par: 4, yardage: 349},
-      { holeNumber: 14, par: 4, yardage: 436},
-      { holeNumber: 15, par: 5, yardage: 510},
-      { holeNumber: 16, par: 5, yardage: 542},
-      { holeNumber: 17, par: 4, yardage: 420},
-      { holeNumber: 18, par: 3, yardage: 175},
-      { holeNumber: "in", par: 35, yardage: 3151},
-      { holeNumber: "total", par: 71, yardage: 6546},
-    ]
-    
-  }
+      { holeNumber: 1, par: 4, yardage: 423 },
+      { holeNumber: 2, par: 5, yardage: 521 },
+      { holeNumber: 3, par: 3, yardage: 212 },
+      { holeNumber: 4, par: 4, yardage: 431 },
+      { holeNumber: 5, par: 4, yardage: 390 },
+      { holeNumber: 6, par: 4, yardage: 394 },
+      { holeNumber: 7, par: 4, yardage: 383 },
+      { holeNumber: 8, par: 3, yardage: 161 },
+      { holeNumber: 9, par: 5, yardage: 480 },
+      { holeNumber: "out", par: 36, yardage: 3395 },
+      { holeNumber: 10, par: 4, yardage: 319 },
+      { holeNumber: 11, par: 3, yardage: 243 },
+      { holeNumber: 12, par: 3, yardage: 157 },
+      { holeNumber: 13, par: 4, yardage: 349 },
+      { holeNumber: 14, par: 4, yardage: 436 },
+      { holeNumber: 15, par: 5, yardage: 510 },
+      { holeNumber: 16, par: 5, yardage: 542 },
+      { holeNumber: 17, par: 4, yardage: 420 },
+      { holeNumber: 18, par: 3, yardage: 175 },
+      { holeNumber: "in", par: 35, yardage: 3151 },
+      { holeNumber: "total", par: 71, yardage: 6546 },
+    ],
+  },
 };
 
 const golferSelect = document.getElementById("golfer-name-dropdown");
@@ -396,10 +395,12 @@ function updateGolferDropdowns() {
 
   const tournamentGolfers = document.getElementById("tournament-golfers");
   golfers.forEach((golfer) => {
+    if (!Array.from(tournamentGolfers.options).some(option => option.value === golfer)){
     const option = document.createElement("option");
     option.value = golfer;
     option.textContent = golfer;
     tournamentGolfers.appendChild(option);
+    }
   });
 }
 
@@ -625,7 +626,7 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
       input.dataset.hole = i;
       input.dataset.golfer = golfer;
       input.dataset.round = roundNumber;
-      input.addEventListener("input", updateTotals);
+      input.addEventListener("input", (event) => updateTotals(event, tee));
       td.appendChild(input);
       golferRow.appendChild(td);
       if (i === 9 || i === 18) {
@@ -660,50 +661,57 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
   submitButton.dataset.round = roundNumber;
 
   submitButton.addEventListener("click", () => {
-    document.querySelectorAll(`input[data-round="${roundNumber}"]`).forEach(input => {
+    document
+      .querySelectorAll(`input[data-round="${roundNumber}"]`)
+      .forEach((input) => {
+        const hole = input.dataset.hole;
+        const score = parseInt(input.value, 10) || "-";
 
-      const hole = input.dataset.hole;
-      const score = parseInt(input.value, 10) || "-";
-      const par = parseInt(tee[hole - 1].par, 10);
+        let holeIndex = parseInt(hole, 10) - 1;
 
-      const span = document.createElement("span");
-      span.textContent = score;
-      span.classList.add("final-score");
-
-      if(score !== "-"){
-        const scoreDifference = score - par;
-
-        if(scoreDifference <= -3){
-          span.classList.add("albatross");
-        } else if (scoreDifference === -2){
-          span.classList.add("eagle");
-        } else if (scoreDifference === -1){
-          span.classList.add("birdie");
-        } else if (scoreDifference === 0){
-          span.classList.add("par")
-        } else if (scoreDifference === 1){
-          span.classList.add("bogey");
-        } else if (scoreDifference === 2){
-          span.classList.add("double-bogey");
-        } else {
-          span.classList.add("triple-bogey");
+        if (hole >= 10) {
+          holeIndex = parseInt(hole, 10);
         }
-      }
-      
-      input.parentNode.replaceChild(span, input);
-    });
+        const par = parseInt(tee[holeIndex].par, 10);
+
+        const span = document.createElement("span");
+        span.textContent = score;
+        span.classList.add("final-score");
+
+        if (score !== "-") {
+          const scoreDifference = score - par;
+
+          if (scoreDifference <= -3) {
+            span.classList.add("albatross");
+          } else if (scoreDifference === -2) {
+            span.classList.add("eagle");
+          } else if (scoreDifference === -1) {
+            span.classList.add("birdie");
+          } else if (scoreDifference === 0) {
+            span.classList.add("par");
+          } else if (scoreDifference === 1) {
+            span.classList.add("bogey");
+          } else if (scoreDifference === 2) {
+            span.classList.add("double-bogey");
+          } else {
+            span.classList.add("triple-bogey");
+          }
+        }
+
+        input.parentNode.replaceChild(span, input);
+      });
     submitButton.disabled = true;
     submitButton.textContent = "Round Submitted";
     submitButton.classList.add("submitted");
   });
-  
+
   scorecardContainer.appendChild(table);
   scorecardContainer.appendChild(submitButton);
 
   return scorecardContainer;
 }
 
-function updateTotals(event) {
+function updateTotals(event, tee) {
   const input = event.target;
   const hole = parseInt(input.dataset.hole) - 1;
   const golfer = input.dataset.golfer;
@@ -712,32 +720,64 @@ function updateTotals(event) {
 
   tournamentScores[golfer][round][hole] = score;
 
+  const outPar = tee[9].par;
+  const inPar = tee[19].par;
+  const totalPar = tee[20].par;
+
+
+
   const outTotal = Object.values(tournamentScores[golfer][round])
     .slice(0, 9)
     .reduce((sum, val) => sum + (val || 0), 0);
-  const outTotalElement = document.querySelector(
-    `.out-total[data-golfer="${golfer}"][data-round="${round}"]`
-  );
-  if (outTotalElement) outTotalElement.textContent = outTotal;
 
   const inTotal = tournamentScores[golfer][round]
     .slice(9, 18)
     .reduce((sum, val) => sum + val, 0);
-  document.querySelector(
-    `.in-total[data-golfer="${golfer}"][data-round="${round}"]`
-  ).textContent = inTotal;
 
   const roundTotal = outTotal + inTotal;
-  document.querySelector(
+
+  const outStrokesAbovePar = outTotal - outPar;
+  const inStrokesAbovePar = inTotal - inPar;
+  const roundStrokesAbovePar = roundTotal - totalPar;
+
+  const outTotalElement = document.querySelector(
+    `.out-total[data-golfer="${golfer}"][data-round="${round}"]`
+  );
+
+  if (outTotalElement) {
+    outTotalElement.textContent = `${outTotal} (${
+    outStrokesAbovePar === 0 ? "E" : outStrokesAbovePar >= 0 ? `+${outStrokesAbovePar}` : outStrokesAbovePar
+  })`;
+  }
+
+  const inTotalElement = document.querySelector(
+    `.in-total[data-golfer="${golfer}"][data-round="${round}"]`
+  );
+
+  if (inTotalElement) {
+    inTotalElement.textContent = `${inTotal} (${
+    inStrokesAbovePar === 0 ? "E" : inStrokesAbovePar >= 0 ? `+${inStrokesAbovePar}` : inStrokesAbovePar
+  })`;
+  }
+
+  const roundTotalElement = document.querySelector(
     `.round-total[data-golfer="${golfer}"][data-round="${round}"]`
-  ).textContent = roundTotal;
+  );
+  if (roundTotalElement) {
+    roundTotalElement.textContent = `${roundTotal} (${
+    roundStrokesAbovePar === 0 ? "E" : roundStrokesAbovePar >= 0 ? `+${roundStrokesAbovePar}` : roundStrokesAbovePar
+  })`;
+  }
 
   let tournamentTotal = 0;
+  let tournamentStrokesAbovePar = 0;
+
   for (let i in tournamentScores[golfer]) {
     tournamentTotal += tournamentScores[golfer][i].reduce(
       (sum, val) => sum + val,
       0
     );
+    tournamentStrokesAbovePar += roundStrokesAbovePar;
   }
   document
     .querySelectorAll(`.tournament-total[data-golfer="${golfer}"]`)
