@@ -319,5 +319,67 @@ body {
 .golfer-row td {
     padding: 5px;
     text-align: center;
+    height: 2em;
 }
 
+.submit-round-btn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 10px 20px;
+    margin: 20px auto;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: block;
+    width: fit-content;
+}
+
+.submit-round-btn:hover {
+    background-color: #037a4d;
+    transform: scale(1.05);
+}
+
+.submit-round-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.albatross {
+    border: 1px solid black;
+    border-radius: 50%;
+    padding: 2px 6px;
+    box-shadow: 0 0 0 1.5px white, 0 0 0 2px white, 0 0 0 3px black, 0 0 0 4px white, 0 0 0 5px black;
+}
+
+.birdie {
+    border: 1px solid black;
+    border-radius: 50%;
+    padding: 2px 6px;
+}
+
+.eagle {
+    border: 1px solid black;
+    border-radius: 50%;
+    padding: 2px 6px;
+    box-shadow: 0 0 0 1.5px white, 0 0 0 2.5px black;
+}
+
+.bogey {
+    border: 1px solid black;
+    padding: 2px 6px;
+}
+
+.double-bogey{
+    border: 1px solid black;
+    padding: 2px 6px;
+    box-shadow: 0 0 0 1px white, 0 0 0 2px black;
+}
+
+.triple-bogey {
+    border: 1px solid black;
+    padding: 2px 6px;
+    box-shadow: 0 0 0 1.5px white, 0 0 0 2px white, 0 0 0 3px black, 0 0 0 4px white, 0 0 0 5px black;
+}
