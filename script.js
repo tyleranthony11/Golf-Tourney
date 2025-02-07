@@ -1803,6 +1803,8 @@ function createTournament() {
   const scorecardContainer = document.getElementById("scorecard-container");
   scorecardContainer.innerHTML = "";
 
+
+
   golfers.forEach((golfer) => {
     if (!tournamentScores[golfer]) tournamentScores[golfer] = {};
     for (let i = 1; i <= rounds; i++) {
@@ -1818,6 +1820,7 @@ function createTournament() {
     scorecardContainer.appendChild(roundHeading);
     scorecardContainer.appendChild(scorecard);
   }
+  scorecardContainer.style.display = "block";
   tournamentForm.classList.toggle("hidden");
 }
 

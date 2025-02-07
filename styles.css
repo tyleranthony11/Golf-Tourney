@@ -254,6 +254,7 @@ body {
 }
 
 #scorecard-container {
+    display: none;
     margin: 20px auto;
     max-width: 1000px;
     padding: 20px;
