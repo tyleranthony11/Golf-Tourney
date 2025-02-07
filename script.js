@@ -487,7 +487,6 @@ const scorecardData = {
       { holeNumber: "in", par: 36, yardage: 3044 },
       { holeNumber: "total", par: 70, yardage: 5729 },
     ],
-
   },
   ganderGolfClub: {
     Red: [
@@ -513,7 +512,7 @@ const scorecardData = {
       { holeNumber: "in", par: 34, yardage: 2378 },
       { holeNumber: "total", par: 70, yardage: 5164 },
     ],
-   
+
     White: [
       { holeNumber: 1, par: 4, yardage: 382 },
       { holeNumber: 2, par: 3, yardage: 181 },
@@ -537,7 +536,7 @@ const scorecardData = {
       { holeNumber: "in", par: 34, yardage: 2668 },
       { holeNumber: "total", par: 70, yardage: 5662 },
     ],
-   
+
     Blue: [
       { holeNumber: 1, par: 4, yardage: 423 },
       { holeNumber: 2, par: 3, yardage: 208 },
@@ -561,7 +560,6 @@ const scorecardData = {
       { holeNumber: "in", par: 34, yardage: 2842 },
       { holeNumber: "total", par: 70, yardage: 6137 },
     ],
-   
   },
   glenDenning: {
     White: [
@@ -679,8 +677,6 @@ const scorecardData = {
       { holeNumber: "in", par: 35, yardage: 3124 },
       { holeNumber: "total", par: 71, yardage: 6214 },
     ],
-   
-   
   },
   grandFallsGolfClub: {
     Red: [
@@ -892,10 +888,8 @@ const scorecardData = {
       { holeNumber: "in", par: 36, yardage: 2965 },
       { holeNumber: "total", par: 72, yardage: 5921 },
     ],
-    
   },
   humberValleyResort: {
-  
     Red: [
       { holeNumber: 1, par: 5, yardage: 421 },
       { holeNumber: 2, par: 3, yardage: 128 },
@@ -1011,7 +1005,6 @@ const scorecardData = {
       { holeNumber: "in", par: 36, yardage: 3423 },
       { holeNumber: "total", par: 72, yardage: 7199 },
     ],
-    
   },
   pippyParkAdmiralsGreen: {
     Red: [
@@ -1042,7 +1035,7 @@ const scorecardData = {
       { holeNumber: 2, par: 4, yardage: 262 },
       { holeNumber: 3, par: 3, yardage: 164 },
       { holeNumber: 4, par: 4, yardage: 393 },
-      { holeNumber: 5, par: 3, yardage: 108},
+      { holeNumber: 5, par: 3, yardage: 108 },
       { holeNumber: 6, par: 4, yardage: 390 },
       { holeNumber: 7, par: 3, yardage: 169 },
       { holeNumber: 8, par: 4, yardage: 240 },
@@ -1065,7 +1058,7 @@ const scorecardData = {
       { holeNumber: 2, par: 4, yardage: 305 },
       { holeNumber: 3, par: 3, yardage: 164 },
       { holeNumber: 4, par: 5, yardage: 460 },
-      { holeNumber: 5, par: 3, yardage: 108},
+      { holeNumber: 5, par: 3, yardage: 108 },
       { holeNumber: 6, par: 5, yardage: 474 },
       { holeNumber: 7, par: 3, yardage: 169 },
       { holeNumber: 8, par: 4, yardage: 315 },
@@ -1083,7 +1076,7 @@ const scorecardData = {
       { holeNumber: "in", par: 33, yardage: 2392 },
       { holeNumber: "total", par: 68, yardage: 5042 },
     ],
- 
+
     "Gold/Silver": [
       { holeNumber: 1, par: 5, yardage: 495 },
       { holeNumber: 2, par: 4, yardage: 305 },
@@ -1153,7 +1146,6 @@ const scorecardData = {
       { holeNumber: "in", par: 35, yardage: 2951 },
       { holeNumber: "total", par: 71, yardage: 6263 },
     ],
- 
   },
   terraNovaTwinRivers: {
     Front: [
@@ -1296,7 +1288,6 @@ const scorecardData = {
       { holeNumber: "in", par: 36, yardage: 3327 },
       { holeNumber: "total", par: 72, yardage: 6772 },
     ],
-   
   },
 };
 
@@ -1641,6 +1632,13 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
       .forEach((input) => {
         const hole = input.dataset.hole;
         const score = parseInt(input.value, 10) || "-";
+        const golfer = input.dataset.golfer;
+        if (!tournamentScores[golfer]) tournamentScores[golfer] = {};
+        if (!tournamentScores[golfer][roundNumber])
+          tournamentScores[golfer][roundNumber] = [];
+        tournamentScores[golfer][roundNumber][hole - 1] = score;
+
+       
 
         let holeIndex = parseInt(hole, 10) - 1;
 
@@ -1695,10 +1693,11 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
     if (roundTotalElement) {
       roundTotalElement.textContent += ` (${roundTotalElement.dataset.strokesAbovePar})`;
     }
-
+    createLeaderboard(golfers, rounds);
     submitButton.disabled = true;
     submitButton.textContent = "Round Submitted";
     submitButton.classList.add("submitted");
+ 
   });
 
   scorecardContainer.appendChild(table);
@@ -1823,3 +1822,66 @@ function createTournament() {
 }
 
 startTournamentBtn.addEventListener("click", createTournament);
+
+function createLeaderboard(golfers, rounds) {
+  const leaderboardContainer = document.getElementById("leaderboard-container");
+  leaderboardContainer.innerHTML = "";
+
+  const table = document.createElement("table");
+  table.classList.add("leaderboard-table");
+
+  const headerRow = document.createElement("tr");
+  const headerCells = ["Golfer"];
+
+  for (let i = 1; i <= rounds; i++) {
+    headerCells.push(`R${i} Score`);
+  }
+
+  headerCells.push("TOTAL");
+
+  headerCells.forEach((header) => {
+    const th = document.createElement("th");
+    th.textContent = header;
+    headerRow.appendChild(th);
+  });
+
+  table.appendChild(headerRow);
+
+  golfers.forEach((golfer) => {
+    const row = document.createElement("tr");
+    const golferNameCell = document.createElement("td");
+    golferNameCell.textContent = golfer;
+    row.appendChild(golferNameCell);
+
+    let totalScore = 0;
+    let totalRounds  = 0;
+
+    for (let i = 1; i <= rounds; i++) {
+      const scoreCell = document.createElement("td");
+      const roundScore = tournamentScores[golfer][i]
+  ? tournamentScores[golfer][i].reduce((sum, val) => sum + val, 0)
+  : 0;
+
+      scoreCell.textContent = roundScore === 0 ? "-" : roundScore;
+      row.appendChild(scoreCell);
+
+      if (roundScore > 0){
+      totalScore += roundScore;
+      totalRounds += 1;
+      }
+    }
+
+    const totalCell = document.createElement("td");
+    totalCell.textContent = totalRounds === 0 ? "-" : totalScore;
+    row.appendChild(totalCell);
+
+    table.appendChild(row);
+  });
+
+  leaderboardContainer.appendChild(table);
+}
+
+
+
+
+

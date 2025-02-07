@@ -11,23 +11,23 @@
     <header>
     <div class="topnav">
         <a class="active" href="#home" onclick="switchTab('home', event)">Home</a>
-        <a href="#handicap-calculator" onclick="switchTab('handicap-calculator', event)">Handicap Calculator</a>
-        <a href="#rankings" onclick="switchTab('rankings', event)">Rankings</a>
-        <a href="#scorecard" onclick="switchTab('scorecard', event)">Scorecard</a>
-        <a href="#history" onclick="switchTab('history', event)">History</a>
+        <a href="#post-round" onclick="switchTab('post-round', event)">Post Round</a>
+        <a href="#handicap-rankings" onclick="switchTab('handicap-rankings', event)">Handicap Rankings</a>
+        <a href="#tournament-scorecard" onclick="switchTab('tournament-scorecard', event)">Tournament Scorecard</a>
+        <a href="#tournament-leaderboard" onclick="switchTab('tournament-leaderboard', event)">Tournament Leaderboard</a>
     </div>
     </header>
    
     <section>
    <div id="home" class="tab tab-active">
     <h1>Welcome to the Golf Tournament App</h1> <!--add image--> 
-    <p>This app allows you to track your rounds, calculate your handicap and create tournaments for you and your friends. </p>
+    <p>Calculate your handicap by posting your recent rounds, and create tournaments for you and your friends. </p>
    </div>
    </section>
 
    <section>
-   <div id="handicap-calculator" class="tab">
-    <h1>Handicap Calculator</h1>
+   <div id="post-round" class="tab">
+    <h1>Post Round</h1>
     <p>Calculate your handicap by posting scores from your rounds.</p>
     <button id="post-score-btn">Post Score</button>
 
@@ -64,15 +64,6 @@
                     <option value="">Select Tees</option>
                 </select>
             </div><br>
-            <!--<div>
-                <strong><label for="holes">Holes:</label></strong>
-                <select id="holes" name="holes" required>
-                    <option value="">Select Holes Played</option>
-                    <option value="18">18 Holes</option>
-                    <option value="front9">Front 9</option>
-                    <option value="back9">Back 9</option>
-                </select>
-            </div><br>-->
             <div>
                 <strong><label for="score">Score:</label></strong>
                 <input type="number" id="score" min="0" max="1000" placeholder="Enter Score" required>
@@ -94,7 +85,7 @@
    </section>
 
    <section>
-   <div id="rankings" class="tab">
+   <div id="handicap-rankings" class="tab">
     <h1>Rankings</h1>
     <p>Current Handicap Index for all Golfers:</p>
     <table id="handicap-table">
@@ -115,7 +106,7 @@
    </section>
 
    <section>
-   <div id="scorecard" class="tab">
+   <div id="tournament-scorecard" class="tab">
     
     <button id="create-tournament-btn">Create Tournament</button>
   
@@ -151,9 +142,12 @@
    </section>
 
    <section>
-   <div id="history" class="tab">
-    <h1>History</h1>
-    <p>Here is where history content will be stored</p>
+   <div id="tournament-leaderboard" class="tab">
+    <h1>Tournament Leaderboard:</h1>
+    <div id="leaderboard-container">
+
+    </div>
+
    </div>
    </section>
    

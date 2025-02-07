@@ -51,7 +51,7 @@ body {
     padding-left: 10px;
 }
 
-#handicap-calculator {
+#post-round {
     max-width: 600px;
     margin: 20px auto;
     padding: 20px;
@@ -61,14 +61,14 @@ body {
     text-align: left;
 }
 
-#handicap-calculator h1 {
+#post-round h1 {
     color: #000000;
     font-size: 24px;
     margin-bottom: 20px;
     text-align: center;
 }
 
-#handicap-calculator p {
+#post-round p {
     font-size: 16px;
     margin-bottom: 20px;
     text-align: center;
@@ -168,12 +168,12 @@ body {
     margin-bottom: 20px;
 }
 
-#rankings {
+#handicap-rankings {
     padding: 20px;
     background-color: #f9f9f9;
 }
 
-#rankings h1 {
+#handicap-rankings h1 {
     font-size: 24px;
     
 }
@@ -199,7 +199,7 @@ body {
     font-size: 18px;
 }
 
-#rankings-table-body tr td:first-child {
+#handicap-rankings-table-body tr td:first-child {
     font-weight: bold;
     
 }
