@@ -43,6 +43,7 @@ const startTournamentBtn = document.getElementById("start-tournament-btn");
 const tournamentForm = document.getElementById("tournament-form");
 const tournamentCourseDropdown = document.getElementById("tournament-course");
 const tournamentTeesDropdown = document.getElementById("tournament-tees");
+const leaderboardContainer = document.getElementById("leaderboard-container");
 
 let tournamentScores = {};
 const rounds = [];
@@ -363,79 +364,79 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
   submitButton.classList.add("submit-round-btn");
   submitButton.dataset.round = roundNumber;
 
-  submitButton.addEventListener("click", () => {
-    document
-      .querySelectorAll(`input[data-round="${roundNumber}"]`)
-      .forEach((input) => {
-        const hole = input.dataset.hole;
-        const score = parseInt(input.value, 10) || "-";
-        const golfer = input.dataset.golfer;
-        if (!tournamentScores[golfer]) tournamentScores[golfer] = {};
-        if (!tournamentScores[golfer][roundNumber])
-          tournamentScores[golfer][roundNumber] = [];
-        tournamentScores[golfer][roundNumber][hole - 1] = score;
-
-       
-
-        let holeIndex = parseInt(hole, 10) - 1;
-
-        if (hole >= 10) {
-          holeIndex = parseInt(hole, 10);
-        }
-        const par = parseInt(tee[holeIndex].par, 10);
-
-        const span = document.createElement("span");
-        span.textContent = score;
-        span.classList.add("final-score");
-
-        if (score !== "-") {
-          const scoreDifference = score - par;
-
-          if (scoreDifference <= -3) {
-            span.classList.add("albatross");
-          } else if (scoreDifference === -2) {
-            span.classList.add("eagle");
-          } else if (scoreDifference === -1) {
-            span.classList.add("birdie");
-          } else if (scoreDifference === 0) {
-            span.classList.add("par");
-          } else if (scoreDifference === 1) {
-            span.classList.add("bogey");
-          } else if (scoreDifference === 2) {
-            span.classList.add("double-bogey");
-          } else {
-            span.classList.add("triple-bogey");
+  submitButton.addEventListener("click", function() {
+    Object.keys(tournamentScores).forEach((golfer) => {
+      document.querySelectorAll(`input[data-round="${roundNumber}"][data-golfer="${golfer}"]`)
+        .forEach((input) => {
+          const hole = input.dataset.hole;
+          const score = parseInt(input.value, 10) || "-";
+          const golfer = input.dataset.golfer;
+  
+          if (!tournamentScores[golfer]) tournamentScores[golfer] = {};
+          if (!tournamentScores[golfer][roundNumber]) tournamentScores[golfer][roundNumber] = [];
+          tournamentScores[golfer][roundNumber][hole - 1] = score;
+  
+          let holeIndex = parseInt(hole, 10) - 1;
+          if (hole >= 10) {
+            holeIndex = parseInt(hole, 10);
           }
-        }
-
-        input.parentNode.replaceChild(span, input);
-      });
-
-    const outTotalElement = document.querySelector(
-      `.out-total[data-round="${roundNumber}"]`
-    );
-    const inTotalElement = document.querySelector(
-      `.in-total[data-round="${roundNumber}"]`
-    );
-    const roundTotalElement = document.querySelector(
-      `.round-total[data-round="${roundNumber}"]`
-    );
-
-    if (outTotalElement) {
-      outTotalElement.textContent += ` (${outTotalElement.dataset.strokesAbovePar})`;
-    }
-    if (inTotalElement) {
-      inTotalElement.textContent += ` (${inTotalElement.dataset.strokesAbovePar})`;
-    }
-    if (roundTotalElement) {
-      roundTotalElement.textContent += ` (${roundTotalElement.dataset.strokesAbovePar})`;
-    }
-    submitButton.disabled = true;
-    submitButton.textContent = "Round Submitted";
-    submitButton.classList.add("submitted");
-    updateLeaderboard();
- 
+          const par = parseInt(tee[holeIndex].par, 10);
+  
+          const span = document.createElement("span");
+          span.textContent = score;
+          span.classList.add("final-score");
+  
+          if (score !== "-") {
+            const scoreDifference = score - par;
+  
+            if (scoreDifference <= -3) {
+              span.classList.add("albatross");
+            } else if (scoreDifference === -2) {
+              span.classList.add("eagle");
+            } else if (scoreDifference === -1) {
+              span.classList.add("birdie");
+            } else if (scoreDifference === 0) {
+              span.classList.add("par");
+            } else if (scoreDifference === 1) {
+              span.classList.add("bogey");
+            } else if (scoreDifference === 2) {
+              span.classList.add("double-bogey");
+            } else {
+              span.classList.add("triple-bogey");
+            }
+          }
+  
+          input.parentNode.replaceChild(span, input);
+        });
+  
+      const outTotalElement = document.querySelector(
+        `.out-total[data-round="${roundNumber}"][data-golfer="${golfer}"]`
+      );
+      const inTotalElement = document.querySelector(
+        `.in-total[data-round="${roundNumber}"][data-golfer="${golfer}"]`
+      );
+      const roundTotalElement = document.querySelector(
+        `.round-total[data-round="${roundNumber}"][data-golfer="${golfer}"]`
+      );
+  
+      if (outTotalElement) {
+        outTotalElement.textContent += ` (${outTotalElement.dataset.strokesAbovePar})`;
+      }
+      if (inTotalElement) {
+        inTotalElement.textContent += ` (${inTotalElement.dataset.strokesAbovePar})`;
+      }
+      if (roundTotalElement) {
+        roundTotalElement.textContent += ` (${roundTotalElement.dataset.strokesAbovePar})`;
+      }
+  
+      submitButton.disabled = true;
+      submitButton.textContent = "Round Submitted";
+      submitButton.classList.add("submitted");
+      updateLeaderboard();
+      leaderboardContainer.style.display = "block";
+    });
   });
+  
 
   scorecardContainer.appendChild(table);
   scorecardContainer.appendChild(submitButton);
@@ -604,7 +605,7 @@ function updateLeaderboard() {
     headerRow.innerHTML += `<th>R${i}</th>`;
   }
 
-  headerRow.innerHTML += "<th>Total Score</th>";
+  headerRow.innerHTML += "<th>Total</th>";
 
  
   leaderboard.forEach((entry, index) => {
@@ -620,6 +621,4 @@ function updateLeaderboard() {
 
   leaderboardContainer.appendChild(table);
 }
-
-
 

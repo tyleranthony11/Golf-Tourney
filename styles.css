@@ -86,6 +86,7 @@ body {
     transition: 0.3s;
     height: 2em;
     width: 7em;
+    font-weight: bold;
     
 }
 
@@ -125,11 +126,24 @@ body {
     cursor: pointer;
     transition: 0.3s;
     align-self: center;
+    font-weight: bold;
 }
 
 #score-form button:hover {
     background-color: #037a4d;
 }
+
+#score-form input,
+#score-form select {
+    padding: 10px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+
 
 #rounds-display {
     max-width: 800px;
@@ -166,48 +180,61 @@ body {
 
 #add-golfer-btn {
     margin-bottom: 20px;
+    font-weight: bold;
 }
 
 #handicap-rankings {
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: #fff;
+    max-width: 500px;
+    margin: 0 auto;
+    
 }
 
 #handicap-rankings h1 {
     font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+    color: #333;
     
+}
+
+#handicap-rankings-container {
+    background-color: #f9f9f9;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 #handicap-table {
     width: 100%;
-    margin-top: 20px;
-    max-width: 700px;
-    margin: 0 auto;
-    margin-top: 30px;
-    
-    
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+    border-radius: 8px;
 }
 
 #handicap-table th, #handicap-table td {
     padding: 12px 15px;
-    text-align: left;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    
 }
 
 #handicap-table th {
     background-color: #04AA6D;
     color: white;
     font-size: 18px;
-}
-
-#handicap-rankings-table-body tr td:first-child {
     font-weight: bold;
-    
 }
 
-#handicap-table th, #handicap-table td {
-    padding: 8px 10px;
+#handicap-table td:first-child, #handicap-table th:first-child,
+#handicap-table td:nth-child(3), #handicap-table th:nth-child(3) {
+  font-weight: bold;
+  width: 20%;
 }
-
 
 #tournament-form.hidden {
     display: none;
@@ -386,3 +413,46 @@ body {
     box-shadow: 0 0 0 1.5px white, 0 0 0 2px white, 0 0 0 3px black, 0 0 0 4px white, 0 0 0 5px black;
 }
 
+#leaderboard-container {
+    margin: 20px auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    max-width: 800px;
+    display: none;
+}
+ 
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    
+}  
+
+.leaderboard-table th {
+    background-color: #04AA6D;
+    color: white;
+    padding:9px 15px;
+    border: 1px solid #ddd;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.leaderboard-table td {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    font-size: 15px;
+}
+
+.leaderboard-table td:first-child {
+    font-weight: bold;
+    font-size: 16px;
+}
+.leaderboard-table td:last-child {
+    font-weight: bold;
+    background-color: #e9f9e9;
+    font-size: 17px;
+  }
+  
