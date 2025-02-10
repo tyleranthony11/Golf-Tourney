@@ -10,11 +10,12 @@
     <main>
     <header>
     <div class="topnav">
-        <a class="active" href="#home" onclick="switchTab('home', event)">Home</a>
-        <a href="#post-round" onclick="switchTab('post-round', event)">Post Round</a>
-        <a href="#handicap-rankings" onclick="switchTab('handicap-rankings', event)">Handicap Rankings</a>
-        <a href="#tournament-scorecard" onclick="switchTab('tournament-scorecard', event)">Tournament Scorecard</a>
-        <a href="#tournament-leaderboard" onclick="switchTab('tournament-leaderboard', event)">Tournament Leaderboard</a>
+        <div class="topnav">
+            <a href="#home" id="homeTab" class="active">Home</a>
+            <a href="#post-round" id="postRoundTab">Post Round</a>
+            <a href="#handicap-rankings" id="handicapRankingsTab">Handicap Rankings</a>
+            <a href="#tournament-scorecard" id="tournamentScorecardTab">Tournament Scorecard</a>
+            <a href="#tournament-leaderboard" id="tournamentLeaderboardTab">Tournament Leaderboard</a>      
     </div>
     </header>
    
@@ -154,6 +155,6 @@
    
     
     </main>
-    <script src="script.js"></script>
+    <script src="script.js" type="module"></script>
 </body>
 </html>
