@@ -44,10 +44,11 @@ const tournamentForm = document.getElementById("tournament-form");
 const tournamentCourseDropdown = document.getElementById("tournament-course");
 const tournamentTeesDropdown = document.getElementById("tournament-tees");
 
+let tournamentScores = {};
 const rounds = [];
 const golfers = [];
 const golferHandicaps = [];
-let tournamentScores = {};
+
 
 function populateCourseDropdown(dropdown) {
   dropdown.innerHTML = '<option value="">Select a Course</option>';
@@ -429,15 +430,17 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
     if (roundTotalElement) {
       roundTotalElement.textContent += ` (${roundTotalElement.dataset.strokesAbovePar})`;
     }
-    createLeaderboard(golfers, rounds);
     submitButton.disabled = true;
     submitButton.textContent = "Round Submitted";
     submitButton.classList.add("submitted");
+    updateLeaderboard();
  
   });
 
   scorecardContainer.appendChild(table);
   scorecardContainer.appendChild(submitButton);
+
+  
 
   return scorecardContainer;
 }
@@ -562,65 +565,61 @@ function createTournament() {
 
 startTournamentBtn.addEventListener("click", createTournament);
 
-function createLeaderboard(golfers, rounds) {
+
+
+function updateLeaderboard() {
   const leaderboardContainer = document.getElementById("leaderboard-container");
   leaderboardContainer.innerHTML = "";
+
+  let leaderboard = [];
+  let totalRounds = 0;
+
+  
+  for (let golfer in tournamentScores) {
+    let totalScore = 0;
+    let roundScores = [];
+
+    for (let round in tournamentScores[golfer]) {
+      let roundTotal = tournamentScores[golfer][round].reduce((sum, score) => sum + score, 0);
+      roundScores.push(roundTotal);
+      totalScore += roundTotal;
+    }
+
+    totalRounds = roundScores.length;
+    leaderboard.push({ golfer, roundScores, totalScore });
+  }
+
+ 
+  leaderboard.sort((a, b) => a.totalScore - b.totalScore);
+
 
   const table = document.createElement("table");
   table.classList.add("leaderboard-table");
 
-  const headerRow = document.createElement("tr");
-  const headerCells = ["Golfer"];
+  let headerRow = table.insertRow();
+  headerRow.innerHTML = "<th>Rank</th><th>Golfer</th>";
 
-  for (let i = 1; i <= rounds; i++) {
-    headerCells.push(`R${i} Score`);
+  
+  for (let i = 1; i <= totalRounds; i++) {
+    headerRow.innerHTML += `<th>R${i}</th>`;
   }
 
-  headerCells.push("TOTAL");
+  headerRow.innerHTML += "<th>Total Score</th>";
 
-  headerCells.forEach((header) => {
-    const th = document.createElement("th");
-    th.textContent = header;
-    headerRow.appendChild(th);
-  });
+ 
+  leaderboard.forEach((entry, index) => {
+    let row = table.insertRow();
+    row.innerHTML = `<td>${index + 1}</td><td>${entry.golfer}</td>`;
 
-  table.appendChild(headerRow);
+    entry.roundScores.forEach((score) => {
+      row.innerHTML += `<td>${score}</td>`;
+    });
 
-  golfers.forEach((golfer) => {
-    const row = document.createElement("tr");
-    const golferNameCell = document.createElement("td");
-    golferNameCell.textContent = golfer;
-    row.appendChild(golferNameCell);
-
-    let totalScore = 0;
-    let totalRounds  = 0;
-
-    for (let i = 1; i <= rounds; i++) {
-      const scoreCell = document.createElement("td");
-      const roundScore = tournamentScores[golfer][i]
-  ? tournamentScores[golfer][i].reduce((sum, val) => sum + val, 0)
-  : 0;
-
-      scoreCell.textContent = roundScore === 0 ? "-" : roundScore;
-      row.appendChild(scoreCell);
-
-      if (roundScore > 0){
-      totalScore += roundScore;
-      totalRounds += 1;
-      }
-    }
-
-    const totalCell = document.createElement("td");
-    totalCell.textContent = totalRounds === 0 ? "-" : totalScore;
-    row.appendChild(totalCell);
-
-    table.appendChild(row);
+    row.innerHTML += `<td>${entry.totalScore}</td>`;
   });
 
   leaderboardContainer.appendChild(table);
 }
-
-
 
 
 
