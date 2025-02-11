@@ -27,7 +27,7 @@
     <img src="images/golfcourse1.jpg" alt="golf course image">
     <p>Register your golfers below to enable score posting and tournament participation. By adding golfers, you'll be able to track recent rounds, calculate handicaps, and set up multi-round tournaments for you and your friends!</p>
     <div id="new-golfer-input">
-        <label for="new-golfer-input">Register New Golfer:</label>
+        <label for="new-golfer-input">Register All Golfers Here:</label>
         <input type="text" id="new-golfer-name" placeholder="Golfer Name">
         <button id="submit-new-golfer" disabled>Add Golfer</button>
     </div>
@@ -113,28 +113,28 @@
    <section>
    <div id="tournament-scorecard" class="tab">
     
-    <button id="create-tournament-btn">Create Tournament</button>
+    <button id="create-tournament-btn">Create New Tournament</button>
   
-    <div id="tournament-form" class="hidden">
+    <form id="tournament-form" class="hidden">
         <h3>Create Tournament</h3>
 
         <label for="tournament-golfers">Select Golfer(s):</label>
-        <select id="tournament-golfers" multiple></select>
+        <select id="tournament-golfers" multiple required></select>
 
 
         <label for="tournament-course">Course:</label>
-        <select id="tournament-course"></select>
+        <select id="tournament-course" required></select>
 
         <label for="tournament-tees">Tees Played:</label>
-        <select id="tournament-tees"></select>
+        <select id="tournament-tees" required></select>
 
         <label for="tournament-rounds">Number of Rounds:</label>
         <input type="number" id="tournament-rounds" min="1" required>
 
 
-        <button id="start-tournament-btn">Start Tournament</button>
+        <button  type="submit" id="start-tournament-btn">Start Tournament</button>
 
-    </div>
+    </form>
 
 
 

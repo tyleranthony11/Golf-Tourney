@@ -16,6 +16,7 @@ const tournamentForm = document.getElementById("tournament-form");
 const tournamentCourseDropdown = document.getElementById("tournament-course");
 const tournamentTeesDropdown = document.getElementById("tournament-tees");
 const leaderboardContainer = document.getElementById("leaderboard-container");
+const scorecardContainer = document.getElementById("scorecard-container");
 
 let tournamentScores = {};
 const rounds = [];
@@ -254,7 +255,7 @@ scoreForm.addEventListener("submit", (event) => {
 });
 
 createTournamentBtn.addEventListener("click", () => {
-  tournamentForm.classList.toggle("hidden");
+  tournamentForm.style.display = "flex";
 });
 
 function generateScorecard(courseName, teeColor, golfers, roundNumber) {
@@ -371,31 +372,53 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
   submitButton.classList.add("submit-round-btn");
   submitButton.dataset.round = roundNumber;
 
+ 
+  
   submitButton.addEventListener("click", function() {
+    let allScoresFilled = true;
+
+
+    Object.keys(tournamentScores).forEach((golfer) => {
+      document.querySelectorAll(`input[data-round="${roundNumber}"][data-golfer="${golfer}"]`)
+        .forEach((input) => {
+          if (!input.value || input.value === "") {
+            allScoresFilled = false;
+            
+          } 
+        });
+    });
+
+    
+    if (!allScoresFilled) {
+      alert("Please enter score for all holes before submitting the round.");
+      return; 
+    }
+
+    
     Object.keys(tournamentScores).forEach((golfer) => {
       document.querySelectorAll(`input[data-round="${roundNumber}"][data-golfer="${golfer}"]`)
         .forEach((input) => {
           const hole = input.dataset.hole;
           const score = parseInt(input.value, 10) || "-";
           const golfer = input.dataset.golfer;
-  
+
           if (!tournamentScores[golfer]) tournamentScores[golfer] = {};
           if (!tournamentScores[golfer][roundNumber]) tournamentScores[golfer][roundNumber] = [];
           tournamentScores[golfer][roundNumber][hole - 1] = score;
-  
+
           let holeIndex = parseInt(hole, 10) - 1;
           if (hole >= 10) {
             holeIndex = parseInt(hole, 10);
           }
           const par = parseInt(tee[holeIndex].par, 10);
-  
+
           const span = document.createElement("span");
           span.textContent = score;
           span.classList.add("final-score");
-  
+
           if (score !== "-") {
             const scoreDifference = score - par;
-  
+
             if (scoreDifference <= -3) {
               span.classList.add("albatross");
             } else if (scoreDifference === -2) {
@@ -412,10 +435,13 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
               span.classList.add("triple-bogey");
             }
           }
-  
+
           input.parentNode.replaceChild(span, input);
+
+          
         });
-  
+
+      
       const outTotalElement = document.querySelector(
         `.out-total[data-round="${roundNumber}"][data-golfer="${golfer}"]`
       );
@@ -425,7 +451,7 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
       const roundTotalElement = document.querySelector(
         `.round-total[data-round="${roundNumber}"][data-golfer="${golfer}"]`
       );
-  
+
       if (outTotalElement) {
         outTotalElement.textContent += ` (${outTotalElement.dataset.strokesAbovePar})`;
       }
@@ -435,15 +461,15 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
       if (roundTotalElement) {
         roundTotalElement.textContent += ` (${roundTotalElement.dataset.strokesAbovePar})`;
       }
-  
+
+     
       submitButton.disabled = true;
       submitButton.textContent = "Round Submitted";
       submitButton.classList.add("submitted");
       updateLeaderboard();
       leaderboardContainer.style.display = "block";
     });
-  });
-  
+});
 
   scorecardContainer.appendChild(table);
   scorecardContainer.appendChild(submitButton);
@@ -547,7 +573,7 @@ function createTournament() {
   const tees = document.getElementById("tournament-tees").value;
   const rounds = parseInt(document.getElementById("tournament-rounds").value);
 
-  const scorecardContainer = document.getElementById("scorecard-container");
+ 
   scorecardContainer.innerHTML = "";
 
 
@@ -571,7 +597,20 @@ function createTournament() {
   tournamentForm.classList.toggle("hidden");
 }
 
-startTournamentBtn.addEventListener("click", createTournament);
+startTournamentBtn.addEventListener("click", function(event) {
+  event.preventDefault();
+  
+
+  if (tournamentForm.checkValidity()) {
+    resetScorecard();
+    createTournament();
+    tournamentForm.style.display = "none";
+    createTournamentBtn.style.display = "block";
+  } else {
+    tournamentForm.reportValidity();
+  }
+  
+});
 
 
 
@@ -629,3 +668,7 @@ function updateLeaderboard() {
   leaderboardContainer.appendChild(table);
 }
 
+function resetScorecard(){
+  if (scorecardContainer) {
+    scorecardContainer.innerHTML = "";
+}}
