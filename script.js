@@ -1,34 +1,6 @@
-function switchTab(tabName, event) {
-  event.preventDefault();
-
-  const tabs = document.querySelectorAll(".tab");
-  tabs.forEach((tab) => {
-    tab.classList.remove("tab-active");
-  });
-
-  const links = document.querySelectorAll(".topnav a");
-  links.forEach((link) => {
-    link.classList.remove("active");
-  });
-
-  const selectedTab = document.getElementById(tabName);
-  if (selectedTab) {
-    selectedTab.classList.add("tab-active");
-  }
-
-  const selectedLink = event.target;
-  selectedLink.classList.add("active");
-}
-
-document.getElementById('homeTab').addEventListener('click', (event) => switchTab('home', event));
-document.getElementById('postRoundTab').addEventListener('click', (event) => switchTab('post-round', event));
-document.getElementById('handicapRankingsTab').addEventListener('click', (event) => switchTab('handicap-rankings', event));
-document.getElementById('tournamentScorecardTab').addEventListener('click', (event) => switchTab('tournament-scorecard', event));
-document.getElementById('tournamentLeaderboardTab').addEventListener('click', (event) => switchTab('tournament-leaderboard', event));
-
 import { courseData, courseNames, scorecardData } from './courses.js';
 const golferSelect = document.getElementById("golfer-name-dropdown");
-const addGolferBtn = document.getElementById("add-golfer-btn");
+
 const roundsList = document.getElementById("rounds-list");
 const scoreForm = document.getElementById("score-form");
 const newGolferInput = document.getElementById("new-golfer-input");
@@ -50,6 +22,33 @@ const rounds = [];
 const golfers = [];
 const golferHandicaps = [];
 
+document.getElementById('homeTab').addEventListener('click', (event) => switchTab('home', event));
+document.getElementById('postRoundTab').addEventListener('click', (event) => switchTab('post-round', event));
+document.getElementById('handicapRankingsTab').addEventListener('click', (event) => switchTab('handicap-rankings', event));
+document.getElementById('tournamentScorecardTab').addEventListener('click', (event) => switchTab('tournament-scorecard', event));
+document.getElementById('tournamentLeaderboardTab').addEventListener('click', (event) => switchTab('tournament-leaderboard', event));
+
+function switchTab(tabName, event) {
+  event.preventDefault();
+
+  const tabs = document.querySelectorAll(".tab");
+  tabs.forEach((tab) => {
+    tab.classList.remove("tab-active");
+  });
+
+  const links = document.querySelectorAll(".topnav a");
+  links.forEach((link) => {
+    link.classList.remove("active");
+  });
+
+  const selectedTab = document.getElementById(tabName);
+  if (selectedTab) {
+    selectedTab.classList.add("tab-active");
+  }
+
+  const selectedLink = event.target;
+  selectedLink.classList.add("active");
+}
 
 function populateCourseDropdown(dropdown) {
   dropdown.innerHTML = '<option value="">Select a Course</option>';
@@ -120,17 +119,23 @@ function addGolfer(golferName) {
     alert("This golfer already exists. Please enter a new golfer.");
   }
 }
-addGolferBtn.addEventListener("click", () => {
-  newGolferInput.style.display = "block";
+
+newGolferNameInput.addEventListener("input", () => {
+  if (newGolferNameInput.value.trim() === "") {
+    submitNewGolferBtn.disabled = true;
+  } else {
+    submitNewGolferBtn.disabled = false;
+  }
 });
 
 submitNewGolferBtn.addEventListener("click", () => {
   const golferName = newGolferNameInput.value;
   if (golferName) {
     addGolfer(golferName);
-    newGolferInput.value = "";
-    newGolferInput.style.display = "none";
+    newGolferInput.value = "";  
   }
+  newGolferNameInput.value = "";
+  newGolferNameInput.dispatchEvent(new Event("input")); 
 });
 
 postScoreBtn.addEventListener("click", () => {
@@ -185,6 +190,7 @@ function updateRankingsTable() {
             `;
     rankingsTable.appendChild(row);
   });
+ 
 }
 
 function updateGolferHandicap(golferName) {
@@ -242,6 +248,7 @@ scoreForm.addEventListener("submit", (event) => {
   rounds.push(round);
   updateGolferHandicap(golferName);
   updateRankingsTable();
+  
 
   scoreForm.reset();
 });

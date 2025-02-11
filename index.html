@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Golf Tournament App</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <main>
@@ -21,8 +23,14 @@
    
     <section>
    <div id="home" class="tab tab-active">
-    <h1>Welcome to the Golf Tournament App</h1> <!--add image--> 
-    <p>Calculate your handicap by posting your recent rounds, and create tournaments for you and your friends. </p>
+    <h1>Welcome to the Golf Tournament App</h1>
+    <img src="images/golfcourse1.jpg" alt="golf course image">
+    <p>Register your golfers below to enable score posting and tournament participation. By adding golfers, you'll be able to track recent rounds, calculate handicaps, and set up multi-round tournaments for you and your friends!</p>
+    <div id="new-golfer-input">
+        <label for="new-golfer-input">Register New Golfer:</label>
+        <input type="text" id="new-golfer-name" placeholder="Golfer Name">
+        <button id="submit-new-golfer" disabled>Add Golfer</button>
+    </div>
    </div>
    </section>
 
@@ -36,22 +44,18 @@
         <h2>Enter Round Information</h2>
         <div class="round-info-container">
         <form id="score-form">
-            <div id="new-golfer-input" style="display: none;">
-                <label for="new-golfer-input">Enter New Golfer Name:</label>
-                <input type="text" id="new-golfer-name" placeholder="Golfer Name">
-                <button id="submit-new-golfer">Add Golfer</button>
-            </div>
+           
             <div>
-                <button id="add-golfer-btn">Add New Golfer</button>
-                <select id="golfer-name-dropdown">
-                    <option value="">Select Golfer</option>
+                
+                <select id="golfer-name-dropdown" required>
+                    <option value="" aria-required="">Select Golfer</option>
                 </select>
             </div>
            
             <br>
             <div>
                 <strong><label for="date-played">Date Played:</label></strong>
-                <input type="date" id="date-played">
+                <input type="date" id="date-played" required>
             </div><br>
             <div>
                 <strong><label for="course">Course:</label></strong>
@@ -89,7 +93,7 @@
    <div id="handicap-rankings" class="tab">
     <h1>Handicap Index Rankings</h1>
     <div id="handicap-rankings-container">
-    <table id="handicap-table">
+    <table id="handicap-table" >
         <thead>
             <tr>
                 <th>Rank</th>
