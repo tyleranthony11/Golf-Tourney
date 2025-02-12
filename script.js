@@ -1,6 +1,5 @@
 import { courseData, courseNames, scorecardData } from './courses.js';
 const golferSelect = document.getElementById("golfer-name-dropdown");
-
 const roundsList = document.getElementById("rounds-list");
 const scoreForm = document.getElementById("score-form");
 const newGolferInput = document.getElementById("new-golfer-input");
@@ -440,7 +439,11 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
 
           
         });
-
+        /*const roundStrokesAbovePar = parseInt(
+          document.querySelector(`.round-total[data-round="${roundNumber}"][data-golfer="${golfer}"]`)
+            .dataset.strokesAbovePar,
+          10
+        );*/
       
       const outTotalElement = document.querySelector(
         `.out-total[data-round="${roundNumber}"][data-golfer="${golfer}"]`
@@ -460,8 +463,24 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
       }
       if (roundTotalElement) {
         roundTotalElement.textContent += ` (${roundTotalElement.dataset.strokesAbovePar})`;
-      }
 
+        /*const tournamentTotalElement = document.querySelector(
+          `.tournament-total[data-golfer="${golfer}"]`
+        );
+        
+        if (tournamentTotalElement) {
+          const tournamentTotal = parseInt(tournamentTotalElement.textContent, 10) || 0;
+          tournamentTotalElement.textContent = `${tournamentTotal} (${
+            tournamentScores[golfer].tournamentStrokesAbovePar === 0
+              ? "E"
+              : tournamentScores[golfer].tournamentStrokesAbovePar > 0
+              ? `+${tournamentScores[golfer].tournamentStrokesAbovePar}`
+              : tournamentScores[golfer].tournamentStrokesAbovePar
+          })`;
+        }*/
+      
+      }
+     
      
       submitButton.disabled = true;
       submitButton.textContent = "Round Submitted";
@@ -505,6 +524,7 @@ function updateTotals(event, tee) {
   const outStrokesAbovePar = outTotal - outPar;
   const inStrokesAbovePar = inTotal - inPar;
   const roundStrokesAbovePar = roundTotal - totalPar;
+
 
   const outTotalElement = document.querySelector(
     `.out-total[data-golfer="${golfer}"][data-round="${round}"]`
