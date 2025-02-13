@@ -16,6 +16,7 @@ const tournamentCourseDropdown = document.getElementById("tournament-course");
 const tournamentTeesDropdown = document.getElementById("tournament-tees");
 const leaderboardContainer = document.getElementById("leaderboard-container");
 const scorecardContainer = document.getElementById("scorecard-container");
+const handicapRankingsContainer = document.getElementById("handicap-rankings-container");
 
 let tournamentScores = {};
 const rounds = [];
@@ -176,6 +177,7 @@ function calculateHandicap(golferName) {
 }
 
 function updateRankingsTable() {
+
   const rankingsTable = document.getElementById("rankings-table-body");
   rankingsTable.innerHTML = "";
 
@@ -190,6 +192,10 @@ function updateRankingsTable() {
             `;
     rankingsTable.appendChild(row);
   });
+  handicapRankingsContainer.style.display = "block";
+  setTimeout(() => {
+    handicapRankingsContainer.classList.add("visible");
+  }, 10);
  
 }
 

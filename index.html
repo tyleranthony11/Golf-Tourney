@@ -23,13 +23,14 @@
    
     <section>
    <div id="home" class="tab tab-active">
-    <h1>Welcome to the Golf Tournament App</h1>
-    <img src="images/golfcourse1.jpg" alt="golf course image">
+    <h1 class="home-header"><img src="images/ballandtee.png" alt="golf icon" class="golf-icon">
+        Welcome to Golf Tourney </h1>
+    <img src="images/golfcourse1.jpg" alt="golf course image" class="home-img">
     <p>Register your golfers below to enable score posting and tournament participation. By adding golfers, you'll be able to track recent rounds, calculate handicaps, and set up multi-round tournaments for you and your friends!</p>
     <div id="new-golfer-input">
         <label for="new-golfer-input">Register All Golfers Here:</label>
         <input type="text" id="new-golfer-name" placeholder="Golfer Name">
-        <button id="submit-new-golfer" disabled>Add Golfer</button>
+        <button id="submit-new-golfer" disabled><img src="/images/golfer1.png" style="width: 25px; vertical-align: middle;"> Add Golfer</button>
     </div>
    </div>
    </section>
@@ -92,7 +93,7 @@
    <section>
    <div id="handicap-rankings" class="tab">
     <h1>Handicap Index Rankings</h1>
-    <div id="handicap-rankings-container">
+    <div id="handicap-rankings-container" style="display: none;">
     <table id="handicap-table" >
         <thead>
             <tr>
@@ -132,7 +133,7 @@
         <input type="number" id="tournament-rounds" min="1" required>
 
 
-        <button  type="submit" id="start-tournament-btn">Start Tournament</button>
+        <button  type="submit" id="start-tournament-btn"><img src="/images/golfer1.png" style="width: 25px; vertical-align: middle;"> Start Tournament</button>
 
     </form>
 
@@ -148,7 +149,7 @@
 
    <section>
    <div id="tournament-leaderboard" class="tab">
-    <h1>Tournament Leaderboard:</h1>
+    <h1>Tournament Leaderboard</h1>
     <div id="leaderboard-container">
 
     </div>
