@@ -17,6 +17,7 @@ const tournamentTeesDropdown = document.getElementById("tournament-tees");
 const leaderboardContainer = document.getElementById("leaderboard-container");
 const scorecardContainer = document.getElementById("scorecard-container");
 const handicapRankingsContainer = document.getElementById("handicap-rankings-container");
+const slides = document.querySelectorAll(".carousel-slide");
 
 let tournamentScores = {};
 const rounds = [];
@@ -50,6 +51,31 @@ function switchTab(tabName, event) {
   const selectedLink = event.target;
   selectedLink.classList.add("active");
 }
+
+let currentIndex = 0;
+
+function showSlide(index){
+  slides.forEach((slide, i) => {
+    if (i === index){
+      slide.classList.add("show");
+      slide.style.opacity = 1;
+    } else {
+      slide.classList.remove("show");
+      slide.style.opacity = 0;
+    }
+   
+  });
+}
+
+function nextSlide() {
+  currentIndex = (currentIndex + 1) % slides.length;
+  showSlide(currentIndex);
+}
+showSlide(currentIndex);
+setInterval(nextSlide, 8000);
+
+
+
 
 function populateCourseDropdown(dropdown) {
   dropdown.innerHTML = '<option value="">Select a Course</option>';
