@@ -439,11 +439,7 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
 
           
         });
-        /*const roundStrokesAbovePar = parseInt(
-          document.querySelector(`.round-total[data-round="${roundNumber}"][data-golfer="${golfer}"]`)
-            .dataset.strokesAbovePar,
-          10
-        );*/
+       
       
       const outTotalElement = document.querySelector(
         `.out-total[data-round="${roundNumber}"][data-golfer="${golfer}"]`
@@ -463,24 +459,25 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
       }
       if (roundTotalElement) {
         roundTotalElement.textContent += ` (${roundTotalElement.dataset.strokesAbovePar})`;
-
-        /*const tournamentTotalElement = document.querySelector(
-          `.tournament-total[data-golfer="${golfer}"]`
-        );
-        
-        if (tournamentTotalElement) {
-          const tournamentTotal = parseInt(tournamentTotalElement.textContent, 10) || 0;
-          tournamentTotalElement.textContent = `${tournamentTotal} (${
-            tournamentScores[golfer].tournamentStrokesAbovePar === 0
-              ? "E"
-              : tournamentScores[golfer].tournamentStrokesAbovePar > 0
-              ? `+${tournamentScores[golfer].tournamentStrokesAbovePar}`
-              : tournamentScores[golfer].tournamentStrokesAbovePar
-          })`;
-        }*/
-      
       }
-     
+      
+    
+      let tournamentStrokesAbovePar = 0;
+      
+      document.querySelectorAll(`.round-total[data-golfer="${golfer}"]`).forEach((roundElement) => {
+        tournamentStrokesAbovePar += parseInt(roundElement.dataset.strokesAbovePar) || 0;
+      });
+      
+      document.querySelectorAll(`.tournament-total[data-golfer="${golfer}"]`).forEach((roundElement) => {
+        if (roundElement) {
+          roundElement.textContent += 
+            tournamentStrokesAbovePar === 0
+            ? " (E)"
+            : tournamentStrokesAbovePar > 0
+            ? ` (+${tournamentStrokesAbovePar})`
+            : ` (${tournamentStrokesAbovePar})`;
+        }
+      });
      
       submitButton.disabled = true;
       submitButton.textContent = "Round Submitted";
@@ -645,15 +642,21 @@ function updateLeaderboard() {
   for (let golfer in tournamentScores) {
     let totalScore = 0;
     let roundScores = [];
+    let strokesAbovePar = [];
 
     for (let round in tournamentScores[golfer]) {
       let roundTotal = tournamentScores[golfer][round].reduce((sum, score) => sum + score, 0);
-      roundScores.push(roundTotal);
-      totalScore += roundTotal;
+      let roundStrokesAbovePar = document.querySelector(
+        `.round-total[data-golfer="${golfer}"][data-round="${round}"]`
+      ).dataset.strokesAbovePar || 0;
+
+      roundScores.push(roundTotal || 0);
+      strokesAbovePar.push(roundStrokesAbovePar);
+      totalScore += roundTotal || 0;
     }
 
     totalRounds = roundScores.length;
-    leaderboard.push({ golfer, roundScores, totalScore });
+    leaderboard.push({ golfer, roundScores, strokesAbovePar,totalScore });
   }
 
  
@@ -678,11 +681,14 @@ function updateLeaderboard() {
     let row = table.insertRow();
     row.innerHTML = `<td>${index + 1}</td><td>${entry.golfer}</td>`;
 
-    entry.roundScores.forEach((score) => {
-      row.innerHTML += `<td>${score}</td>`;
+    entry.roundScores.forEach((score, i) => {
+      let strokesAbovePar = entry.strokesAbovePar[i];
+      row.innerHTML += `<td>${score} (${strokesAbovePar >= 0 ? `${strokesAbovePar}` : strokesAbovePar})</td>`;
     });
-
-    row.innerHTML += `<td>${entry.totalScore}</td>`;
+    let totalStrokesAbovePar = entry.strokesAbovePar.reduce((a, b) => {
+      return (parseFloat(a) || 0) + (parseFloat(b) || 0);
+    }, 0);
+    row.innerHTML += `<td>${entry.totalScore} (${totalStrokesAbovePar >= 0 ? `+${totalStrokesAbovePar}` : totalStrokesAbovePar})</td>`;
   });
 
   leaderboardContainer.appendChild(table);
