@@ -584,7 +584,7 @@ body {
     margin-bottom: 20px;
     font-size: 16px;
     background-color: #f1f1f1;
-    transition: border-color 0.3s ease, box-shadown 0.3s;
+    transition: border-color 0.3s ease, box-shadow 0.3s;
 }
 #tournament-form select:focus,
 #tournament-form input:focus {
