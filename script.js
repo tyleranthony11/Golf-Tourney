@@ -18,6 +18,8 @@ const leaderboardContainer = document.getElementById("leaderboard-container");
 const scorecardContainer = document.getElementById("scorecard-container");
 const handicapRankingsContainer = document.getElementById("handicap-rankings-container");
 const slides = document.querySelectorAll(".carousel-slide");
+const emptyHandicapRankings = document.getElementById("empty-handicap-rankings");
+const emptyLeaderboard = document.getElementById("empty-leaderboard");
 
 
 
@@ -62,7 +64,7 @@ function switchTab(tabName, event) {
   selectedLink.classList.add("active");
 }
 
-let currentIndex = 0;
+
 
 function showSlide(index){
   slides.forEach((slide, i) => {
@@ -76,7 +78,7 @@ function showSlide(index){
    
   });
 }
-
+let currentIndex = 0;
 function nextSlide() {
   currentIndex = (currentIndex + 1) % slides.length;
   showSlide(currentIndex);
@@ -213,10 +215,13 @@ function calculateHandicap(golferName) {
 }
 
 function updateRankingsTable() {
+   const rankingsTable = document.getElementById("rankings-table-body");
+   emptyHandicapRankings.style.display = "none";
+  
 
-  const rankingsTable = document.getElementById("rankings-table-body");
   rankingsTable.innerHTML = "";
 
+  if (golferHandicaps.length > 0) {
   golferHandicaps.sort((a, b) => a.handicap - b.handicap);
 
   golferHandicaps.forEach((golfer, index) => {
@@ -228,11 +233,13 @@ function updateRankingsTable() {
             `;
     rankingsTable.appendChild(row);
   });
+
   handicapRankingsContainer.style.display = "block";
-  setTimeout(() => {
     handicapRankingsContainer.classList.add("visible");
-  }, 10);
- 
+  
+} else {
+  emptyHandicapRankings.style.display = "block";
+}
 }
 
 function updateGolferHandicap(golferName) {
@@ -527,6 +534,7 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
       submitButton.textContent = "Round Submitted";
       submitButton.classList.add("submitted");
       updateLeaderboard();
+      emptyLeaderboard.style.display = "none";
       leaderboardContainer.style.display = "block";
     });
 });

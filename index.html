@@ -104,7 +104,7 @@
             </div><br>
             <div>
                 <strong><label for="score">Score:</label></strong>
-                <input type="number" id="score" min="0" max="1000" placeholder="Enter Score" required>
+                <input type="number" id="score" min="18" max="500" placeholder="Enter Score" required>
             </div><br>
             <button type="submit">Submit Round</button>
 
@@ -128,7 +128,7 @@
     <div id="empty-handicap-rankings" class="empty-state">
         <img src="/images/ranking.png" style="width: 90px;" alt="trophy"/>
         <h3>No Rankings Available Yet</h3>
-        <p>Once scores are posted <a href="#" id="post-score-link">here</a>, you'll be able to view the rankings in this tab.</p>
+        <p>Once scores are posted <a href="#" id="post-score-link">here</a>, you'll be able to view the handicap index rankings in this tab.</p>
     </div>
     <div id="handicap-rankings-container" style="display: none;">
     <table id="handicap-table" >
@@ -163,11 +163,11 @@
         <label for="tournament-course">Course:</label>
         <select id="tournament-course" required></select>
 
-        <label for="tournament-tees">Tees Played:</label>
+        <label for="tournament-tees">Tees:</label>
         <select id="tournament-tees" required></select>
 
         <label for="tournament-rounds">Number of Rounds:</label>
-        <input type="number" id="tournament-rounds" min="1" required>
+        <input type="number" id="tournament-rounds" min="1" max="10" required>
 
 
         <button  type="submit" id="start-tournament-btn"><img src="/images/flag.png" style="width: 25px; vertical-align: middle;"> Start Tournament</button>

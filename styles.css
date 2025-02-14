@@ -463,10 +463,16 @@ body {
 }
 
 #handicap-rankings-container {
-    display: none;
+    
     opacity: 0;
     transform: translateY(-20px);
     transition: opacity 0.5s ease, transform 0.5s ease;
+    visibility: hidden;
+}
+#handicap-rankings-container.visible {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
 }
 #handicap-rankings-container.visible {
     opacity: 1;
@@ -744,7 +750,7 @@ body {
     border: 1px solid #ccc;
     border-radius: 10px;
     background-color: #f9f9f9;
-    max-width: 800px;
+    max-width: fit-content;
     display: none;
 }
  
