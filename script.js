@@ -740,7 +740,7 @@ function updateLeaderboard() {
     let totalStrokesAbovePar = entry.strokesAbovePar.reduce((a, b) => {
       return (parseFloat(a) || 0) + (parseFloat(b) || 0);
     }, 0);
-    row.innerHTML += `<td>${entry.totalScore} (${totalStrokesAbovePar >= 0 ? `+${totalStrokesAbovePar}` : totalStrokesAbovePar})</td>`;
+    row.innerHTML += `<td>${entry.totalScore} (${totalStrokesAbovePar === 0 ? 'E' : (totalStrokesAbovePar > 0 ? `+${totalStrokesAbovePar}` : totalStrokesAbovePar)})</td>`;
   });
 
   leaderboardContainer.appendChild(table);
