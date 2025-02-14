@@ -48,6 +48,13 @@
             Hole #8 - Admiral's Green, Pippy Park Public Golf Course - St. John's, NL, Canada
             </div>
         </div>
+        <div class="carousel-slide">
+        <img src="images/ballyhally.jpg" alt="Golf Course" class="home-img">
+            <div class="carousel-caption">
+            <img src="/images/location.png" alt="Location Icon" class="location-icon">
+            Hole #1 - Championship South Course, Bally Haly Country Club - St. John's, NL, Canada
+            </div>
+        </div>
 
 </div>
     <p>Register your golfers below to enable score posting and tournament participation. By adding golfers, you'll be able to track recent rounds, calculate handicaps, and set up multi-round tournaments for you and your friends!</p>
@@ -64,7 +71,7 @@
    <div id="post-round" class="tab">
     <h1>Post Round</h1>
     <p>Calculate your handicap by posting scores from your rounds.</p>
-    <button id="post-score-btn"><img src="/images/pencil1.png" style="width: 20px; vertical-align: middle;"> Post Score</button>
+    <button id="post-score-btn"><img src="/images/pencil1.png" style="width: 20px; vertical-align: middle; margin-right: 5px;"> Post Score</button>
 
     <div id="post-score-form" style="display: none;">
         <h2>Enter Round Information</h2>
@@ -118,6 +125,11 @@
    <section>
    <div id="handicap-rankings" class="tab">
     <h1>Handicap Index Rankings</h1>
+    <div id="empty-handicap-rankings" class="empty-state">
+        <img src="/images/ranking.png" style="width: 90px;" alt="trophy"/>
+        <h3>No Rankings Available Yet</h3>
+        <p>Once scores are posted <a href="#" id="post-score-link">here</a>, you'll be able to view the rankings in this tab.</p>
+    </div>
     <div id="handicap-rankings-container" style="display: none;">
     <table id="handicap-table" >
         <thead>
@@ -142,7 +154,7 @@
     <button id="create-tournament-btn">Create New Tournament</button>
   
     <form id="tournament-form" class="hidden">
-        <h3>Create Tournament</h3>
+        <h1>Create Tournament</h1>
 
         <label for="tournament-golfers">Select Golfer(s):</label>
         <select id="tournament-golfers" multiple required></select>
@@ -175,8 +187,13 @@
    <section>
    <div id="tournament-leaderboard" class="tab">
     <h1>Tournament Leaderboard</h1>
+    <div id="empty-leaderboard" class="empty-state">
+        <img src="/images/trophy.png" alt="trophy"/>
+        <h3>No Tournament In Progress Yet</Progress></h3>
+        <p>Start a tournament <a href="#" id="start-tournament-link">here</a> to see the leaderboard</p>
+    </div>
     <div id="leaderboard-container">
-
+           
     </div>
 
    </div>

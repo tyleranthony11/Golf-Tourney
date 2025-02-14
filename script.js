@@ -19,6 +19,8 @@ const scorecardContainer = document.getElementById("scorecard-container");
 const handicapRankingsContainer = document.getElementById("handicap-rankings-container");
 const slides = document.querySelectorAll(".carousel-slide");
 
+
+
 let tournamentScores = {};
 const rounds = [];
 const golfers = [];
@@ -29,6 +31,14 @@ document.getElementById('postRoundTab').addEventListener('click', (event) => swi
 document.getElementById('handicapRankingsTab').addEventListener('click', (event) => switchTab('handicap-rankings', event));
 document.getElementById('tournamentScorecardTab').addEventListener('click', (event) => switchTab('tournament-scorecard', event));
 document.getElementById('tournamentLeaderboardTab').addEventListener('click', (event) => switchTab('tournament-leaderboard', event));
+document.getElementById("start-tournament-link").addEventListener("click", (event) => {
+  event.preventDefault();
+  document.getElementById("tournamentScorecardTab").click();
+});
+document.getElementById("post-score-link").addEventListener("click", (event) => {
+  event.preventDefault();
+  document.getElementById("postRoundTab").click();
+});
 
 function switchTab(tabName, event) {
   event.preventDefault();
@@ -237,6 +247,8 @@ function updateGolferHandicap(golferName) {
   }
   updateRankingsTable();
 }
+
+
 
 scoreForm.addEventListener("submit", (event) => {
   event.preventDefault();

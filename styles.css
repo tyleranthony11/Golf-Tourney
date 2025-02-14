@@ -444,12 +444,12 @@ body {
 
 #handicap-rankings {
     
-    padding: 30px;
+    padding: 0px;
     background-color: #fff;
     max-width: 600px;
-    margin: 40px auto;
+    margin: 10px auto;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    
     
 }
 
@@ -526,6 +526,10 @@ body {
     background-color: #f9f9f9;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     
+}
+#tournament-form h1 {
+    color: #2c3e50;
+    font-size: 28px;
 }
 #tournament-form label {
     font-size: 18px;
@@ -728,6 +732,11 @@ body {
     padding: 2px 8px;
     box-shadow: 0 0 0 1.5px white, 0 0 0 2px white, 0 0 0 3px black, 0 0 0 4px white, 0 0 0 5px black;
 }
+#tournament-leaderboard h1 {
+    color: #2c3e50;
+    margin: 20px auto;
+    font-size: 28px;
+}
 
 #leaderboard-container {
     margin: 20px auto;
@@ -772,3 +781,35 @@ body {
     font-size: 17px;
   }
   
+
+  .empty-state {
+    text-align: center;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 30px auto;
+  }
+.empty-state img {
+    width: 80px;
+    opacity: 0.8;
+}
+#start-tournament-link {
+    color: #04AA6D;
+    text-decoration: none;
+    font-weight: bold;
+}
+#start-tournament-link:hover {
+    color:#037a4d;
+    text-decoration: underline;
+}
+#post-score-link {
+    color: #04AA6D;
+    text-decoration: none;
+    font-weight: bold;
+}
+#post-score-link:hover {
+    color:#037a4d;
+    text-decoration: underline;
+}
