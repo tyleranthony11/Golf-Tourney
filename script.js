@@ -312,8 +312,11 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
   const course = scorecardData[courseName];
   const tee = course[teeColor];
 
+  
+
   const scorecardContainer = document.createElement("div");
   scorecardContainer.classList.add("scorecard-container");
+
 
   const table = document.createElement("table");
   table.classList.add("scorecard-table");
@@ -635,6 +638,7 @@ function updateTotals(event, tee) {
 }
 
 function createTournament() {
+  const tournamentName = document.getElementById("tournament-name").value;
   const golfers = Array.from(
     document.getElementById("tournament-golfers").selectedOptions
   ).map((option) => option.value);
@@ -647,12 +651,17 @@ function createTournament() {
 
 
 
+
   golfers.forEach((golfer) => {
     if (!tournamentScores[golfer]) tournamentScores[golfer] = {};
     for (let i = 1; i <= rounds; i++) {
       tournamentScores[golfer][i] = new Array(18).fill(0);
     }
   });
+
+  const tournamentTitle = document.createElement("h2");
+tournamentTitle.textContent = tournamentName;
+scorecardContainer.appendChild(tournamentTitle);
 
   for (let i = 1; i <= rounds; i++) {
     const roundHeading = document.createElement("h3");
@@ -686,6 +695,11 @@ startTournamentBtn.addEventListener("click", function(event) {
 function updateLeaderboard() {
   const leaderboardContainer = document.getElementById("leaderboard-container");
   leaderboardContainer.innerHTML = "";
+  const tournamentName = document.getElementById("tournament-name").value;
+
+  const leaderboardTitle = document.createElement("h2");
+  leaderboardTitle.textContent = tournamentName;
+  leaderboardContainer.appendChild(leaderboardTitle);
 
   let leaderboard = [];
   let totalRounds = 0;
