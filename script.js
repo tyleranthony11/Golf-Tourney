@@ -16,6 +16,7 @@ const tournamentCourseDropdown = document.getElementById("tournament-course");
 const tournamentTeesDropdown = document.getElementById("tournament-tees");
 const leaderboardContainer = document.getElementById("leaderboard-container");
 const scorecardContainer = document.getElementById("scorecard-container");
+const historyList = document.getElementById("history-list");
 const handicapRankingsContainer = document.getElementById("handicap-rankings-container");
 const slides = document.querySelectorAll(".carousel-slide");
 const emptyHandicapRankings = document.getElementById("empty-handicap-rankings");
@@ -33,6 +34,8 @@ document.getElementById('postRoundTab').addEventListener('click', (event) => swi
 document.getElementById('handicapRankingsTab').addEventListener('click', (event) => switchTab('handicap-rankings', event));
 document.getElementById('tournamentScorecardTab').addEventListener('click', (event) => switchTab('tournament-scorecard', event));
 document.getElementById('tournamentLeaderboardTab').addEventListener('click', (event) => switchTab('tournament-leaderboard', event));
+document.getElementById('historyTab').addEventListener('click', (event) => switchTab('history', event));
+
 document.getElementById("start-tournament-link").addEventListener("click", (event) => {
   event.preventDefault();
   document.getElementById("tournamentScorecardTab").click();
@@ -539,6 +542,8 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
       updateLeaderboard();
       emptyLeaderboard.style.display = "none";
       leaderboardContainer.style.display = "block";
+
+      captureCompletedScorecard();
     });
 });
 
@@ -763,4 +768,42 @@ function updateLeaderboard() {
 function resetScorecard(){
   if (scorecardContainer) {
     scorecardContainer.innerHTML = "";
+}}
+
+function captureCompletedScorecard(){
+  const submitButtons = document.querySelectorAll(".submit-round-btn");
+  const allRoundsCompleted = Array.from(submitButtons).every(button => button.disabled);
+
+  if(allRoundsCompleted){
+    const historyList = document.querySelector("#history-list");
+    if (historyList.dataset.tournamentAdded === "true"){
+      return;
+    }
+    historyList.dataset.tournamentAdded = "true";
+
+    const scorecardContainers = document.querySelectorAll(".scorecard-container");
+
+    scorecardContainers.forEach((container, index) => {
+      const scorecardClone = container.cloneNode(true);
+      scorecardClone.querySelectorAll('td[data-strokes-above-par]').forEach((cell) =>{
+        const strokesAbovePar = cell.getAttribute('data-strokes-above-par');
+        if (!cell.textContent.includes(strokesAbovePar)) {
+          cell.textContent = `${cell.textContent} (${strokesAbovePar})`;
+        }
+      });
+     
+      const roundElement = document.createElement("div");
+      roundElement.classList.add("round-history");
+
+      const roundTitle = document.createElement('h3');
+      roundTitle.textContent = `Round ${index + 1}`;
+      roundElement.appendChild(roundTitle);
+
+     
+     
+      roundElement.appendChild(scorecardClone);
+      historyList.appendChild(roundElement);
+
+     
+    }); 
 }}
