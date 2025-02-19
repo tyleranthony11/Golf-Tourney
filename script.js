@@ -535,7 +535,8 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
             : ` (${tournamentStrokesAbovePar})`;
         }
       });
-     
+      captureCompletedScorecard();
+      captureCompletedLeaderboard();
       submitButton.disabled = true;
       submitButton.textContent = "Round Submitted";
       submitButton.classList.add("submitted");
@@ -543,14 +544,12 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
       emptyLeaderboard.style.display = "none";
       leaderboardContainer.style.display = "block";
 
-      captureCompletedScorecard();
+     
     });
 });
 
   scorecardContainer.appendChild(table);
   scorecardContainer.appendChild(submitButton);
-
-  
 
   return scorecardContainer;
 }
@@ -651,11 +650,7 @@ function createTournament() {
   const tees = document.getElementById("tournament-tees").value;
   const rounds = parseInt(document.getElementById("tournament-rounds").value);
 
- 
   scorecardContainer.innerHTML = "";
-
-
-
 
   golfers.forEach((golfer) => {
     if (!tournamentScores[golfer]) tournamentScores[golfer] = {};
@@ -694,8 +689,6 @@ startTournamentBtn.addEventListener("click", function(event) {
   }
   
 });
-
-
 
 function updateLeaderboard() {
   const leaderboardContainer = document.getElementById("leaderboard-container");
@@ -782,7 +775,6 @@ function captureCompletedScorecard(){
     historyList.dataset.tournamentAdded = "true";
 
     const scorecardContainers = document.querySelectorAll(".scorecard-container");
-
     scorecardContainers.forEach((container, index) => {
       const scorecardClone = container.cloneNode(true);
       scorecardClone.querySelectorAll('td[data-strokes-above-par]').forEach((cell) =>{
@@ -807,3 +799,25 @@ function captureCompletedScorecard(){
      
     }); 
 }}
+
+function captureCompletedLeaderboard() {
+  const submitButtons = document.querySelectorAll(".submit-round-btn");
+  const allRoundsCompleted = Array.from(submitButtons).every(button => button.disabled);
+
+  if (allRoundsCompleted) {
+    const historyList = document.querySelector("#history-list");
+
+    if (historyList.querySelector(".leaderboard-history")) {
+      return; 
+    }
+
+    const leaderboardHistoryEntry = document.createElement("div");
+    leaderboardHistoryEntry.classList.add("leaderboard-history");
+
+    const leaderboardClone = document.querySelector("#leaderboard-container").cloneNode(true);
+    leaderboardHistoryEntry.appendChild(leaderboardClone);
+
+    historyList.appendChild(leaderboardHistoryEntry);
+  }
+}
+
