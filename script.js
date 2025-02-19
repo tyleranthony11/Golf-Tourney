@@ -535,7 +535,8 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
             : ` (${tournamentStrokesAbovePar})`;
         }
       });
-     
+      captureCompletedLeaderboard();
+      captureCompletedScorecard();
       submitButton.disabled = true;
       submitButton.textContent = "Round Submitted";
       submitButton.classList.add("submitted");
@@ -543,8 +544,7 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
       emptyLeaderboard.style.display = "none";
       leaderboardContainer.style.display = "block";
 
-      captureCompletedScorecard();
-      captureCompletedLeaderboard();
+      
     });
 });
 
