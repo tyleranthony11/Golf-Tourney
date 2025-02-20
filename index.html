@@ -72,6 +72,10 @@
         <input type="text" id="new-golfer-name" placeholder="Golfer Name">
         <button id="submit-new-golfer" disabled><img src="/images/golfer1.png" style="width: 25px; vertical-align: middle;"> Add Golfer</button>
     </div>
+    <div id="golfer-list-container">
+        <h3>Registered Golfers:</h3>
+        <ul id="golfer-list"></ul>
+    </div>
    </div>
    </section>
 
@@ -200,7 +204,7 @@
     <h1>Tournament Leaderboard</h1>
     <div id="empty-leaderboard" class="empty-state">
         <img src="/images/trophy.png" alt="trophy"/>
-        <h3>No Tournament In Progress Yet</Progress></h3>
+        <h3>No Tournament In Progress</Progress></h3>
         <p>Start a tournament <a href="#" id="start-tournament-link">here</a> to see the leaderboard</p>
     </div>
     <div id="leaderboard-container">
@@ -211,7 +215,12 @@
    </section>
    <section>
    <div id="history" class="tab">
-    <h2>History</h2>
+    <h2>Tournament History</h2>
+    <div id="empty-history" class="empty-state">
+        <img src="/images/history.png" alt="trophy"/>
+        <h3>No Tournament History Yet</h3>
+        <p>Once a tournament is completed, you'll see the results here.</p>
+    </div>
     <div id="history-list">
 
     </div>

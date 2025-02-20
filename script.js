@@ -5,6 +5,8 @@ const scoreForm = document.getElementById("score-form");
 const newGolferInput = document.getElementById("new-golfer-input");
 const submitNewGolferBtn = document.getElementById("submit-new-golfer");
 const newGolferNameInput = document.getElementById("new-golfer-name");
+const golferList = document.getElementById("golfer-list");
+const registeredGolfersDiv = document.getElementById("golfer-list-container");
 const courseDropdown = document.getElementById("course");
 const teesDropdown = document.getElementById("tees");
 const postScoreBtn = document.getElementById("post-score-btn");
@@ -21,6 +23,7 @@ const handicapRankingsContainer = document.getElementById("handicap-rankings-con
 const slides = document.querySelectorAll(".carousel-slide");
 const emptyHandicapRankings = document.getElementById("empty-handicap-rankings");
 const emptyLeaderboard = document.getElementById("empty-leaderboard");
+
 
 
 
@@ -157,9 +160,28 @@ function addGolfer(golferName) {
     golfers.push(golferName);
     updateGolferHandicap(golferName);
     updateGolferDropdowns();
+    updateGolferList();
+    checkGolfers();
   } else {
     alert("This golfer already exists. Please enter a new golfer.");
   }
+}
+function updateGolferList(){
+  golferList.innerHTML = "";
+
+  golfers.forEach((golfer) => {
+    const golferItem = document.createElement("li");
+    golferItem.textContent = golfer;
+    golferList.appendChild(golferItem);
+  });
+}
+
+function checkGolfers(){
+  if (golferList.children.length > 0) {
+    registeredGolfersDiv.style.display = "block";  
+} else {
+    registeredGolfersDiv.style.display = "none"; 
+}
 }
 
 newGolferNameInput.addEventListener("input", () => {
@@ -786,9 +808,20 @@ function saveTournamentToHistory() {
 
 
 function updateHistoryTab() {
+
+  const emptyHistory = document.getElementById('empty-history');
+
   historyList.innerHTML = ""; 
 
   const tournamentHistory = JSON.parse(localStorage.getItem("tournamentHistory")) || [];
+
+  if (tournamentHistory.length === 0) {
+    emptyHistory.style.display = "block";
+    historyList.style.display = "none";
+  } else {
+    emptyHistory.style.display = "none";
+    historyList.style.display = "block";
+  }
   
   tournamentHistory.forEach((tournament) => {
       
