@@ -30,7 +30,7 @@ const emptyLeaderboard = document.getElementById("empty-leaderboard");
 let tournamentScores = {};
 const rounds = [];
 const golfers = [];
-const golferHandicaps = [];
+let golferHandicaps = [];
 
 document.getElementById('homeTab').addEventListener('click', (event) => switchTab('home', event));
 document.getElementById('postRoundTab').addEventListener('click', (event) => switchTab('post-round', event));
@@ -91,9 +91,6 @@ function nextSlide() {
 }
 showSlide(currentIndex);
 setInterval(nextSlide, 8000);
-
-
-
 
 function populateCourseDropdown(dropdown) {
   dropdown.innerHTML = '<option value="">Select a Course</option>';
@@ -162,6 +159,7 @@ function addGolfer(golferName) {
     updateGolferDropdowns();
     updateGolferList();
     checkGolfers();
+    saveGolfers();
   } else {
     alert("This golfer already exists. Please enter a new golfer.");
   }
@@ -240,31 +238,39 @@ function calculateHandicap(golferName) {
 }
 
 function updateRankingsTable() {
-   const rankingsTable = document.getElementById("rankings-table-body");
-   emptyHandicapRankings.style.display = "none";
+  const rankingsTable = document.getElementById("rankings-table-body");
   
+  const validGolferHandicaps = golferHandicaps.filter(golfer => !isNaN(golfer.handicap));
 
-  rankingsTable.innerHTML = "";
+  if (validGolferHandicaps.length > 0) {
+    emptyHandicapRankings.style.display = "none";
+    rankingsTable.innerHTML = "";
+   
+    validGolferHandicaps.sort((a, b) => a.handicap - b.handicap);
 
-  if (golferHandicaps.length > 0) {
-  golferHandicaps.sort((a, b) => a.handicap - b.handicap);
+    validGolferHandicaps.forEach((golfer, index) => {
+     
+      let existingRow = rankingsTable.querySelector(`[data-golfer="${golfer.name}"]`);
 
-  golferHandicaps.forEach((golfer, index) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${golfer.name}</td>
-            <td>${golfer.handicap}</td>
-            `;
-    rankingsTable.appendChild(row);
-  });
+      if (existingRow) {  
+        existingRow.cells[2].textContent = golfer.handicap;
+      } else {  
+        const row = document.createElement("tr");
+        row.setAttribute("data-golfer", golfer.name);  
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${golfer.name}</td>
+          <td>${golfer.handicap}</td>
+        `;
+        rankingsTable.appendChild(row);
+      }
+    });
 
-  handicapRankingsContainer.style.display = "block";
+    handicapRankingsContainer.style.display = "block";
     handicapRankingsContainer.classList.add("visible");
-  
-} else {
-  emptyHandicapRankings.style.display = "block";
-}
+  } else {
+    emptyHandicapRankings.style.display = "block";
+  }
 }
 
 function updateGolferHandicap(golferName) {
@@ -277,6 +283,7 @@ function updateGolferHandicap(golferName) {
   } else {
     golferHandicaps.push({ name: golferName, handicap });
   }
+  saveHandicaps();
   updateRankingsTable();
 }
 
@@ -324,6 +331,8 @@ scoreForm.addEventListener("submit", (event) => {
   rounds.push(round);
   updateGolferHandicap(golferName);
   updateRankingsTable();
+  saveRounds();
+  saveHandicaps();
   
 
   scoreForm.reset();
@@ -868,4 +877,70 @@ function areAllRoundsSubmitted(){
   const submitButtons = document.querySelectorAll(".submit-round-btn");
   return Array.from(submitButtons).every(button => button.disabled);
 }
+function saveGolfers(){
+  localStorage.setItem("golfers", JSON.stringify(golfers));
+}
+function loadGolfers(){
+  const storedGolfers = JSON.parse(localStorage.getItem("golfers")) || [];
+  storedGolfers.forEach((golfer) => addGolfer(golfer, false));
+}
+document.addEventListener("DOMContentLoaded", loadGolfers);
+
+function saveRounds(){
+  console.log("saving rounds:", rounds);
+  localStorage.setItem("rounds", JSON.stringify(rounds));
+}
+function loadRounds(){
+  const storedRounds = JSON.parse(localStorage.getItem("rounds")) || [];
+
+  storedRounds.forEach((round) => {
+    rounds.push(round);
+    displayRound(round);
+  });
+  if (rounds.length > 0){
+    const roundsDisplay = document.getElementById("rounds-display");
+    roundsDisplay.style.display = "block";
+  }
+}
+document.addEventListener("DOMContentLoaded", loadRounds);
+
+function displayRound(round) {
+  const roundsDisplay = document.getElementById("rounds-display");
+  const roundsList = document.getElementById("rounds-list");
+
+  const course = courseNames[round.courseValue] || "Unknown";
+  const selectedCourseData = courseData[round.courseValue];
+  const selectedTeeData = selectedCourseData?.tees[round.tees];
+
+  const strokesAbovePar = round.score - selectedTeeData.par;
+
+  const roundItem = document.createElement("li");
+  roundItem.innerHTML = `
+    <strong>Golfer:</strong> ${round.golferName}<br>
+    <strong>Date Played:</strong> ${round.datePlayed}<br>
+    <strong>Course:</strong> ${course}<br>
+    <strong>Tees:</strong> ${round.tees}<br>
+    <strong>Score:</strong> ${round.score} (${strokesAbovePar >= 0 ? "+" : ""}${strokesAbovePar})`;
+
+  roundsList.appendChild(roundItem);
+
+  if (roundsDisplay) {
+    roundsDisplay.style.display = "block";
+  }
+}
+
+function saveHandicaps(){
+  localStorage.setItem("golferHandicaps", JSON.stringify(golferHandicaps));
+  
+}
+
+function loadHandicaps() {
+  const storedHandicaps = JSON.parse(localStorage.getItem("golferHandicaps")) || [];
+  golferHandicaps = storedHandicaps.filter(golfer => !isNaN(golfer.handicap));
+  updateRankingsTable();
+}
+
+
+document.addEventListener("DOMContentLoaded", loadHandicaps);
+
 
