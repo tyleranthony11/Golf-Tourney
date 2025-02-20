@@ -535,16 +535,17 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
             : ` (${tournamentStrokesAbovePar})`;
         }
       });
-      captureCompletedLeaderboard();
-      captureCompletedScorecard();
+     
       submitButton.disabled = true;
       submitButton.textContent = "Round Submitted";
       submitButton.classList.add("submitted");
       updateLeaderboard();
+      if (areAllRoundsSubmitted()){
+        saveTournamentToHistory();
+      }
+      
       emptyLeaderboard.style.display = "none";
       leaderboardContainer.style.display = "block";
-
-      
     });
 });
 
@@ -765,61 +766,73 @@ function resetScorecard(){
     scorecardContainer.innerHTML = "";
 }}
 
-function captureCompletedScorecard(){
-  const submitButtons = document.querySelectorAll(".submit-round-btn");
-  const allRoundsCompleted = Array.from(submitButtons).every(button => button.disabled);
+function saveTournamentToHistory() {
+  const scorecardData = scorecardContainer.innerHTML;
+  const leaderboardData = leaderboardContainer.innerHTML;
+  const scorecardWithoutName = scorecardData.replace(/<h2>.*<\/h2>/, '');
 
-  if(allRoundsCompleted){
-    const historyList = document.querySelector("#history-list");
-    if (historyList.dataset.tournamentAdded === "true"){
-      return;
-    }
-    historyList.dataset.tournamentAdded = "true";
+  const tournamentHistory = JSON.parse(localStorage.getItem("tournamentHistory")) || [];
 
-    const scorecardContainers = document.querySelectorAll(".scorecard-container");
-    scorecardContainers.forEach((container, index) => {
-      const scorecardClone = container.cloneNode(true);
-      scorecardClone.querySelectorAll('td[data-strokes-above-par]').forEach((cell) =>{
-        const strokesAbovePar = cell.getAttribute('data-strokes-above-par');
-        if (!cell.textContent.includes(strokesAbovePar)) {
-          cell.textContent = `${cell.textContent} (${strokesAbovePar})`;
-        }
+  const tournament = {
+      scorecard: scorecardWithoutName,
+      leaderboard: leaderboardData,
+  };
+
+  tournamentHistory.push(tournament);
+  localStorage.setItem("tournamentHistory", JSON.stringify(tournamentHistory));
+
+  updateHistoryTab();
+}
+
+
+function updateHistoryTab() {
+  historyList.innerHTML = ""; 
+
+  const tournamentHistory = JSON.parse(localStorage.getItem("tournamentHistory")) || [];
+  
+  tournamentHistory.forEach((tournament) => {
+      
+
+      const tournamentItem = document.createElement("div");
+      tournamentItem.classList.add("tournament-item");
+
+
+
+    
+      const leaderboard = document.createElement("div");
+      leaderboard.classList.add("leaderboard-preview");
+      leaderboard.innerHTML = tournament.leaderboard;
+      tournamentItem.appendChild(leaderboard);
+
+      
+      const scorecard = document.createElement("div");
+      scorecard.classList.add("scorecard-details");
+      scorecard.innerHTML = tournament.scorecard;
+      scorecard.style.display = "none";
+      tournamentItem.appendChild(scorecard);
+
+      
+      const viewDetailsBtn = document.createElement("button");
+      viewDetailsBtn.textContent = "View Full Tournament Scorecard";
+      viewDetailsBtn.classList.add("view-details-btn");
+
+      viewDetailsBtn.addEventListener("click", () => {
+        const isScorecardVisible = scorecard.style.display === "block";
+        scorecard.style.display = isScorecardVisible ? "none" : "block";
+        viewDetailsBtn.textContent = isScorecardVisible
+          ? "View Full Tournament Scorecard"
+          : "Close Full Tournament Scorecard";
       });
-     
-      const roundElement = document.createElement("div");
-      roundElement.classList.add("round-history");
 
-      const roundTitle = document.createElement('h3');
-      roundTitle.textContent = `Round ${index + 1}`;
-      roundElement.appendChild(roundTitle);
+      tournamentItem.appendChild(viewDetailsBtn);
+      historyList.appendChild(tournamentItem);
+  });
+}
+document.addEventListener("DOMContentLoaded", updateHistoryTab);
 
-     
-     
-      roundElement.appendChild(scorecardClone);
-      historyList.appendChild(roundElement);
 
-     
-    }); 
-}}
-
-function captureCompletedLeaderboard() {
+function areAllRoundsSubmitted(){
   const submitButtons = document.querySelectorAll(".submit-round-btn");
-  const allRoundsCompleted = Array.from(submitButtons).every(button => button.disabled);
-
-  if (allRoundsCompleted) {
-    const historyList = document.querySelector("#history-list");
-
-    if (historyList.querySelector(".leaderboard-history")) {
-      return; 
-    }
-
-    const leaderboardHistoryEntry = document.createElement("div");
-    leaderboardHistoryEntry.classList.add("leaderboard-history");
-
-    const leaderboardClone = document.querySelector("#leaderboard-container").cloneNode(true);
-    leaderboardHistoryEntry.appendChild(leaderboardClone);
-
-    historyList.appendChild(leaderboardHistoryEntry);
-  }
+  return Array.from(submitButtons).every(button => button.disabled);
 }
 
