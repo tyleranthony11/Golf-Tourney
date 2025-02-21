@@ -275,9 +275,13 @@ function updateRankingsTable() {
 
 function updateGolferHandicap(golferName) {
   const handicap = calculateHandicap(golferName);
-  const golferIndex = golferHandicaps.findIndex(
-    (golfer) => golfer.name === golferName
-  );
+
+  if (isNaN(handicap) || !isFinite(handicap)) {
+    return;
+  }
+
+  const golferIndex = golferHandicaps.findIndex(golfer => golfer.name === golferName);
+
   if (golferIndex !== -1) {
     golferHandicaps[golferIndex].handicap = handicap;
   } else {
@@ -815,11 +819,8 @@ function saveTournamentToHistory() {
   updateHistoryTab();
 }
 
-
 function updateHistoryTab() {
-
   const emptyHistory = document.getElementById('empty-history');
-
   historyList.innerHTML = ""; 
 
   const tournamentHistory = JSON.parse(localStorage.getItem("tournamentHistory")) || [];
@@ -838,15 +839,11 @@ function updateHistoryTab() {
       const tournamentItem = document.createElement("div");
       tournamentItem.classList.add("tournament-item");
 
-
-
-    
       const leaderboard = document.createElement("div");
       leaderboard.classList.add("leaderboard-preview");
       leaderboard.innerHTML = tournament.leaderboard;
       tournamentItem.appendChild(leaderboard);
 
-      
       const scorecard = document.createElement("div");
       scorecard.classList.add("scorecard-details");
       scorecard.innerHTML = tournament.scorecard;
@@ -887,7 +884,6 @@ function loadGolfers(){
 document.addEventListener("DOMContentLoaded", loadGolfers);
 
 function saveRounds(){
-  console.log("saving rounds:", rounds);
   localStorage.setItem("rounds", JSON.stringify(rounds));
 }
 function loadRounds(){
@@ -929,17 +925,19 @@ function displayRound(round) {
   }
 }
 
-function saveHandicaps(){
-  localStorage.setItem("golferHandicaps", JSON.stringify(golferHandicaps));
-  
+function saveHandicaps() {
+  const validHandicaps = golferHandicaps.filter(golfer => isFinite(golfer.handicap));
+  localStorage.setItem("golferHandicaps", JSON.stringify(validHandicaps));
 }
 
 function loadHandicaps() {
   const storedHandicaps = JSON.parse(localStorage.getItem("golferHandicaps")) || [];
-  golferHandicaps = storedHandicaps.filter(golfer => !isNaN(golfer.handicap));
-  updateRankingsTable();
-}
+  golferHandicaps = storedHandicaps.filter(golfer => isFinite(golfer.handicap));
 
+  if (golferHandicaps.length > 0) {
+    updateRankingsTable();
+  }
+}
 
 document.addEventListener("DOMContentLoaded", loadHandicaps);
 
