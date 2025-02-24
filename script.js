@@ -27,6 +27,7 @@ const emptyLeaderboard = document.getElementById("empty-leaderboard");
 
 
 
+
 let tournamentScores = {};
 const rounds = [];
 const golfers = [];
@@ -92,6 +93,25 @@ function nextSlide() {
 showSlide(currentIndex);
 setInterval(nextSlide, 8000);
 
+document.getElementById("country-selection").addEventListener("change", function () {
+  const country = this.value;
+  const courseContainer = document.getElementById("course-container");
+
+  courseDropdown.innerHTML = "";
+
+  if (country === "canada") {
+      courseDropdown.innerHTML = `<option value="">Select a Course</option>`;
+      populateCourseDropdown(courseDropdown);
+      courseDropdown.style.display = "block";
+      courseContainer.innerHTML = ""; 
+  } else if (country === "usa") {
+      courseContainer.innerHTML = `<input type="text" id="course-search" placeholder="Search for a US course..." autocomplete="off">
+                                   <div id="course-results" class="dropdown-results"></div>`;
+      setupCourseSearch();
+      courseDropdown.style.display = "none";
+  }
+});
+
 function populateCourseDropdown(dropdown) {
   dropdown.innerHTML = '<option value="">Select a Course</option>';
   Object.keys(courseData).forEach((courseKey) => {
@@ -101,7 +121,47 @@ function populateCourseDropdown(dropdown) {
     dropdown.appendChild(option);
   });
 }
-populateCourseDropdown(courseDropdown);
+
+/*function setupCourseSearch(){   
+  const searchInput = document.getElementById("course-search");
+  const resultsContainer = document.getElementById("course-results");
+
+  if (!searchInput || !resultsContainer) return;
+
+  searchInput.addEventListener("input", async function () {
+    const query = this.value.trim();
+    resultsContainer.innerHTML = "";
+    if (query.length < 3) return;
+
+    const courses = await fetchUSCourses(query);
+    courses.forEach(course => {
+      const div = document.createElement("div");
+      div.classList.add("search-result");
+      div.textContent = course.name;
+      div.addEventListener("click", () => {
+        searchInput.value = course.name;
+        resultsContainer.innerHTML = "";
+      });
+      resultsContainer.appendChild(div);
+    });
+  });
+
+}
+
+async function fetchUSCourses(query) {
+    const apiKey = "XJX4SWNO7XXEZVPBNMVJDJPOW4";
+    const url = `https://golfcourseapi.com/api/courses?search=${query}&key=${apiKey}`;
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      return data.courses || [];
+    } catch (error) {
+      console.log("Error fetching courses:", error);
+      return [];
+    }
+}*/
+
 populateCourseDropdown(tournamentCourseDropdown);
 
 courseDropdown.addEventListener("change", () => {

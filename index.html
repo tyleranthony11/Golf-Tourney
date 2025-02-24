@@ -89,7 +89,15 @@
         <h2>Enter Round Information</h2>
         <div class="round-info-container">
         <form id="score-form">
-           
+            <div>
+                <strong><label for="country-selection">Select Country:</label></strong>
+                <select id="country-selection" required>
+                    <option value="">Select Country</option>
+                    <option value="canada">Canada</option>
+                    <option value="usa">USA</option>
+                </select>
+            </div><br>
+
             <div>
                 
                 <select id="golfer-name-dropdown" required>
@@ -108,6 +116,7 @@
                     <option value="">Select a Course</option>
                 </select>
             </div><br>
+            <div id="course-container"></div>
             <div>
                 <strong><label for="tees">Tees:</label></strong>
                 <select id="tees" name="tees" required>
