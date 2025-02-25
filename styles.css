@@ -920,3 +920,25 @@ body {
     outline: none;
     box-shadow: 0 0 0 2px rgba(4, 170, 109, 0.2);
 }
+
+#course-results {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: white;
+    position: absolute;
+    width: 100%;
+    max-width: 400px; /* Add this line to limit the width */
+    z-index: 1000;
+    display: block;
+}
+
+.search-result {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.search-result:hover {
+    background-color: #f0f0f0;
+}

@@ -96,19 +96,23 @@ setInterval(nextSlide, 8000);
 document.getElementById("country-selection").addEventListener("change", function () {
   const country = this.value;
   const courseContainer = document.getElementById("course-container");
+  const courseDropdown = document.getElementById("course");
 
   courseDropdown.innerHTML = "";
 
   if (country === "canada") {
-      courseDropdown.innerHTML = `<option value="">Select a Course</option>`;
-      populateCourseDropdown(courseDropdown);
-      courseDropdown.style.display = "block";
-      courseContainer.innerHTML = ""; 
+    courseDropdown.innerHTML = "<option value=''>Select a Course</option>";
+    populateCourseDropdown(courseDropdown);
+    courseDropdown.style.display = "block";
+    courseContainer.innerHTML = "";
   } else if (country === "usa") {
-      courseContainer.innerHTML = `<input type="text" id="course-search" placeholder="Search for a US course..." autocomplete="off">
-                                   <div id="course-results" class="dropdown-results"></div>`;
-      setupCourseSearch();
-      courseDropdown.style.display = "none";
+    courseContainer.innerHTML = `
+      <input type="text" id="course-search" placeholder="Search for a US course..." autocomplete="off">
+      <div id="course-results" class="dropdown-results"></div>
+    `;
+
+    setupCourseSearch();
+    courseDropdown.style.display = "none";
   }
 });
 
@@ -122,7 +126,7 @@ function populateCourseDropdown(dropdown) {
   });
 }
 
-/*function setupCourseSearch(){   
+function setupCourseSearch() {
   const searchInput = document.getElementById("course-search");
   const resultsContainer = document.getElementById("course-results");
 
@@ -134,33 +138,34 @@ function populateCourseDropdown(dropdown) {
     if (query.length < 3) return;
 
     const courses = await fetchUSCourses(query);
+
     courses.forEach(course => {
       const div = document.createElement("div");
       div.classList.add("search-result");
-      div.textContent = course.name;
+      div.textContent = `${course.club_name} - ${course.course_name}`;
+
       div.addEventListener("click", () => {
-        searchInput.value = course.name;
+        searchInput.value = div.textContent;
         resultsContainer.innerHTML = "";
       });
+
       resultsContainer.appendChild(div);
     });
   });
-
 }
 
 async function fetchUSCourses(query) {
-    const apiKey = "XJX4SWNO7XXEZVPBNMVJDJPOW4";
-    const url = `https://golfcourseapi.com/api/courses?search=${query}&key=${apiKey}`;
+  try {
+    const response = await fetch(`https://golf-api-backend.vercel.app/courses`);
+    const data = await response.json();
+    return data.courses || [];
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+    return [];
+  }
+}
 
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      return data.courses || [];
-    } catch (error) {
-      console.log("Error fetching courses:", error);
-      return [];
-    }
-}*/
+setupCourseSearch();
 
 populateCourseDropdown(tournamentCourseDropdown);
 
@@ -651,7 +656,7 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
 
   return scorecardContainer;
 }
-
+let tournamentStrokesAbovePar = 0;
 function updateTotals(event, tee) {
   const input = event.target;
   const hole = parseInt(input.dataset.hole) - 1;
@@ -723,7 +728,7 @@ function updateTotals(event, tee) {
       : roundStrokesAbovePar;
 
   let tournamentTotal = 0;
-  let tournamentStrokesAbovePar = 0;
+  
 
   for (let i in tournamentScores[golfer]) {
     tournamentTotal += tournamentScores[golfer][i].reduce(
@@ -756,8 +761,9 @@ function createTournament() {
       tournamentScores[golfer][i] = new Array(18).fill(0);
     }
   });
+  
 
-  const tournamentTitle = document.createElement("h2");
+const tournamentTitle = document.createElement("h2");
 tournamentTitle.textContent = tournamentName;
 scorecardContainer.appendChild(tournamentTitle);
 
