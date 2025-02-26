@@ -154,7 +154,7 @@ function setupCourseSearch() {
   });
 }
 
-async function fetchUSCourses(query) {
+async function fetchUSCourses() {
   try {
     const response = await fetch(`https://golf-api-backend.vercel.app/courses`);
     const data = await response.json();
@@ -550,7 +550,8 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
       return; 
     }
 
-    
+    let tournamentStrokesAbovePar = 0; 
+
     Object.keys(tournamentScores).forEach((golfer) => {
       document.querySelectorAll(`input[data-round="${roundNumber}"][data-golfer="${golfer}"]`)
         .forEach((input) => {
@@ -619,22 +620,13 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
       }
       
     
-      let tournamentStrokesAbovePar = 0;
+     
       
-      document.querySelectorAll(`.round-total[data-golfer="${golfer}"]`).forEach((roundElement) => {
+      document.querySelectorAll(`.round-total[data-round="${roundNumber}"][data-golfer="${golfer}"]`).forEach((roundElement) => {
+   
         tournamentStrokesAbovePar += parseInt(roundElement.dataset.strokesAbovePar) || 0;
-      });
-      
-      document.querySelectorAll(`.tournament-total[data-golfer="${golfer}"]`).forEach((roundElement) => {
-        if (roundElement) {
-          roundElement.textContent += 
-            tournamentStrokesAbovePar === 0
-            ? " (E)"
-            : tournamentStrokesAbovePar > 0
-            ? ` (+${tournamentStrokesAbovePar})`
-            : ` (${tournamentStrokesAbovePar})`;
-        }
-      });
+    });
+    
      
       submitButton.disabled = true;
       submitButton.textContent = "Round Submitted";
@@ -658,7 +650,6 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
 
   return scorecardContainer;
 }
-let tournamentStrokesAbovePar = 0;
 function updateTotals(event, tee) {
   const input = event.target;
   const hole = parseInt(input.dataset.hole) - 1;
@@ -729,24 +720,38 @@ function updateTotals(event, tee) {
       ? `+${roundStrokesAbovePar}`
       : roundStrokesAbovePar;
 
-  let tournamentTotal = 0;
-  
+ let tournamentTotal = 0;
+let tournamentStrokesAbovePar = 0;
 
-  for (let i in tournamentScores[golfer]) {
-    tournamentTotal += tournamentScores[golfer][i].reduce(
-      (sum, val) => sum + val,
-      0
-    );
-    tournamentStrokesAbovePar += roundStrokesAbovePar;
+for (let i in tournamentScores[golfer]) {
+  const roundScores = tournamentScores[golfer][i];
+  
+  if (roundScores && roundScores.length > 0) {
+    const roundScore = roundScores.reduce((sum, val) => sum + val, 0);
+    tournamentTotal += roundScore;
+
+    const roundStrokes = roundScore - totalPar;
+    tournamentStrokesAbovePar += roundStrokes;
   }
-  document
-    .querySelectorAll(`.tournament-total[data-golfer="${golfer}"]`)
-    .forEach((cell) => {
-      cell.textContent = tournamentTotal;
-    });
+}
+
+document.querySelectorAll(`.tournament-total[data-golfer="${golfer}"]`).forEach((cell) => {
+  if (cell) {
+    cell.textContent = `${tournamentTotal}`;
+    
+    
+    cell.textContent += 
+      tournamentStrokesAbovePar === 0
+      ? " (E)"  
+      : tournamentStrokesAbovePar > 0
+      ? ` (+${tournamentStrokesAbovePar})` 
+      : ` (${tournamentStrokesAbovePar})`;  
+  }
+});
 }
 
 function createTournament() {
+  scorecardContainer.innerHTML = "";
   const tournamentName = document.getElementById("tournament-name").value;
   const golfers = Array.from(
     document.getElementById("tournament-golfers").selectedOptions
@@ -755,7 +760,7 @@ function createTournament() {
   const tees = document.getElementById("tournament-tees").value;
   const rounds = parseInt(document.getElementById("tournament-rounds").value);
 
-  scorecardContainer.innerHTML = "";
+  
 
   golfers.forEach((golfer) => {
     if (!tournamentScores[golfer]) tournamentScores[golfer] = {};
@@ -940,8 +945,6 @@ document.addEventListener("DOMContentLoaded", updateHistoryTab);
 
 function areAllRoundsSubmitted() { 
   const submitButtons = document.querySelectorAll(".submit-round-btn");
-  console.log("Checking if all rounds are submitted:", Array.from(submitButtons).map(btn => btn.disabled));
-  console.trace(); // Shows the function call history
   return submitButtons.length > 0 && Array.from(submitButtons).every(button => button.disabled);
 }
 
