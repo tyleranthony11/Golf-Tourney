@@ -681,7 +681,6 @@ function updateTotals(event, tee) {
   const outTotalElement = document.querySelector(
     `.out-total[data-golfer="${golfer}"][data-round="${round}"]`
   );
-
   if (outTotalElement) {
     outTotalElement.textContent = `${outTotal}`;
   }
@@ -689,7 +688,6 @@ function updateTotals(event, tee) {
   const inTotalElement = document.querySelector(
     `.in-total[data-golfer="${golfer}"][data-round="${round}"]`
   );
-
   if (inTotalElement) {
     inTotalElement.textContent = `${inTotal}`;
   }
@@ -720,34 +718,46 @@ function updateTotals(event, tee) {
       ? `+${roundStrokesAbovePar}`
       : roundStrokesAbovePar;
 
- let tournamentTotal = 0;
-let tournamentStrokesAbovePar = 0;
+  let tournamentTotal = 0;
+  let tournamentStrokesAbovePar = 0;
 
-for (let i in tournamentScores[golfer]) {
-  const roundScores = tournamentScores[golfer][i];
-  
-  if (roundScores && roundScores.length > 0) {
-    const roundScore = roundScores.reduce((sum, val) => sum + val, 0);
-    tournamentTotal += roundScore;
+  for (let roundKey in tournamentScores[golfer]) {
+    const roundScores = tournamentScores[golfer][roundKey];
 
-    const roundStrokes = roundScore - totalPar;
-    tournamentStrokesAbovePar += roundStrokes;
+   
+    if (isRoundComplete(roundScores)) {
+      const roundTotal = roundScores.reduce((sum, val) => sum + val, 0);
+      tournamentTotal += roundTotal;
+
+     
+      const roundStrokesAbovePar = document.querySelector(
+        `.round-total[data-golfer="${golfer}"][data-round="${roundKey}"]`
+      )?.dataset.strokesAbovePar || 0;
+
+     
+      tournamentStrokesAbovePar += parseFloat(roundStrokesAbovePar) || 0;
+    }
   }
-}
 
-document.querySelectorAll(`.tournament-total[data-golfer="${golfer}"]`).forEach((cell) => {
-  if (cell) {
-    cell.textContent = `${tournamentTotal}`;
-    
-    
-    cell.textContent += 
+
+document.querySelectorAll(`.tournament-total[data-golfer="${golfer}"]`).forEach((element) => {
+  if (element) {
+    element.textContent = `${tournamentTotal}`;
+    element.textContent +=
       tournamentStrokesAbovePar === 0
-      ? " (E)"  
-      : tournamentStrokesAbovePar > 0
-      ? ` (+${tournamentStrokesAbovePar})` 
-      : ` (${tournamentStrokesAbovePar})`;  
+        ? " (E)"
+        : tournamentStrokesAbovePar > 0
+        ? ` (+${tournamentStrokesAbovePar})`
+        : ` (${tournamentStrokesAbovePar})`;
   }
 });
+}
+function isRoundComplete(roundScores) {
+  return (
+    roundScores.length === 18 && 
+    roundScores.every((score) => !isNaN(score) && 
+    roundScores.every((score) => score !== null) 
+  ));
 }
 
 function createTournament() {
