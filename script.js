@@ -640,13 +640,15 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
       submitButton.textContent = "Round Submitted";
       submitButton.classList.add("submitted");
       updateLeaderboard();
-      if (areAllRoundsSubmitted()){
-        saveTournamentToHistory();
-      }
+     
       
       emptyLeaderboard.style.display = "none";
       leaderboardContainer.style.display = "block";
     });
+
+    if (areAllRoundsSubmitted()){
+      saveTournamentToHistory();
+    }
 });
 
   scorecardContainer.appendChild(table);
@@ -936,10 +938,13 @@ function updateHistoryTab() {
 document.addEventListener("DOMContentLoaded", updateHistoryTab);
 
 
-function areAllRoundsSubmitted(){
+function areAllRoundsSubmitted() { 
   const submitButtons = document.querySelectorAll(".submit-round-btn");
-  return Array.from(submitButtons).every(button => button.disabled);
+  console.log("Checking if all rounds are submitted:", Array.from(submitButtons).map(btn => btn.disabled));
+  console.trace(); // Shows the function call history
+  return submitButtons.length > 0 && Array.from(submitButtons).every(button => button.disabled);
 }
+
 function saveGolfers(){
   localStorage.setItem("golfers", JSON.stringify(golfers));
 }
