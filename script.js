@@ -619,7 +619,11 @@ function generateScorecard(courseName, teeColor, golfers, roundNumber) {
         roundTotalElement.textContent += ` (${roundTotalElement.dataset.strokesAbovePar})`;
       }
       
-    
+      Object.keys(tournamentScores).forEach((golfer) => {
+        document.querySelectorAll(`.tournament-total[data-golfer="${golfer}"] .hidden-strokes`).forEach((span) => {
+          span.classList.remove("hidden-strokes");
+        });
+      });
      
       
       document.querySelectorAll(`.round-total[data-round="${roundNumber}"][data-golfer="${golfer}"]`).forEach((roundElement) => {
@@ -743,12 +747,14 @@ function updateTotals(event, tee) {
 document.querySelectorAll(`.tournament-total[data-golfer="${golfer}"]`).forEach((element) => {
   if (element) {
     element.textContent = `${tournamentTotal}`;
-    element.textContent +=
-      tournamentStrokesAbovePar === 0
+    const strokesSpan = document.createElement("span");
+    strokesSpan.classList.add("hidden-strokes");
+    strokesSpan.textContent = tournamentStrokesAbovePar === 0
         ? " (E)"
         : tournamentStrokesAbovePar > 0
         ? ` (+${tournamentStrokesAbovePar})`
         : ` (${tournamentStrokesAbovePar})`;
+        element.appendChild(strokesSpan);
   }
 });
 }
