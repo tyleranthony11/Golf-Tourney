@@ -183,9 +183,17 @@
         <label for="tournament-golfers">Select Golfer(s):</label>
         <select id="tournament-golfers" multiple required></select>
 
+        <label for="tournament-country-selection"><strong>Select Country:</strong></label>
+        <select id="tournament-country-selection" required>
+            <option value="">Select Country</option>
+            <option value="canada">Canada</option>
+            <option value="usa">USA</option>
+        </select>
 
         <label for="tournament-course">Course:</label>
         <select id="tournament-course" required></select>
+        <div id="tournament-course-container">
+        </div>
 
         <label for="tournament-tees">Tees:</label>
         <select id="tournament-tees" required></select>

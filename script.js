@@ -116,6 +116,28 @@ document.getElementById("country-selection").addEventListener("change", function
   }
 });
 
+document.getElementById("tournament-country-selection").addEventListener("change", function(){
+  const country = this.value;
+  const tournamentCourseContainer = document.getElementById("tournament-course-container");
+  const tournamentCourseDropdown = document.getElementById("tournament-course");
+
+  tournamentCourseDropdown.innerHTML = "";
+
+  if (country === "canada"){
+    tournamentCourseDropdown.innerHTML = "<option value=''>Select a Course</option>";
+    populateCourseDropdown(tournamentCourseDropdown);
+    tournamentCourseDropdown.style.display = "block";
+    tournamentCourseContainer.innerHTML = "";
+  } else if (country ==="usa"){
+    tournamentCourseContainer.innerHTML = `
+    <input type="text" id="course-search" placeholder="Search for a US course..." autocomplete="off">
+    <div id="course-results" class="dropdown-results"></div>
+  `;
+  setupCourseSearch();
+  tournamentCourseDropdown.style.display = "none";
+  }
+});
+
 function populateCourseDropdown(dropdown) {
   dropdown.innerHTML = '<option value="">Select a Course</option>';
   Object.keys(courseData).forEach((courseKey) => {
@@ -167,7 +189,7 @@ async function fetchUSCourses() {
 
 setupCourseSearch();
 
-populateCourseDropdown(tournamentCourseDropdown);
+//populateCourseDropdown(tournamentCourseDropdown);
 
 courseDropdown.addEventListener("change", () => {
   populateTeesDropdown(courseDropdown, teesDropdown);
