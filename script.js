@@ -189,9 +189,9 @@ async function fetchUSCourses() {
 
 setupCourseSearch();
 
-//populateCourseDropdown(tournamentCourseDropdown);
 
 courseDropdown.addEventListener("change", () => {
+  console.log(courseDropdown.value);
   populateTeesDropdown(courseDropdown, teesDropdown);
 });
 
@@ -199,11 +199,12 @@ tournamentCourseDropdown.addEventListener("change", () => {
   populateTeesDropdown(tournamentCourseDropdown, tournamentTeesDropdown);
 });
 
-function populateTeesDropdown(courseDropdown, teesDropdown) {
+async function populateTeesDropdown(courseDropdown, teesDropdown) {
   teesDropdown.innerHTML = "<option value=''>Select Tees Played </option>";
   const selectedCourse = courseDropdown.value;
+  const country = document.getElementById("country-selection").value || document.getElementById("tournament-country-selection").value;
 
-  if (courseData[selectedCourse]) {
+  if (country === "canada" && courseData[selectedCourse]) {
     const courseInfo = courseData[selectedCourse];
     for (const teeName in courseInfo.tees) {
       const teeData = courseInfo.tees[teeName];
@@ -211,6 +212,18 @@ function populateTeesDropdown(courseDropdown, teesDropdown) {
       newOption.value = teeName;
       newOption.textContent = `${teeName} (${teeData.yardage} yds) - Par ${teeData.par}, Rating ${teeData.courseRating}, Slope ${teeData.slopeRating}`;
       teesDropdown.appendChild(newOption);
+    }
+  } else if (country === "usa") {
+    const selectedCourseInfo = courses[selectedCourse];
+    if (selectedCourseInfo && selectedCourseInfo.tees) {
+      selectedCourseInfo.tees.forEach(tee => {
+        const newOption = document.createElement("option");
+        newOption.value = tee.tee_name;
+        newOption.textContent = `${tee.tee_name} (${tee.total_yards} yds) - Par ${tee.par_total}, Rating ${tee.course_rating}, Slope ${tee.slope_rating}`;
+        teesDropdown.appendChild(newOption);
+      });
+    } else {
+      console.log("No tees found for the selected USA course.");
     }
   }
 }
