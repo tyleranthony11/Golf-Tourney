@@ -155,13 +155,18 @@ function setupCourseSearch() {
   if (!searchInput || !resultsContainer) return;
 
   searchInput.addEventListener("input", async function () {
-    const query = this.value.trim();
+    const query = this.value.trim().toLowerCase();
     resultsContainer.innerHTML = "";
     if (query.length < 3) return;
 
     const courses = await fetchUSCourses(query);
 
-    courses.forEach(course => {
+    const filteredCourses = courses.filter(course =>
+      course.club_name.toLowerCase().includes(query) ||
+      course.course_name.toLowerCase().includes(query)
+    );
+
+    filteredCourses.forEach(course => {
       const div = document.createElement("div");
       div.classList.add("search-result");
       div.textContent = `${course.club_name} - ${course.course_name}`;
@@ -169,12 +174,31 @@ function setupCourseSearch() {
       div.addEventListener("click", () => {
         searchInput.value = div.textContent;
         resultsContainer.innerHTML = "";
+        populateTeesDropdownUSA(course);
       });
 
       resultsContainer.appendChild(div);
     });
   });
 }
+
+
+function populateTeesDropdownUSA(course) {
+  const teesDropdown = document.getElementById("tees");
+  teesDropdown.innerHTML = "<option value=''>Select Tees Played</option>";
+
+  if (course.tees) {
+    for (const gender in course.tees) {
+      course.tees[gender].forEach(tee => {
+        const newOption = document.createElement("option");
+        newOption.value = tee.tee_name;
+        newOption.textContent = `${tee.tee_name} (${tee.total_yards} yds) - Par ${tee.par_total}, Rating ${tee.course_rating}, Slope ${tee.slope_rating}`;
+        teesDropdown.appendChild(newOption);
+      });
+    }
+  }
+}
+
 
 async function fetchUSCourses() {
   try {
@@ -187,11 +211,9 @@ async function fetchUSCourses() {
   }
 }
 
-setupCourseSearch();
 
 
 courseDropdown.addEventListener("change", () => {
-  console.log(courseDropdown.value);
   populateTeesDropdown(courseDropdown, teesDropdown);
 });
 
@@ -199,12 +221,10 @@ tournamentCourseDropdown.addEventListener("change", () => {
   populateTeesDropdown(tournamentCourseDropdown, tournamentTeesDropdown);
 });
 
-async function populateTeesDropdown(courseDropdown, teesDropdown) {
+function populateTeesDropdown(courseDropdown, teesDropdown) {
   teesDropdown.innerHTML = "<option value=''>Select Tees Played </option>";
   const selectedCourse = courseDropdown.value;
-  const country = document.getElementById("country-selection").value || document.getElementById("tournament-country-selection").value;
 
-  if (country === "canada" && courseData[selectedCourse]) {
     const courseInfo = courseData[selectedCourse];
     for (const teeName in courseInfo.tees) {
       const teeData = courseInfo.tees[teeName];
@@ -212,21 +232,10 @@ async function populateTeesDropdown(courseDropdown, teesDropdown) {
       newOption.value = teeName;
       newOption.textContent = `${teeName} (${teeData.yardage} yds) - Par ${teeData.par}, Rating ${teeData.courseRating}, Slope ${teeData.slopeRating}`;
       teesDropdown.appendChild(newOption);
-    }
-  } else if (country === "usa") {
-    const selectedCourseInfo = courses[selectedCourse];
-    if (selectedCourseInfo && selectedCourseInfo.tees) {
-      selectedCourseInfo.tees.forEach(tee => {
-        const newOption = document.createElement("option");
-        newOption.value = tee.tee_name;
-        newOption.textContent = `${tee.tee_name} (${tee.total_yards} yds) - Par ${tee.par_total}, Rating ${tee.course_rating}, Slope ${tee.slope_rating}`;
-        teesDropdown.appendChild(newOption);
-      });
-    } else {
-      console.log("No tees found for the selected USA course.");
-    }
+
+  } 
   }
-}
+  
 
 function updateGolferDropdowns() {
   golferSelect.innerHTML = '<option value="">Select Golfer</option>';
