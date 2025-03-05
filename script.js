@@ -1075,4 +1075,37 @@ function loadHandicaps() {
 
 document.addEventListener("DOMContentLoaded", loadHandicaps);
 
+function transformApiData(apiData) {
+  const transformedData = {};
 
+  apiData.courses.forEach(course => {
+    const courseKey = course.course_name.replace(/\s+/g, ''); 
+    transformedData[courseKey] = {
+      tees: {}
+    };
+
+    ['male', 'female'].forEach(gender => {
+      if (course.tees[gender]) {
+        course.tees[gender].forEach(tee => {
+          transformedData[courseKey].tees[tee.tee_name] = {
+            yardage: tee.total_yards,
+            par: tee.par_total,
+            courseRating: tee.course_rating,
+            slopeRating: tee.slope_rating
+          };
+        });
+      }
+    });
+  });
+
+  return transformedData;
+}
+
+
+fetch('https://golf-api-backend.vercel.app/courses')
+.then(response => response.json())
+.then(apiData => {
+  const transformedApiData = transformApiData(apiData);
+  const mergedCourseData = { ...courseData, ...transformedApiData };
+})
+.catch(error => console.error('Error fetching courses:', error));
