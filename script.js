@@ -1075,37 +1075,34 @@ function loadHandicaps() {
 
 document.addEventListener("DOMContentLoaded", loadHandicaps);
 
-function transformApiData(apiData) {
-  const transformedData = {};
 
-  apiData.courses.forEach(course => {
-    const courseKey = course.course_name.replace(/\s+/g, ''); 
-    transformedData[courseKey] = {
-      tees: {}
-    };
+async function fetchAndTransformCourse(courseName) {
+  const response = await fetch("https://golf-api-backend.vercel.app/courses");
+  const data = await response.json();
 
-    ['male', 'female'].forEach(gender => {
-      if (course.tees[gender]) {
-        course.tees[gender].forEach(tee => {
-          transformedData[courseKey].tees[tee.tee_name] = {
+  const course = data.courses.find(course => course.course_name === courseName);
+
+  if (course) {
+    const combinedTees = [...course.tees.male, ...course.tees.female];
+
+    const transformedCourse = {
+      [course.club_name.replace(/\s+/g, '')]: { 
+        tees: combinedTees.reduce((acc, tee) => {
+          acc[tee.tee_name] = {
             yardage: tee.total_yards,
             par: tee.par_total,
             courseRating: tee.course_rating,
-            slopeRating: tee.slope_rating
+            slopeRating: tee.slope_rating,
           };
-        });
+          return acc;
+        }, {})
       }
-    });
-  });
+    };
 
-  return transformedData;
+    console.log(transformedCourse);
+  } else {
+    console.log("Course not found");
+  }
 }
 
-
-fetch('https://golf-api-backend.vercel.app/courses')
-.then(response => response.json())
-.then(apiData => {
-  const transformedApiData = transformApiData(apiData);
-  const mergedCourseData = { ...courseData, ...transformedApiData };
-})
-.catch(error => console.error('Error fetching courses:', error));
+fetchAndTransformCourse("Cumberland Lake Golf Course");
