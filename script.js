@@ -402,22 +402,25 @@ function updateGolferHandicap(golferName) {
 
 
 
-scoreForm.addEventListener("submit", (event) => {
+scoreForm.addEventListener("submit", async (event) => {
   event.preventDefault();
+  const country = document.getElementById("country-selection").value;
   const golferName = document.getElementById("golfer-name-dropdown").value;
   const datePlayed = document.getElementById("date-played").value;
-  const courseValue = document.getElementById("course").value;
-  const course = courseNames[courseValue];
-  const tees =
-    document.getElementById("tees").value.charAt(0).toUpperCase() +
-    document.getElementById("tees").value.slice(1);
   const score = Number(document.getElementById("score").value);
-  const courseKey = document.getElementById("course").value;
-  const selectedCourseData = courseData[courseKey];
-  const selectedTeeData = selectedCourseData.tees[tees];
-  const strokesAbovePar = score - selectedTeeData.par;
 
-  const roundItem = document.createElement("li");
+  if (country === "canada"){
+    const courseValue = document.getElementById("course").value;
+    const course = courseNames[courseValue];
+    const tees =
+      document.getElementById("tees").value.charAt(0).toUpperCase() +
+      document.getElementById("tees").value.slice(1);
+    
+    const courseKey = document.getElementById("course").value;
+    const selectedCourseData = courseData[courseKey];
+    const selectedTeeData = selectedCourseData.tees[tees];
+    const strokesAbovePar = score - selectedTeeData.par;
+    const roundItem = document.createElement("li");
   roundItem.innerHTML = `
                 <strong>Golfer:</strong> ${golferName}<br>
                 <strong>Date Played:</strong> ${datePlayed}<br>
@@ -426,9 +429,7 @@ scoreForm.addEventListener("submit", (event) => {
                 <strong>Score:</strong> ${score} (${
     strokesAbovePar >= 0 ? "+" : ""
   }${strokesAbovePar})`;
-
   roundsList.appendChild(roundItem);
-
   const roundsDisplay = document.getElementById("rounds-display");
   if (roundsDisplay.style.display === "none") {
     roundsDisplay.style.display = "block";
@@ -441,6 +442,7 @@ scoreForm.addEventListener("submit", (event) => {
     tees,
     score,
   };
+  console.log("Canada round:", round);
   rounds.push(round);
   updateGolferHandicap(golferName);
   updateRankingsTable();
@@ -449,6 +451,51 @@ scoreForm.addEventListener("submit", (event) => {
   
 
   scoreForm.reset();
+  } else if (country === "usa"){
+    const courseInput = document.getElementById("course-search").value;
+    const courseName = courseInput.split(" - ")[0].trim();
+    
+    const transformedCourse = await fetchAndTransformCourse(courseName);
+    const tees = document.getElementById("tees").value;
+    const selectedTeeData = transformedCourse[courseName].tees[tees];
+    const strokesAbovePar = score - selectedTeeData.par;
+
+
+    const roundItem = document.createElement("li");
+    roundItem.innerHTML = `
+              <strong>Golfer:</strong> ${golferName}<br>
+              <strong>Date Played:</strong> ${datePlayed}<br>
+              <strong>Course:</strong> ${courseName}<br>
+              <strong>Tees:</strong> ${tees}<br>
+              <strong>Score:</strong> ${score} (${
+      strokesAbovePar >= 0 ? "+" : ""
+    }${strokesAbovePar})`;
+    roundsList.appendChild(roundItem);
+
+    const roundsDisplay = document.getElementById("rounds-display");
+    if (roundsDisplay.style.display === "none") {
+      roundsDisplay.style.display = "block";
+    }
+
+    const round = { golferName, datePlayed, courseValue: courseName, tees, score };
+    console.log("USA round:", round);
+    rounds.push(round);
+    updateGolferHandicap(golferName);
+    updateRankingsTable();
+    saveRounds();
+    saveHandicaps();
+    scoreForm.reset();
+    
+    
+    
+  }
+ 
+
+  
+
+
+
+ 
 });
 
 createTournamentBtn.addEventListener("click", () => {
@@ -1086,7 +1133,7 @@ async function fetchAndTransformCourse(courseName) {
     const combinedTees = [...course.tees.male, ...course.tees.female];
 
     const transformedCourse = {
-      [course.club_name.replace(/\s+/g, '')]: { 
+      [course.club_name]: { 
         tees: combinedTees.reduce((acc, tee) => {
           acc[tee.tee_name] = {
             yardage: tee.total_yards,
@@ -1099,10 +1146,10 @@ async function fetchAndTransformCourse(courseName) {
       }
     };
 
-    console.log(transformedCourse);
+    return transformedCourse;
   } else {
     console.log("Course not found");
   }
 }
 
-fetchAndTransformCourse("Cumberland Lake Golf Course");
+//fetchAndTransformCourse("Cumberland Lake Golf Course");
