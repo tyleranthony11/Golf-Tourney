@@ -319,32 +319,49 @@ postScoreBtn.addEventListener("click", () => {
   }
 });
 
-function calculateHandicap(golferName) {
-  const golferRounds = rounds.filter(
-    (round) => round.golferName === golferName
-  );
+async function calculateHandicap(golferName) {
+  const golferRounds = rounds.filter((round) => round.golferName === golferName);
   golferRounds.sort((a, b) => new Date(b.datePlayed) - new Date(a.datePlayed));
   const recentRounds = golferRounds.slice(0, 20);
 
-  const differentials = recentRounds.map((round) => {
+  const differentials = [];
+
+  for (const round of recentRounds) {
     const { score, courseValue, tees } = round;
-    const courseInfo = courseData[courseValue];
+    let courseInfo;
+
+    if (courseData[courseValue]) {
+      courseInfo = courseData[courseValue];
+    } else {
+      const transformedCourse = await fetchAndTransformCourse(courseValue);
+      if (!transformedCourse) continue;
+      courseInfo = transformedCourse[courseValue];
+    }
+
     const teeInfo = courseInfo.tees[tees];
+    if (!teeInfo) continue;
+
     const { courseRating, slopeRating } = teeInfo;
+
     const differential = (113 / slopeRating) * (score - courseRating);
-    return differential;
-  });
+    differentials.push(differential);
+  }
 
   differentials.sort((a, b) => a - b);
   const lowestDifferentials = differentials.slice(0, 8);
+
   let total = 0;
   for (let i = 0; i < lowestDifferentials.length; i++) {
     total += lowestDifferentials[i];
   }
+
   const averageDifferential = total / lowestDifferentials.length;
 
   return averageDifferential.toFixed(1);
 }
+
+
+
 
 function updateRankingsTable() {
   const rankingsTable = document.getElementById("rankings-table-body");
@@ -382,8 +399,8 @@ function updateRankingsTable() {
   }
 }
 
-function updateGolferHandicap(golferName) {
-  const handicap = calculateHandicap(golferName);
+async function updateGolferHandicap(golferName) {
+  const handicap = await calculateHandicap(golferName);
 
   if (isNaN(handicap) || !isFinite(handicap)) {
     return;
@@ -442,7 +459,6 @@ scoreForm.addEventListener("submit", async (event) => {
     tees,
     score,
   };
-  console.log("Canada round:", round);
   rounds.push(round);
   updateGolferHandicap(golferName);
   updateRankingsTable();
@@ -478,7 +494,6 @@ scoreForm.addEventListener("submit", async (event) => {
     }
 
     const round = { golferName, datePlayed, courseValue: courseName, tees, score };
-    console.log("USA round:", round);
     rounds.push(round);
     updateGolferHandicap(golferName);
     updateRankingsTable();
@@ -489,12 +504,6 @@ scoreForm.addEventListener("submit", async (event) => {
     
     
   }
- 
-
-  
-
-
-
  
 });
 
@@ -1085,9 +1094,25 @@ function displayRound(round) {
   const roundsDisplay = document.getElementById("rounds-display");
   const roundsList = document.getElementById("rounds-list");
 
-  const course = courseNames[round.courseValue] || "Unknown";
-  const selectedCourseData = courseData[round.courseValue];
-  const selectedTeeData = selectedCourseData?.tees[round.tees];
+  let course, selectedCourseData, selectedTeeData;
+
+  if (courseNames[round.courseValue]) {
+    course = courseNames[round.courseValue];
+    selectedCourseData = courseData[round.courseValue];
+    selectedTeeData = selectedCourseData?.tees[round.tees];
+  } else {
+    const transformedCourse = JSON.parse(localStorage.getItem("transformedCourses") || "{}");
+    if (transformedCourse[round.courseValue]) {
+      course = round.courseValue;
+      selectedCourseData = transformedCourse[round.courseValue];
+      selectedTeeData = selectedCourseData?.tees[round.tees];
+    }
+  }
+
+  if (!selectedTeeData) {
+    console.error(`Missing tee data for course: ${course}`);
+    return;
+  }
 
   const strokesAbovePar = round.score - selectedTeeData.par;
 
@@ -1105,6 +1130,7 @@ function displayRound(round) {
     roundsDisplay.style.display = "block";
   }
 }
+
 
 function saveHandicaps() {
   const validHandicaps = golferHandicaps.filter(golfer => isFinite(golfer.handicap));
@@ -1145,11 +1171,12 @@ async function fetchAndTransformCourse(courseName) {
         }, {})
       }
     };
-
+    let transformedCourses = JSON.parse(localStorage.getItem("transformedCourses") || "{}");
+      transformedCourses[course.club_name] = transformedCourse[course.club_name];
+      localStorage.setItem("transformedCourses", JSON.stringify(transformedCourses));
+      
     return transformedCourse;
   } else {
     console.log("Course not found");
   }
 }
-
-//fetchAndTransformCourse("Cumberland Lake Golf Course");
