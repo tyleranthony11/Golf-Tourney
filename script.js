@@ -461,8 +461,9 @@ scoreForm.addEventListener("submit", async (event) => {
                 <strong>Course:</strong> ${course}<br>
                 <strong>Tees:</strong> ${tees}<br>
                 <strong>Score:</strong> ${score} (${
-    strokesAbovePar >= 0 ? "+" : ""
-  }${strokesAbovePar})`;
+        strokesAbovePar > 0 ? "+" + strokesAbovePar : 
+        strokesAbovePar < 0 ? strokesAbovePar : "E"
+    })`;
   roundsList.appendChild(roundItem);
   const roundsDisplay = document.getElementById("rounds-display");
   if (roundsDisplay.style.display === "none") {
@@ -501,8 +502,9 @@ scoreForm.addEventListener("submit", async (event) => {
               <strong>Course:</strong> ${courseName}<br>
               <strong>Tees:</strong> ${tees}<br>
               <strong>Score:</strong> ${score} (${
-      strokesAbovePar >= 0 ? "+" : ""
-    }${strokesAbovePar})`;
+        strokesAbovePar > 0 ? "+" + strokesAbovePar : 
+        strokesAbovePar < 0 ? strokesAbovePar : "E"
+    })`;
     roundsList.appendChild(roundItem);
 
     const roundsDisplay = document.getElementById("rounds-display");
@@ -1156,7 +1158,8 @@ function displayRound(round) {
     <strong>Date Played:</strong> ${round.datePlayed}<br>
     <strong>Course:</strong> ${course}<br>
     <strong>Tees:</strong> ${round.tees}<br>
-    <strong>Score:</strong> ${round.score} (${strokesAbovePar >= 0 ? "+" : ""}${strokesAbovePar})`;
+    <strong>Score:</strong> ${round.score} (${strokesAbovePar > 0 ? "+" + strokesAbovePar : strokesAbovePar < 0 ? strokesAbovePar : "E"})`;
+
 
   roundsList.appendChild(roundItem);
 
