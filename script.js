@@ -175,6 +175,7 @@ function setupCourseSearch() {
         searchInput.value = div.textContent;
         resultsContainer.innerHTML = "";
         populateTeesDropdownUSA(course);
+        populateTournamentTeesDropdownUSA(course);
       });
 
       resultsContainer.appendChild(div);
@@ -194,6 +195,22 @@ function populateTeesDropdownUSA(course) {
         newOption.value = tee.tee_name;
         newOption.textContent = `${tee.tee_name} (${tee.total_yards} yds) - Par ${tee.par_total}, Rating ${tee.course_rating}, Slope ${tee.slope_rating}`;
         teesDropdown.appendChild(newOption);
+      });
+    }
+  }
+}
+
+function populateTournamentTeesDropdownUSA(course) {
+  const tournamentTeesDropdown = document.getElementById("tournament-tees");
+  tournamentTeesDropdown.innerHTML = "<option value=''>Select Tees Played</option>";
+
+  if (course.tees) {
+    for (const gender in course.tees) {
+      course.tees[gender].forEach(tee => {
+        const newOption = document.createElement("option");
+        newOption.value = tee.tee_name;
+        newOption.textContent = `${tee.tee_name} (${tee.total_yards} yds) - Par ${tee.par_total}, Rating ${tee.course_rating}, Slope ${tee.slope_rating}`;
+        tournamentTeesDropdown.appendChild(newOption);
       });
     }
   }
@@ -511,11 +528,19 @@ createTournamentBtn.addEventListener("click", () => {
   tournamentForm.style.display = "flex";
 });
 
-function generateScorecard(courseName, teeColor, golfers, roundNumber) {
-  const course = scorecardData[courseName];
-  const tee = course[teeColor];
+async function generateScorecard(courseName, teeColor, golfers, roundNumber, country) {
+ let course, tee;
 
-  
+
+  if (country === "canada") {
+    course = scorecardData[courseName];
+    tee = course[teeColor];
+  } else if (country === "usa"){
+    
+    course = await fetchAndTransformCourseTournament(courseName);
+    tee = course[teeColor];
+    console.log("Fetching and transforming USA course data");
+  }
 
   const scorecardContainer = document.createElement("div");
   scorecardContainer.classList.add("scorecard-container");
@@ -866,15 +891,24 @@ function isRoundComplete(roundScores) {
   ));
 }
 
-function createTournament() {
+async function createTournament() {
   scorecardContainer.innerHTML = "";
   const tournamentName = document.getElementById("tournament-name").value;
   const golfers = Array.from(
     document.getElementById("tournament-golfers").selectedOptions
   ).map((option) => option.value);
-  const course = document.getElementById("tournament-course").value;
   const tees = document.getElementById("tournament-tees").value;
   const rounds = parseInt(document.getElementById("tournament-rounds").value);
+  const country = document.getElementById("tournament-country-selection").value;
+  let course;
+
+  if (country === "canada"){
+    course = document.getElementById("tournament-course").value;
+    console.log("Canada Course Selected:", course);
+  } else if (country === "usa"){
+    course = document.getElementById("course-search").value.split(" - ")[0];
+    console.log("USA Course Selected:", course);
+  }
 
   
 
@@ -894,7 +928,7 @@ scorecardContainer.appendChild(tournamentTitle);
     const roundHeading = document.createElement("h3");
     roundHeading.textContent = `Round ${i}:`;
     roundHeading.classList.add("round-heading");
-    const scorecard = generateScorecard(course, tees, golfers, i);
+    const scorecard = await generateScorecard(course, tees, golfers, i, country);
     scorecardContainer.appendChild(roundHeading);
     scorecardContainer.appendChild(scorecard);
   }
@@ -902,7 +936,7 @@ scorecardContainer.appendChild(tournamentTitle);
   tournamentForm.classList.toggle("hidden");
 }
 
-startTournamentBtn.addEventListener("click", function(event) {
+startTournamentBtn.addEventListener("click", async function(event) {
   event.preventDefault();
   
 
@@ -1178,5 +1212,69 @@ async function fetchAndTransformCourse(courseName) {
     return transformedCourse;
   } else {
     console.log("Course not found");
+  }
+}
+async function fetchAndTransformCourseTournament(courseName) {
+  try {
+    const response = await fetch("https://golf-api-backend.vercel.app/courses");
+    const data = await response.json();
+    const apiResponse = data.courses.find((course) => course.course_name === courseName);
+
+    if (!apiResponse) {
+      console.error("Course data not found for USA course:", courseName);
+      return null;
+    }
+
+    const transformedCourse = {};
+
+    Object.keys(apiResponse.tees).forEach((gender) => {
+      apiResponse.tees[gender].forEach((teeData) => {
+        const teeName = teeData.tee_name;
+        transformedCourse[teeName] = [];
+
+     
+        for (let i = 0; i < 9; i++) {
+          transformedCourse[teeName].push({
+            holeNumber: i + 1,
+            par: teeData.holes[i].par,
+            yardage: teeData.holes[i].yardage,
+          });
+        }
+
+        const frontNine = teeData.holes.slice(0, 9);
+        transformedCourse[teeName].push({
+          holeNumber: "out",
+          par: frontNine.reduce((sum, hole) => sum + hole.par, 0),
+          yardage: frontNine.reduce((sum, hole) => sum + hole.yardage, 0),
+        });
+
+        for (let i = 9; i < 18; i++) {
+          transformedCourse[teeName].push({
+            holeNumber: i + 1,
+            par: teeData.holes[i].par,
+            yardage: teeData.holes[i].yardage,
+          });
+        }
+
+        const backNine = teeData.holes.slice(9);
+        transformedCourse[teeName].push({
+          holeNumber: "in",
+          par: backNine.reduce((sum, hole) => sum + hole.par, 0),
+          yardage: backNine.reduce((sum, hole) => sum + hole.yardage, 0),
+        });
+
+        transformedCourse[teeName].push({
+          holeNumber: "total",
+          par: teeData.par_total,
+          yardage: teeData.total_yards,
+        });
+      });
+    });
+
+    console.log("Transformed Course Data:", transformedCourse);
+    return transformedCourse;
+  } catch (error) {
+    console.error("Error fetching and transforming USA course data:", error);
+    return null;
   }
 }
