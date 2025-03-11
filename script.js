@@ -75,6 +75,14 @@ document.getElementById("hamburgerMenu").addEventListener("click", function () {
   document.getElementById("navLinks").classList.toggle("show");
 });
 
+const navLinks = document.getElementById("navLinks");
+const links = navLinks.getElementsByTagName("a");
+
+for (let link of links) {
+  link.addEventListener("click", function () {
+    navLinks.classList.remove("show");
+  });
+}
 
 function showSlide(index){
   slides.forEach((slide, i) => {
@@ -260,7 +268,8 @@ function populateTeesDropdown(courseDropdown, teesDropdown) {
   function updateGolferDropdowns() {
     const golferContainer = document.getElementById("tournament-golfers-container");
     golferContainer.innerHTML = "";
-  
+    golferSelect.innerHTML = `<option value="" aria-required="">Select Golfer</option>`;
+
     golfers.forEach((golfer) => {
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
@@ -273,6 +282,11 @@ function populateTeesDropdown(courseDropdown, teesDropdown) {
       label.appendChild(document.createTextNode(` ${golfer}`));
   
       golferContainer.appendChild(label);
+
+    const option = document.createElement("option");
+    option.value = golfer;
+    option.textContent = golfer;
+    golferSelect.appendChild(option);
     
     });
   }
