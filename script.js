@@ -254,30 +254,26 @@ function populateTeesDropdown(courseDropdown, teesDropdown) {
   }
   
 
-function updateGolferDropdowns() {
-  golferSelect.innerHTML = '<option value="">Select Golfer</option>';
-  golfers.forEach((golfer) => {
-    const option = document.createElement("option");
-    option.value = golfer;
-    option.textContent = golfer;
-    golferSelect.appendChild(option);
-  });
-
-  const tournamentGolfers = document.getElementById("tournament-golfers");
-  golfers.forEach((golfer) => {
-    if (
-      !Array.from(tournamentGolfers.options).some(
-        (option) => option.value === golfer
-      )
-    ) {
-      const option = document.createElement("option");
-      option.value = golfer;
-      option.textContent = golfer;
-      tournamentGolfers.appendChild(option);
-    }
-  });
-}
-
+  function updateGolferDropdowns() {
+    const golferContainer = document.getElementById("tournament-golfers-container");
+    golferContainer.innerHTML = "";
+  
+    golfers.forEach((golfer) => {
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.value = golfer;
+      checkbox.classList.add("golfer-checkbox");
+  
+      const label = document.createElement("label");
+      label.style.display = "flex";
+      label.appendChild(checkbox);
+      label.appendChild(document.createTextNode(` ${golfer}`));
+  
+      golferContainer.appendChild(label);
+    
+    });
+  }
+  
 function addGolfer(golferName) {
   if (!golfers.includes(golferName)) {
     golfers.push(golferName);
@@ -527,6 +523,14 @@ scoreForm.addEventListener("submit", async (event) => {
 });
 
 createTournamentBtn.addEventListener("click", () => {
+  if (!areAllRoundsSubmitted()) {
+    const confirmDelete = confirm("Warning: You have a tournament in progess. If you create a new tournament, all current progess will be lost. Do you want to continue?"
+  );
+
+  if(!confirmDelete){
+    return;
+  }
+}
   tournamentForm.style.display = "flex";
 });
 
@@ -901,8 +905,8 @@ async function createTournament() {
   scorecardContainer.innerHTML = "";
   const tournamentName = document.getElementById("tournament-name").value;
   const golfers = Array.from(
-    document.getElementById("tournament-golfers").selectedOptions
-  ).map((option) => option.value);
+    document.querySelectorAll("#tournament-golfers-container .golfer-checkbox:checked")
+  ).map((checkbox) => checkbox.value);
   const tees = document.getElementById("tournament-tees").value;
   const rounds = parseInt(document.getElementById("tournament-rounds").value);
   const country = document.getElementById("tournament-country-selection").value;
