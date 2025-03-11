@@ -71,6 +71,9 @@ function switchTab(tabName, event) {
   selectedLink.classList.add("active");
 }
 
+document.getElementById("hamburgerMenu").addEventListener("click", function () {
+  document.getElementById("navLinks").classList.toggle("show");
+});
 
 
 function showSlide(index){

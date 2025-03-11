@@ -7,9 +7,12 @@ body {
     min-width: 100vw;
     overflow-x: auto;
 }
-
+main {
+    margin-top: 40px;  
+}
 .topnav {
     display: flex;
+    align-items: center;
     background-color: black;
     overflow: hidden;
     justify-content: center;
@@ -18,16 +21,23 @@ body {
     left: 0;
     width: 100vw;
     z-index: 1000;
+    height: 50px;
+}
+.nav-links {
+    display: flex; 
+    justify-content: center;  
+    align-items: center;
+    gap: 10px;  
+    flex: 1;
+    width: 100%;  
 }
 
 .topnav a {
-    float: left;
     color: #f2f2f2;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
     font-size: 17px;
-    flex: 1;
     white-space: nowrap;
 }
 
@@ -40,6 +50,16 @@ body {
     background-color: #04AA6D;
     color: white;
 }
+.icon {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: white;
+    padding: 10px;
+    position: absolute;
+    left: 10px;
+}
+
 
 .tab {
     display: none;
@@ -48,6 +68,34 @@ body {
 .tab-active {
     display: block;
     
+}
+
+@media screen and (max-width: 768px){
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        top: 50px;
+        padding-left:  10px;
+        width: 100%;
+        background-color: black;
+        z-index: 1000;
+    }
+    .nav-links a {
+        text-align: left;
+        padding: 12px 16px;
+        display: block;
+        width: 100%;
+    }
+    .nav-links a:hover {
+        padding-left: 30px;  
+    }
+    .icon {
+        display: block;
+    }
+    .nav-links.show {
+        display: flex;
+    }
 }
 
 #home {
