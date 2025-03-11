@@ -621,6 +621,7 @@ async function generateScorecard(courseName, teeColor, golfers, roundNumber, cou
       input.dataset.hole = i;
       input.dataset.golfer = golfer;
       input.dataset.round = roundNumber;
+      input.disabled = roundNumber > 1;
       input.addEventListener("input", (event) => updateTotals(event, tee));
       td.appendChild(input);
       golferRow.appendChild(td);
@@ -762,6 +763,9 @@ async function generateScorecard(courseName, teeColor, golfers, roundNumber, cou
       submitButton.disabled = true;
       submitButton.textContent = "Round Submitted";
       submitButton.classList.add("submitted");
+      const nextRoundInputs = document.querySelectorAll(`input[data-round="${roundNumber + 1}"]`);
+      nextRoundInputs.forEach(input => input.disabled = false);
+
       updateLeaderboard();
      
       

@@ -773,6 +773,12 @@ body {
     display: none;
 }
 
+input.hole-score:disabled {
+    cursor: not-allowed;
+    background-color: #f0f0f0;
+    opacity: 0.6;
+}
+
 .albatross {
     border: 1px solid black;
     border-radius: 50%;
