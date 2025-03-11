@@ -1083,7 +1083,7 @@ function updateHistoryTab() {
     historyList.style.display = "block";
   }
   
-  tournamentHistory.forEach((tournament) => {
+  tournamentHistory.forEach((tournament, index) => {
       
 
       const tournamentItem = document.createElement("div");
@@ -1113,13 +1113,39 @@ function updateHistoryTab() {
           : "Close Full Tournament Scorecard";
       });
 
+      const deleteBtn = document.createElement("button");
+      deleteBtn.classList.add("delete-tournament-btn");
+
+      const trashIcon = document.createElement("img");
+      trashIcon.src = "images/delete.png";
+      trashIcon.alt = "Delete";
+      trashIcon.classList.add("trash-icon");
+
+      deleteBtn.appendChild(trashIcon);
+      deleteBtn.addEventListener("click", () => {
+        confirmDeleteTournament(index);
+      });
+      
       tournamentItem.appendChild(viewDetailsBtn);
+      tournamentItem.appendChild(deleteBtn);
       historyList.appendChild(tournamentItem);
   });
 }
 document.addEventListener("DOMContentLoaded", updateHistoryTab);
 
+function deleteTournament(index){
+  let tournamentHistory = JSON.parse(localStorage.getItem("tournamentHistory")) || [];
+  tournamentHistory.splice(index, 1);
+  localStorage.setItem("tournamentHistory", JSON.stringify(tournamentHistory));
+  updateHistoryTab();
+}
 
+function confirmDeleteTournament(index){
+  const confirmation = confirm("Are you sure you want to delete this tournament? This action cannot be undone.");
+  if (confirmation){
+    deleteTournament(index);
+  }
+}
 function areAllRoundsSubmitted() { 
   const submitButtons = document.querySelectorAll(".submit-round-btn");
   return submitButtons.length > 0 && Array.from(submitButtons).every(button => button.disabled);

@@ -986,15 +986,35 @@ input.hole-score:disabled {
 }
 
 .tournament-item {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-bottom: 20px;
-    padding: 20px;
+    position: relative;
+    margin: 15px 0;
+    padding: 15px;
+    background-color: #f1f1f1;
     border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
+.delete-tournament-btn{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.trash-icon {
+    width: 20px; 
+    height: 20px;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.delete-tournament-btn:hover .trash-icon {
+    opacity: 1;
+  }
 
 .tournament-item:hover {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
