@@ -2,7 +2,6 @@ body {
     
     font-family: poppins, arial, sans-serif;
     margin: 0;
-    padding-top: 50px;
     text-align: center;
     min-width: 100vw;
     overflow-x: auto;
@@ -26,8 +25,7 @@ main {
 .nav-links {
     display: flex; 
     justify-content: center;  
-    align-items: center;
-    gap: 10px;  
+    align-items: center; 
     flex: 1;
     width: 100%;  
 }
@@ -539,7 +537,7 @@ main {
 
 #handicap-rankings {
     
-    padding: 0px;
+    padding-top: 10px;
     background-color: #fff;
     max-width: 600px;
     margin: 10px auto;
@@ -893,6 +891,7 @@ input.hole-score:disabled {
     box-shadow: 0 0 0 1.5px white, 0 0 0 2px white, 0 0 0 3px black, 0 0 0 4px white, 0 0 0 5px black;
 }
 #tournament-leaderboard h1 {
+    padding-top: 20px;
     color: #2c3e50;
     margin: 20px auto;
     font-size: 28px;
@@ -973,6 +972,9 @@ input.hole-score:disabled {
     color:#037a4d;
     text-decoration: underline;
 }
+#history {
+    padding-top: 10px;
+}
 #history-list {
     display: none;
     margin: 20px auto;
@@ -1016,6 +1018,14 @@ input.hole-score:disabled {
     opacity: 1;
   }
 
+  .delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
 .tournament-item:hover {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }

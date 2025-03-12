@@ -455,88 +455,78 @@ scoreForm.addEventListener("submit", async (event) => {
   const golferName = document.getElementById("golfer-name-dropdown").value;
   const datePlayed = document.getElementById("date-played").value;
   const score = Number(document.getElementById("score").value);
+  let roundItem, round;
 
-  if (country === "canada"){
+  if (country === "canada") {
     const courseValue = document.getElementById("course").value;
     const course = courseNames[courseValue];
     const tees =
       document.getElementById("tees").value.charAt(0).toUpperCase() +
       document.getElementById("tees").value.slice(1);
-    
+
     const courseKey = document.getElementById("course").value;
     const selectedCourseData = courseData[courseKey];
     const selectedTeeData = selectedCourseData.tees[tees];
     const strokesAbovePar = score - selectedTeeData.par;
-    const roundItem = document.createElement("li");
-  roundItem.innerHTML = `
+
+    roundItem = document.createElement("li");
+    roundItem.innerHTML = `
                 <strong>Golfer:</strong> ${golferName}<br>
                 <strong>Date Played:</strong> ${datePlayed}<br>
                 <strong>Course:</strong> ${course}<br>
                 <strong>Tees:</strong> ${tees}<br>
                 <strong>Score:</strong> ${score} (${
-        strokesAbovePar > 0 ? "+" + strokesAbovePar : 
-        strokesAbovePar < 0 ? strokesAbovePar : "E"
+      strokesAbovePar > 0 ? "+" + strokesAbovePar : 
+      strokesAbovePar < 0 ? strokesAbovePar : "E"
     })`;
-  roundsList.appendChild(roundItem);
-  const roundsDisplay = document.getElementById("rounds-display");
-  if (roundsDisplay.style.display === "none") {
-    roundsDisplay.style.display = "block";
-  }
 
-  const round = {
-    golferName,
-    datePlayed,
-    courseValue,
-    tees,
-    score,
-  };
-  rounds.push(round);
-  updateGolferHandicap(golferName);
-  updateRankingsTable();
-  saveRounds();
-  saveHandicaps();
-  
+    round = { golferName, datePlayed, courseValue, tees, score };
 
-  scoreForm.reset();
-  } else if (country === "usa"){
+  } else if (country === "usa") {
     const courseInput = document.getElementById("course-search").value;
     const courseName = courseInput.split(" - ")[0].trim();
-    
+
     const transformedCourse = await fetchAndTransformCourse(courseName);
     const tees = document.getElementById("tees").value;
     const selectedTeeData = transformedCourse[courseName].tees[tees];
     const strokesAbovePar = score - selectedTeeData.par;
 
-
-    const roundItem = document.createElement("li");
+    roundItem = document.createElement("li");
     roundItem.innerHTML = `
               <strong>Golfer:</strong> ${golferName}<br>
               <strong>Date Played:</strong> ${datePlayed}<br>
               <strong>Course:</strong> ${courseName}<br>
               <strong>Tees:</strong> ${tees}<br>
               <strong>Score:</strong> ${score} (${
-        strokesAbovePar > 0 ? "+" + strokesAbovePar : 
-        strokesAbovePar < 0 ? strokesAbovePar : "E"
+      strokesAbovePar > 0 ? "+" + strokesAbovePar : 
+      strokesAbovePar < 0 ? strokesAbovePar : "E"
     })`;
-    roundsList.appendChild(roundItem);
 
-    const roundsDisplay = document.getElementById("rounds-display");
-    if (roundsDisplay.style.display === "none") {
-      roundsDisplay.style.display = "block";
-    }
-
-    const round = { golferName, datePlayed, courseValue: courseName, tees, score };
-    rounds.push(round);
-    updateGolferHandicap(golferName);
-    updateRankingsTable();
-    saveRounds();
-    saveHandicaps();
-    scoreForm.reset();
-    
-    
-    
+    round = { golferName, datePlayed, courseValue: courseName, tees, score };
   }
- 
+
+  const deleteBtn = document.createElement("img");
+  deleteBtn.src = "images/delete.png";
+  deleteBtn.alt = "Delete";
+  deleteBtn.classList.add("delete-btn");
+
+  const index = rounds.length;
+  deleteBtn.addEventListener("click", () => deleteRound(index, golferName));
+
+  roundItem.appendChild(deleteBtn);
+  roundsList.appendChild(roundItem);
+
+  const roundsDisplay = document.getElementById("rounds-display");
+  if (roundsDisplay.style.display === "none") {
+    roundsDisplay.style.display = "block";
+  }
+
+  rounds.push(round);
+  updateGolferHandicap(golferName);
+  updateRankingsTable();
+  saveRounds();
+  saveHandicaps();
+  scoreForm.reset();
 });
 
 createTournamentBtn.addEventListener("click", () => {
@@ -1166,9 +1156,9 @@ function saveRounds(){
 function loadRounds(){
   const storedRounds = JSON.parse(localStorage.getItem("rounds")) || [];
 
-  storedRounds.forEach((round) => {
+  storedRounds.forEach((round, index) => {
     rounds.push(round);
-    displayRound(round);
+    displayRound(round, index);
   });
   if (rounds.length > 0){
     const roundsDisplay = document.getElementById("rounds-display");
@@ -1177,7 +1167,7 @@ function loadRounds(){
 }
 document.addEventListener("DOMContentLoaded", loadRounds);
 
-function displayRound(round) {
+function displayRound(round, index) {
   const roundsDisplay = document.getElementById("rounds-display");
   const roundsList = document.getElementById("rounds-list");
 
@@ -1211,11 +1201,45 @@ function displayRound(round) {
     <strong>Tees:</strong> ${round.tees}<br>
     <strong>Score:</strong> ${round.score} (${strokesAbovePar > 0 ? "+" + strokesAbovePar : strokesAbovePar < 0 ? strokesAbovePar : "E"})`;
 
+  const deleteBtn = document.createElement("img");
+  deleteBtn.src = "images/delete.png";
+  deleteBtn.alt = "Delete";
+  deleteBtn.classList.add("delete-btn");
+  deleteBtn.addEventListener("click", () => deleteRound(index, round.golferName));
 
+
+  roundItem.appendChild(deleteBtn);
   roundsList.appendChild(roundItem);
 
   if (roundsDisplay) {
     roundsDisplay.style.display = "block";
+  }
+}
+
+function deleteRound(index, golferName) {
+  if (!confirm("Are you sure you want to delete this round? This action cannot be undone.")) return;
+
+  rounds.splice(index, 1);
+
+  saveRounds();
+
+  updateGolferHandicap(golferName);
+
+  updateRankingsTable();
+
+  refreshRoundsDisplay();
+}
+
+function refreshRoundsDisplay() {
+  const roundsList = document.getElementById("rounds-list");
+  roundsList.innerHTML = "";
+
+  rounds.forEach((round, index) => {
+    displayRound(round, index);
+  });
+
+  if (rounds.length === 0) {
+    document.getElementById("rounds-display").style.display = "none";
   }
 }
 
