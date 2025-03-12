@@ -338,6 +338,7 @@ main {
     list-style-type: none;
     padding: 0;
 }
+
 #golfer-list li{
     font-size: 16px;
     color: #555;
@@ -351,6 +352,17 @@ main {
     transition: background-color 0.3s ease;
     gap: 10px;
 }
+.delete-golfer-btn {
+    cursor: pointer;
+  margin-left: auto; 
+  width: 18px;
+  visibility: hidden;
+  }
+
+  #golfer-list li:hover .delete-golfer-btn {
+    opacity: 1;
+    visibility: visible; 
+  }
 #golfer-list li:hover {
     background-color: #ecf0f1;
     cursor: pointer;
@@ -630,9 +642,9 @@ main {
     display: flex;
     flex-direction: column;
     align-items: flex-start; 
-    border: 2px solid #ccc;
+    border: 2px solid #ddd;
     border-radius: 8px;
-    background-color: #f9f9f9;
+    background-color: #f1f1f1;
     max-width: 400px;
     width: 100%;
     box-sizing: border-box;
@@ -891,7 +903,7 @@ input.hole-score:disabled {
     box-shadow: 0 0 0 1.5px white, 0 0 0 2px white, 0 0 0 3px black, 0 0 0 4px white, 0 0 0 5px black;
 }
 #tournament-leaderboard h1 {
-    padding-top: 20px;
+    padding-top: 30px;
     color: #2c3e50;
     margin: 20px auto;
     font-size: 28px;
@@ -974,6 +986,10 @@ input.hole-score:disabled {
 }
 #history {
     padding-top: 10px;
+  
+}
+#history h2 {
+    font-size: 28px;
 }
 #history-list {
     display: none;

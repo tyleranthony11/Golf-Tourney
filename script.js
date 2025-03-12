@@ -306,11 +306,33 @@ function addGolfer(golferName) {
 function updateGolferList(){
   golferList.innerHTML = "";
 
-  golfers.forEach((golfer) => {
+  golfers.forEach((golfer, index) => {
     const golferItem = document.createElement("li");
     golferItem.textContent = golfer;
+
+    const deleteGolferBtn = document.createElement("img");
+    deleteGolferBtn.src = "images/delete.png";
+    deleteGolferBtn.alt = "Delete";
+    deleteGolferBtn.classList.add("delete-golfer-btn");
+
+    deleteGolferBtn.addEventListener("click", () => {
+      deleteGolfer(index);
+    });
+
+    golferItem.appendChild(deleteGolferBtn);
+
     golferList.appendChild(golferItem);
   });
+}
+
+function deleteGolfer(index){
+  golfers.splice(index, 1);
+
+  updateGolferList();
+  updateGolferDropdowns();
+  checkGolfers();
+
+  saveGolfers();
 }
 
 function checkGolfers(){
