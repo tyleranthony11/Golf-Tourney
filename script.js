@@ -1371,10 +1371,44 @@ async function fetchAndTransformCourseTournament(courseName) {
       });
     });
 
-    console.log("Transformed Course Data:", transformedCourse);
     return transformedCourse;
   } catch (error) {
     console.error("Error fetching and transforming USA course data:", error);
     return null;
   }
 }
+
+document.getElementById('get-weather').addEventListener('click', function() {
+  const city = document.getElementById('weather-course').value;
+  const date = document.getElementById('weather-date').value;
+
+  if (!city || !date) {
+      alert("Please enter both a course/city and a date.");
+      return;
+  }
+
+  const apiKey = '679a4435a4c0499eb5c131838251303';
+  const apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(city)}&dt=${date}`;
+
+  fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+          if (data.error) {
+              document.getElementById('weather-result').innerHTML = `Error: ${data.error.message}`;
+          } else {
+              const weather = data.forecast.forecastday[0].day;
+              const weatherInfo = `
+                  <h3>Weather Forecast for ${city} on ${date}</h3>
+                  <p><strong>Temperature:</strong> ${weather.avgtemp_c}°C</p>
+                  <p><strong>Condition:</strong> ${weather.condition.text}</p>
+                  <p><strong>Wind Speed:</strong> ${weather.maxwind_kph} km/h / ${weather.maxwind_mph} mph</p>
+          
+              `;
+              document.getElementById('weather-result').innerHTML = weatherInfo;
+          }
+      })
+      .catch(error => {
+          document.getElementById('weather-result').innerHTML = `Error fetching weather data: ${error.message}`;
+      });
+});
+
