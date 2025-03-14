@@ -557,6 +557,10 @@ createTournamentBtn.addEventListener("click", () => {
   }
 }
   tournamentForm.style.display = "flex";
+  const weatherResult = document.getElementById('weather-result');
+  const weatherLookupContainer = document.querySelector('.weather-lookup-container');
+  weatherResult.style.display = 'block';
+  weatherLookupContainer.style.display = 'block';
 });
 
 async function generateScorecard(courseName, teeColor, golfers, roundNumber, country) {
@@ -974,6 +978,15 @@ scorecardContainer.appendChild(tournamentTitle);
 startTournamentBtn.addEventListener("click", async function(event) {
   event.preventDefault();
   
+  const weatherResult = document.getElementById('weather-result');
+  const weatherLookupContainer = document.querySelector('.weather-lookup-container');
+  if (weatherResult.style.display === 'none') {
+    weatherResult.style.display = 'block';
+    weatherLookupContainer.style.display = 'block';
+} else {
+    weatherResult.style.display = 'none';
+    weatherLookupContainer.style.display = 'none'; 
+}
 
   if (tournamentForm.checkValidity()) {
     resetScorecard();
@@ -1404,11 +1417,11 @@ document.getElementById('get-weather').addEventListener('click', function() {
                   <div style="text-align: center; font-size: 48px; font-weight: bold;">
                       ${weather.avgtemp_c}°C
                   </div>
-                 
                   <p style="text-align: center;">${weather.condition.text}</p>
                   <p style="text-align: center;"><strong>Wind Speed:</strong> ${weather.maxwind_kph} km/h</p>
               `;
               document.getElementById('weather-result').innerHTML = weatherInfo;
+              document.getElementById('weather-result').style.display = 'block';
           }
       })
       .catch(error => {
