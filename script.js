@@ -472,6 +472,7 @@ scoreForm.addEventListener("submit", async (event) => {
   const country = document.getElementById("country-selection").value;
   const golferName = document.getElementById("golfer-name-dropdown").value;
   const datePlayed = document.getElementById("date-played").value;
+  const formattedDatePlayed = formatDate(datePlayed);
   const score = Number(document.getElementById("score").value);
   let roundItem, round;
 
@@ -490,7 +491,7 @@ scoreForm.addEventListener("submit", async (event) => {
     roundItem = document.createElement("li");
     roundItem.innerHTML = `
                 <strong>Golfer:</strong> ${golferName}<br>
-                <strong>Date Played:</strong> ${datePlayed}<br>
+                <strong>Date Played:</strong> ${formattedDatePlayed}<br>
                 <strong>Course:</strong> ${course}<br>
                 <strong>Tees:</strong> ${tees}<br>
                 <strong>Score:</strong> ${score} (${
@@ -512,7 +513,7 @@ scoreForm.addEventListener("submit", async (event) => {
     roundItem = document.createElement("li");
     roundItem.innerHTML = `
               <strong>Golfer:</strong> ${golferName}<br>
-              <strong>Date Played:</strong> ${datePlayed}<br>
+              <strong>Date Played:</strong> ${formattedDatePlayed}<br>
               <strong>Course:</strong> ${courseName}<br>
               <strong>Tees:</strong> ${tees}<br>
               <strong>Score:</strong> ${score} (${
@@ -1223,11 +1224,12 @@ function displayRound(round, index) {
   }
 
   const strokesAbovePar = round.score - selectedTeeData.par;
+  const formattedDate = formatDate(round.datePlayed);
 
   const roundItem = document.createElement("li");
   roundItem.innerHTML = `
     <strong>Golfer:</strong> ${round.golferName}<br>
-    <strong>Date Played:</strong> ${round.datePlayed}<br>
+    <strong>Date Played:</strong> ${formattedDate}<br>
     <strong>Course:</strong> ${course}<br>
     <strong>Tees:</strong> ${round.tees}<br>
     <strong>Score:</strong> ${round.score} (${strokesAbovePar > 0 ? "+" + strokesAbovePar : strokesAbovePar < 0 ? strokesAbovePar : "E"})`;
@@ -1395,6 +1397,7 @@ document.getElementById('get-weather').addEventListener('click', function() {
       alert("Please enter both a course/city and a date.");
       return;
   }
+  const formattedDate = formatDate(date);
 
   const apiKey = '679a4435a4c0499eb5c131838251303';
   const apiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(city)}&dt=${date}`;
@@ -1410,7 +1413,7 @@ document.getElementById('get-weather').addEventListener('click', function() {
               const iconUrl = `https:${weather.condition.icon}`;
 
               const weatherInfo = `
-                   <h3 style="text-align: center;">Weather Forecast for ${city} on ${date}</h3>
+                   <h3 style="text-align: center;">Weather Forecast for ${city} on ${formattedDate}</h3>
                     <div style="text-align: center;">
                       <img src="${iconUrl}" alt="${condition}" style="width: 100px; height: 100px;">
                   </div>
@@ -1428,3 +1431,22 @@ document.getElementById('get-weather').addEventListener('click', function() {
           document.getElementById('weather-result').innerHTML = `Error fetching weather data: ${error.message}`;
       });
 });
+
+function formatDate(dateString) {
+  const [year, month, day] = dateString.split('-');
+  
+  const date = new Date(Date.UTC(year, month - 1, day));
+
+  const adjustedDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+  
+  const formattedDay = adjustedDate.getUTCDate();
+  const formattedMonth = adjustedDate.toLocaleString("default", { month: "long" });
+  const formattedYear = adjustedDate.getUTCFullYear();
+
+  const suffix = (formattedDay % 10 === 1 && formattedDay !== 11) ? "st" :
+                (formattedDay % 10 === 2 && formattedDay !== 12) ? "nd" :
+                (formattedDay % 10 === 3 && formattedDay !== 13) ? "rd" : "th";
+
+  return `${formattedMonth} ${formattedDay}${suffix}, ${formattedYear}`;
+}
+
