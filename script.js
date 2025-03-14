@@ -24,10 +24,6 @@ const slides = document.querySelectorAll(".carousel-slide");
 const emptyHandicapRankings = document.getElementById("empty-handicap-rankings");
 const emptyLeaderboard = document.getElementById("empty-leaderboard");
 
-
-
-
-
 let tournamentScores = {};
 const rounds = [];
 const golfers = [];
@@ -1397,12 +1393,20 @@ document.getElementById('get-weather').addEventListener('click', function() {
               document.getElementById('weather-result').innerHTML = `Error: ${data.error.message}`;
           } else {
               const weather = data.forecast.forecastday[0].day;
+              const condition = weather.condition.text;
+              const iconUrl = `https:${weather.condition.icon}`;
+
               const weatherInfo = `
-                  <h3>Weather Forecast for ${city} on ${date}</h3>
-                  <p><strong>Temperature:</strong> ${weather.avgtemp_c}°C</p>
-                  <p><strong>Condition:</strong> ${weather.condition.text}</p>
-                  <p><strong>Wind Speed:</strong> ${weather.maxwind_kph} km/h / ${weather.maxwind_mph} mph</p>
-          
+                   <h3 style="text-align: center;">Weather Forecast for ${city} on ${date}</h3>
+                    <div style="text-align: center;">
+                      <img src="${iconUrl}" alt="${condition}" style="width: 100px; height: 100px;">
+                  </div>
+                  <div style="text-align: center; font-size: 48px; font-weight: bold;">
+                      ${weather.avgtemp_c}°C
+                  </div>
+                 
+                  <p style="text-align: center;">${weather.condition.text}</p>
+                  <p style="text-align: center;"><strong>Wind Speed:</strong> ${weather.maxwind_kph} km/h</p>
               `;
               document.getElementById('weather-result').innerHTML = weatherInfo;
           }
@@ -1411,4 +1415,3 @@ document.getElementById('get-weather').addEventListener('click', function() {
           document.getElementById('weather-result').innerHTML = `Error fetching weather data: ${error.message}`;
       });
 });
-
