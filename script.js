@@ -1397,7 +1397,7 @@ document.getElementById('get-weather').addEventListener('click', function() {
   }
 
   const apiKey = '679a4435a4c0499eb5c131838251303';
-  const apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(city)}&dt=${date}`;
+  const apiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(city)}&dt=${date}`;
 
   fetch(apiUrl)
       .then(response => response.json())
