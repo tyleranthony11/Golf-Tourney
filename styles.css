@@ -182,7 +182,6 @@ main {
 
 
 .carousel-slide {
-
     position: absolute;
     top: 0;
     left: 0;
@@ -545,6 +544,18 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.tournament-details{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    gap: 40px;
+}
+
+.tournament-details span {
+    white-space: nowrap; 
+    margin-right: 50px;
+}
 
 
 #handicap-rankings {

@@ -1077,12 +1077,28 @@ function saveTournamentToHistory() {
   const scorecardData = scorecardContainer.innerHTML;
   const leaderboardData = leaderboardContainer.innerHTML;
   const scorecardWithoutName = scorecardData.replace(/<h2>.*<\/h2>/, '');
+  const datePlayed = document.getElementById("tournament-date").value;
+  const course = document.getElementById("tournament-course").value;
+  const tees = document.getElementById("tournament-tees").value;
+  const country = document.getElementById("tournament-country-selection").value;
 
   const tournamentHistory = JSON.parse(localStorage.getItem("tournamentHistory")) || [];
 
+  let courseName = "";
+
+  if (country === "canada"){
+    const courseKey = document.getElementById("tournament-course").value;
+    courseName = courseNames[courseKey] || courseKey;
+  } else {
+    courseName = document.getElementById("course-search").value.trim();
+  }
+
   const tournament = {
-      scorecard: scorecardWithoutName,
-      leaderboard: leaderboardData,
+    datePlayed,
+    course: courseName,
+    tees,
+    scorecard: scorecardWithoutName,
+    leaderboard: leaderboardData,
   };
 
   tournamentHistory.push(tournament);
@@ -1116,10 +1132,22 @@ function updateHistoryTab() {
       leaderboard.innerHTML = tournament.leaderboard;
       tournamentItem.appendChild(leaderboard);
 
+      const formattedDate = formatDate(tournament.datePlayed);
+
       const scorecard = document.createElement("div");
       scorecard.classList.add("scorecard-details");
       scorecard.innerHTML = tournament.scorecard;
       scorecard.style.display = "none";
+
+      const detailsSection = document.createElement("div");
+      detailsSection.classList.add("tournament-details");
+      detailsSection.innerHTML = `
+            <span><strong>Date Played:</strong> ${formattedDate}</span>
+            <span><strong>Course:</strong> ${tournament.course}</span>
+            <span><strong>Tees:</strong> ${tournament.tees}</span>
+            `;
+      detailsSection.style.display = "none";
+      tournamentItem.appendChild(detailsSection);
       tournamentItem.appendChild(scorecard);
 
       
@@ -1128,9 +1156,10 @@ function updateHistoryTab() {
       viewDetailsBtn.classList.add("view-details-btn");
 
       viewDetailsBtn.addEventListener("click", () => {
-        const isScorecardVisible = scorecard.style.display === "block";
-        scorecard.style.display = isScorecardVisible ? "none" : "block";
-        viewDetailsBtn.textContent = isScorecardVisible
+        const isVisible = scorecard.style.display === "block";
+        scorecard.style.display = isVisible ? "none" : "block";
+        detailsSection.style.display = isVisible ? "none" : "block";
+        viewDetailsBtn.textContent = isVisible
           ? "View Full Tournament Scorecard"
           : "Close Full Tournament Scorecard";
       });

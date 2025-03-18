@@ -28,7 +28,7 @@
    <div id="home" class="tab tab-active">
     <h1 class="home-header"><img src="images/ballandtee.png" alt="golf icon" class="golf-icon">
         Welcome to Golf Tourney </h1>
-
+         
     <div id="image-carousel" class="carousel">
         <div class="carousel-slide">
         <img src="images/golfcourse1.jpg" alt="Golf Course" class="home-img">
@@ -106,12 +106,18 @@
                     <option value="" aria-required="">Select Golfer</option>
                 </select>
             </div>
-           
+          
             <br>
             <div>
                 <strong><label for="date-played">Date Played:</label></strong>
                 <input type="date" id="date-played" required>
             </div><br>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const today = new Date().toISOString().split('T')[0];
+                        document.getElementById("date-played").value = today;
+                });
+            </script>
             <div>
                 <strong><label for="course">Course:</label></strong>
                 <select id="course" name="course">
@@ -182,6 +188,15 @@
 
         <label for="tournament-name">Tournament Name:</label>
         <input type="text" id="tournament-name" required>
+
+        <label for="tournament-date">Start Date:</label>
+        <input type="date" id="tournament-date" required>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const today = new Date().toISOString().split('T')[0];
+                    document.getElementById("tournament-date").value = today;
+            });
+        </script>
 
         <label for="tournament-golfers">Select Golfer(s):</label>
         <div id="tournament-golfers-container"></div>
