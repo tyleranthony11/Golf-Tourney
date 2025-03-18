@@ -1,4 +1,4 @@
-import { courseData, courseNames, scorecardData } from './courses.js';
+import { courseData, courseNames, scorecardData, courseLocations } from "./courses.js";
 const golferSelect = document.getElementById("golfer-name-dropdown");
 const roundsList = document.getElementById("rounds-list");
 const scoreForm = document.getElementById("score-form");
@@ -19,9 +19,13 @@ const tournamentTeesDropdown = document.getElementById("tournament-tees");
 const leaderboardContainer = document.getElementById("leaderboard-container");
 const scorecardContainer = document.getElementById("scorecard-container");
 const historyList = document.getElementById("history-list");
-const handicapRankingsContainer = document.getElementById("handicap-rankings-container");
+const handicapRankingsContainer = document.getElementById(
+  "handicap-rankings-container"
+);
 const slides = document.querySelectorAll(".carousel-slide");
-const emptyHandicapRankings = document.getElementById("empty-handicap-rankings");
+const emptyHandicapRankings = document.getElementById(
+  "empty-handicap-rankings"
+);
 const emptyLeaderboard = document.getElementById("empty-leaderboard");
 
 let tournamentScores = {};
@@ -29,21 +33,41 @@ const rounds = [];
 const golfers = [];
 let golferHandicaps = [];
 
-document.getElementById('homeTab').addEventListener('click', (event) => switchTab('home', event));
-document.getElementById('postRoundTab').addEventListener('click', (event) => switchTab('post-round', event));
-document.getElementById('handicapRankingsTab').addEventListener('click', (event) => switchTab('handicap-rankings', event));
-document.getElementById('tournamentScorecardTab').addEventListener('click', (event) => switchTab('tournament-scorecard', event));
-document.getElementById('tournamentLeaderboardTab').addEventListener('click', (event) => switchTab('tournament-leaderboard', event));
-document.getElementById('historyTab').addEventListener('click', (event) => switchTab('history', event));
+document
+  .getElementById("homeTab")
+  .addEventListener("click", (event) => switchTab("home", event));
+document
+  .getElementById("postRoundTab")
+  .addEventListener("click", (event) => switchTab("post-round", event));
+document
+  .getElementById("handicapRankingsTab")
+  .addEventListener("click", (event) => switchTab("handicap-rankings", event));
+document
+  .getElementById("tournamentScorecardTab")
+  .addEventListener("click", (event) =>
+    switchTab("tournament-scorecard", event)
+  );
+document
+  .getElementById("tournamentLeaderboardTab")
+  .addEventListener("click", (event) =>
+    switchTab("tournament-leaderboard", event)
+  );
+document
+  .getElementById("historyTab")
+  .addEventListener("click", (event) => switchTab("history", event));
 
-document.getElementById("start-tournament-link").addEventListener("click", (event) => {
-  event.preventDefault();
-  document.getElementById("tournamentScorecardTab").click();
-});
-document.getElementById("post-score-link").addEventListener("click", (event) => {
-  event.preventDefault();
-  document.getElementById("postRoundTab").click();
-});
+document
+  .getElementById("start-tournament-link")
+  .addEventListener("click", (event) => {
+    event.preventDefault();
+    document.getElementById("tournamentScorecardTab").click();
+  });
+document
+  .getElementById("post-score-link")
+  .addEventListener("click", (event) => {
+    event.preventDefault();
+    document.getElementById("postRoundTab").click();
+  });
 
 function switchTab(tabName, event) {
   event.preventDefault();
@@ -80,16 +104,15 @@ for (let link of links) {
   });
 }
 
-function showSlide(index){
+function showSlide(index) {
   slides.forEach((slide, i) => {
-    if (i === index){
+    if (i === index) {
       slide.classList.add("show");
       slide.style.opacity = 1;
     } else {
       slide.classList.remove("show");
       slide.style.opacity = 0;
     }
-   
   });
 }
 let currentIndex = 0;
@@ -100,50 +123,58 @@ function nextSlide() {
 showSlide(currentIndex);
 setInterval(nextSlide, 8000);
 
-document.getElementById("country-selection").addEventListener("change", function () {
-  const country = this.value;
-  const courseContainer = document.getElementById("course-container");
-  const courseDropdown = document.getElementById("course");
+document
+  .getElementById("country-selection")
+  .addEventListener("change", function () {
+    const country = this.value;
+    const courseContainer = document.getElementById("course-container");
+    const courseDropdown = document.getElementById("course");
 
-  courseDropdown.innerHTML = "";
+    courseDropdown.innerHTML = "";
 
-  if (country === "canada") {
-    courseDropdown.innerHTML = "<option value=''>Select a Course</option>";
-    populateCourseDropdown(courseDropdown);
-    courseDropdown.style.display = "block";
-    courseContainer.innerHTML = "";
-  } else if (country === "usa") {
-    courseContainer.innerHTML = `
+    if (country === "canada") {
+      courseDropdown.innerHTML = "<option value=''>Select a Course</option>";
+      populateCourseDropdown(courseDropdown);
+      courseDropdown.style.display = "block";
+      courseContainer.innerHTML = "";
+    } else if (country === "usa") {
+      courseContainer.innerHTML = `
       <input type="text" id="course-search" placeholder="Search for a US course..." autocomplete="off">
       <div id="course-results" class="dropdown-results"></div>
     `;
 
-    setupCourseSearch();
-    courseDropdown.style.display = "none";
-  }
-});
+      setupCourseSearch();
+      courseDropdown.style.display = "none";
+    }
+  });
 
-document.getElementById("tournament-country-selection").addEventListener("change", function(){
-  const country = this.value;
-  const tournamentCourseContainer = document.getElementById("tournament-course-container");
-  const tournamentCourseDropdown = document.getElementById("tournament-course");
+document
+  .getElementById("tournament-country-selection")
+  .addEventListener("change", function () {
+    const country = this.value;
+    const tournamentCourseContainer = document.getElementById(
+      "tournament-course-container"
+    );
+    const tournamentCourseDropdown =
+      document.getElementById("tournament-course");
 
-  tournamentCourseDropdown.innerHTML = "";
+    tournamentCourseDropdown.innerHTML = "";
 
-  if (country === "canada"){
-    tournamentCourseDropdown.innerHTML = "<option value=''>Select a Course</option>";
-    populateCourseDropdown(tournamentCourseDropdown);
-    tournamentCourseDropdown.style.display = "block";
-    tournamentCourseContainer.innerHTML = "";
-  } else if (country ==="usa"){
-    tournamentCourseContainer.innerHTML = `
+    if (country === "canada") {
+      tournamentCourseDropdown.innerHTML =
+        "<option value=''>Select a Course</option>";
+      populateCourseDropdown(tournamentCourseDropdown);
+      tournamentCourseDropdown.style.display = "block";
+      tournamentCourseContainer.innerHTML = "";
+    } else if (country === "usa") {
+      tournamentCourseContainer.innerHTML = `
     <input type="text" id="course-search" placeholder="Search for a US course..." autocomplete="off">
     <div id="course-results" class="dropdown-results"></div>
   `;
-  setupCourseSearch();
-  tournamentCourseDropdown.style.display = "none";
-  }
-});
+      setupCourseSearch();
+      tournamentCourseDropdown.style.display = "none";
+    }
+  });
 
 function populateCourseDropdown(dropdown) {
   dropdown.innerHTML = '<option value="">Select a Course</option>';
@@ -168,12 +199,13 @@ function setupCourseSearch() {
 
     const courses = await fetchUSCourses(query);
 
-    const filteredCourses = courses.filter(course =>
-      course.club_name.toLowerCase().includes(query) ||
-      course.course_name.toLowerCase().includes(query)
+    const filteredCourses = courses.filter(
+      (course) =>
+        course.club_name.toLowerCase().includes(query) ||
+        course.course_name.toLowerCase().includes(query)
     );
 
-    filteredCourses.forEach(course => {
+    filteredCourses.forEach((course) => {
       const div = document.createElement("div");
       div.classList.add("search-result");
       div.textContent = `${course.club_name} - ${course.course_name}`;
@@ -190,14 +222,13 @@ function setupCourseSearch() {
   });
 }
 
-
 function populateTeesDropdownUSA(course) {
   const teesDropdown = document.getElementById("tees");
   teesDropdown.innerHTML = "<option value=''>Select Tees Played</option>";
 
   if (course.tees) {
     for (const gender in course.tees) {
-      course.tees[gender].forEach(tee => {
+      course.tees[gender].forEach((tee) => {
         const newOption = document.createElement("option");
         newOption.value = tee.tee_name;
         newOption.textContent = `${tee.tee_name} (${tee.total_yards} yds) - Par ${tee.par_total}, Rating ${tee.course_rating}, Slope ${tee.slope_rating}`;
@@ -209,11 +240,12 @@ function populateTeesDropdownUSA(course) {
 
 function populateTournamentTeesDropdownUSA(course) {
   const tournamentTeesDropdown = document.getElementById("tournament-tees");
-  tournamentTeesDropdown.innerHTML = "<option value=''>Select Tees Played</option>";
+  tournamentTeesDropdown.innerHTML =
+    "<option value=''>Select Tees Played</option>";
 
   if (course.tees) {
     for (const gender in course.tees) {
-      course.tees[gender].forEach(tee => {
+      course.tees[gender].forEach((tee) => {
         const newOption = document.createElement("option");
         newOption.value = tee.tee_name;
         newOption.textContent = `${tee.tee_name} (${tee.total_yards} yds) - Par ${tee.par_total}, Rating ${tee.course_rating}, Slope ${tee.slope_rating}`;
@@ -222,7 +254,6 @@ function populateTournamentTeesDropdownUSA(course) {
     }
   }
 }
-
 
 async function fetchUSCourses() {
   try {
@@ -234,8 +265,6 @@ async function fetchUSCourses() {
     return [];
   }
 }
-
-
 
 courseDropdown.addEventListener("change", () => {
   populateTeesDropdown(courseDropdown, teesDropdown);
@@ -249,44 +278,43 @@ function populateTeesDropdown(courseDropdown, teesDropdown) {
   teesDropdown.innerHTML = "<option value=''>Select Tees Played </option>";
   const selectedCourse = courseDropdown.value;
 
-    const courseInfo = courseData[selectedCourse];
-    for (const teeName in courseInfo.tees) {
-      const teeData = courseInfo.tees[teeName];
-      const newOption = document.createElement("option");
-      newOption.value = teeName;
-      newOption.textContent = `${teeName} (${teeData.yardage} yds) - Par ${teeData.par}, Rating ${teeData.courseRating}, Slope ${teeData.slopeRating}`;
-      teesDropdown.appendChild(newOption);
-
-  } 
+  const courseInfo = courseData[selectedCourse];
+  for (const teeName in courseInfo.tees) {
+    const teeData = courseInfo.tees[teeName];
+    const newOption = document.createElement("option");
+    newOption.value = teeName;
+    newOption.textContent = `${teeName} (${teeData.yardage} yds) - Par ${teeData.par}, Rating ${teeData.courseRating}, Slope ${teeData.slopeRating}`;
+    teesDropdown.appendChild(newOption);
   }
-  
+}
 
-  function updateGolferDropdowns() {
-    const golferContainer = document.getElementById("tournament-golfers-container");
-    golferContainer.innerHTML = "";
-    golferSelect.innerHTML = `<option value="" aria-required="">Select Golfer</option>`;
+function updateGolferDropdowns() {
+  const golferContainer = document.getElementById(
+    "tournament-golfers-container"
+  );
+  golferContainer.innerHTML = "";
+  golferSelect.innerHTML = `<option value="" aria-required="">Select Golfer</option>`;
 
-    golfers.forEach((golfer) => {
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.value = golfer;
-      checkbox.classList.add("golfer-checkbox");
-  
-      const label = document.createElement("label");
-      label.style.display = "flex";
-      label.appendChild(checkbox);
-      label.appendChild(document.createTextNode(` ${golfer}`));
-  
-      golferContainer.appendChild(label);
+  golfers.forEach((golfer) => {
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = golfer;
+    checkbox.classList.add("golfer-checkbox");
+
+    const label = document.createElement("label");
+    label.style.display = "flex";
+    label.appendChild(checkbox);
+    label.appendChild(document.createTextNode(` ${golfer}`));
+
+    golferContainer.appendChild(label);
 
     const option = document.createElement("option");
     option.value = golfer;
     option.textContent = golfer;
     golferSelect.appendChild(option);
-    
-    });
-  }
-  
+  });
+}
+
 function addGolfer(golferName) {
   if (!golfers.includes(golferName)) {
     golfers.push(golferName);
@@ -299,7 +327,7 @@ function addGolfer(golferName) {
     alert("This golfer already exists. Please enter a new golfer.");
   }
 }
-function updateGolferList(){
+function updateGolferList() {
   golferList.innerHTML = "";
 
   golfers.forEach((golfer, index) => {
@@ -321,7 +349,7 @@ function updateGolferList(){
   });
 }
 
-function deleteGolfer(index){
+function deleteGolfer(index) {
   golfers.splice(index, 1);
 
   updateGolferList();
@@ -331,12 +359,12 @@ function deleteGolfer(index){
   saveGolfers();
 }
 
-function checkGolfers(){
+function checkGolfers() {
   if (golferList.children.length > 0) {
-    registeredGolfersDiv.style.display = "block";  
-} else {
-    registeredGolfersDiv.style.display = "none"; 
-}
+    registeredGolfersDiv.style.display = "block";
+  } else {
+    registeredGolfersDiv.style.display = "none";
+  }
 }
 
 newGolferNameInput.addEventListener("input", () => {
@@ -351,10 +379,10 @@ submitNewGolferBtn.addEventListener("click", () => {
   const golferName = newGolferNameInput.value;
   if (golferName) {
     addGolfer(golferName);
-    newGolferInput.value = "";  
+    newGolferInput.value = "";
   }
   newGolferNameInput.value = "";
-  newGolferNameInput.dispatchEvent(new Event("input")); 
+  newGolferNameInput.dispatchEvent(new Event("input"));
 });
 
 postScoreBtn.addEventListener("click", () => {
@@ -368,7 +396,9 @@ postScoreBtn.addEventListener("click", () => {
 });
 
 async function calculateHandicap(golferName) {
-  const golferRounds = rounds.filter((round) => round.golferName === golferName);
+  const golferRounds = rounds.filter(
+    (round) => round.golferName === golferName
+  );
   golferRounds.sort((a, b) => new Date(b.datePlayed) - new Date(a.datePlayed));
   const recentRounds = golferRounds.slice(0, 20);
 
@@ -408,29 +438,29 @@ async function calculateHandicap(golferName) {
   return averageDifferential.toFixed(1);
 }
 
-
-
-
 function updateRankingsTable() {
   const rankingsTable = document.getElementById("rankings-table-body");
-  
-  const validGolferHandicaps = golferHandicaps.filter(golfer => !isNaN(golfer.handicap));
+
+  const validGolferHandicaps = golferHandicaps.filter(
+    (golfer) => !isNaN(golfer.handicap)
+  );
 
   if (validGolferHandicaps.length > 0) {
     emptyHandicapRankings.style.display = "none";
     rankingsTable.innerHTML = "";
-   
+
     validGolferHandicaps.sort((a, b) => a.handicap - b.handicap);
 
     validGolferHandicaps.forEach((golfer, index) => {
-     
-      let existingRow = rankingsTable.querySelector(`[data-golfer="${golfer.name}"]`);
+      let existingRow = rankingsTable.querySelector(
+        `[data-golfer="${golfer.name}"]`
+      );
 
-      if (existingRow) {  
+      if (existingRow) {
         existingRow.cells[2].textContent = golfer.handicap;
-      } else {  
+      } else {
         const row = document.createElement("tr");
-        row.setAttribute("data-golfer", golfer.name);  
+        row.setAttribute("data-golfer", golfer.name);
         row.innerHTML = `
           <td>${index + 1}</td>
           <td>${golfer.name}</td>
@@ -454,7 +484,9 @@ async function updateGolferHandicap(golferName) {
     return;
   }
 
-  const golferIndex = golferHandicaps.findIndex(golfer => golfer.name === golferName);
+  const golferIndex = golferHandicaps.findIndex(
+    (golfer) => golfer.name === golferName
+  );
 
   if (golferIndex !== -1) {
     golferHandicaps[golferIndex].handicap = handicap;
@@ -464,8 +496,6 @@ async function updateGolferHandicap(golferName) {
   saveHandicaps();
   updateRankingsTable();
 }
-
-
 
 scoreForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -495,12 +525,14 @@ scoreForm.addEventListener("submit", async (event) => {
                 <strong>Course:</strong> ${course}<br>
                 <strong>Tees:</strong> ${tees}<br>
                 <strong>Score:</strong> ${score} (${
-      strokesAbovePar > 0 ? "+" + strokesAbovePar : 
-      strokesAbovePar < 0 ? strokesAbovePar : "E"
+      strokesAbovePar > 0
+        ? "+" + strokesAbovePar
+        : strokesAbovePar < 0
+        ? strokesAbovePar
+        : "E"
     })`;
 
     round = { golferName, datePlayed, courseValue, tees, score };
-
   } else if (country === "usa") {
     const courseInput = document.getElementById("course-search").value;
     const courseName = courseInput.split(" - ")[0].trim();
@@ -517,8 +549,11 @@ scoreForm.addEventListener("submit", async (event) => {
               <strong>Course:</strong> ${courseName}<br>
               <strong>Tees:</strong> ${tees}<br>
               <strong>Score:</strong> ${score} (${
-      strokesAbovePar > 0 ? "+" + strokesAbovePar : 
-      strokesAbovePar < 0 ? strokesAbovePar : "E"
+      strokesAbovePar > 0
+        ? "+" + strokesAbovePar
+        : strokesAbovePar < 0
+        ? strokesAbovePar
+        : "E"
     })`;
 
     round = { golferName, datePlayed, courseValue: courseName, tees, score };
@@ -550,29 +585,36 @@ scoreForm.addEventListener("submit", async (event) => {
 
 createTournamentBtn.addEventListener("click", () => {
   if (!areAllRoundsSubmitted()) {
-    const confirmDelete = confirm("Warning: You have a tournament in progess. If you create a new tournament, all current progess will be lost. Do you want to continue?"
-  );
+    const confirmDelete = confirm(
+      "Warning: You have a tournament in progess. If you create a new tournament, all current progess will be lost. Do you want to continue?"
+    );
 
-  if(!confirmDelete){
-    return;
+    if (!confirmDelete) {
+      return;
+    }
   }
-}
   tournamentForm.style.display = "flex";
-  const weatherResult = document.getElementById('weather-result');
-  const weatherLookupContainer = document.querySelector('.weather-lookup-container');
-  weatherResult.style.display = 'block';
-  weatherLookupContainer.style.display = 'block';
+  const weatherResult = document.getElementById("weather-result");
+  const weatherLookupContainer = document.querySelector(
+    ".weather-lookup-container"
+  );
+  weatherResult.style.display = "block";
+  weatherLookupContainer.style.display = "block";
 });
 
-async function generateScorecard(courseName, teeColor, golfers, roundNumber, country) {
- let course, tee;
-
+async function generateScorecard(
+  courseName,
+  teeColor,
+  golfers,
+  roundNumber,
+  country
+) {
+  let course, tee;
 
   if (country === "canada") {
     course = scorecardData[courseName];
     tee = course[teeColor];
-  } else if (country === "usa"){
-    
+  } else if (country === "usa") {
     course = await fetchAndTransformCourseTournament(courseName);
     tee = course[teeColor];
     console.log("Fetching and transforming USA course data");
@@ -581,6 +623,8 @@ async function generateScorecard(courseName, teeColor, golfers, roundNumber, cou
   const scorecardContainer = document.createElement("div");
   scorecardContainer.classList.add("scorecard-container");
 
+  const scrollableTableContainer = document.createElement("div");
+  scrollableTableContainer.classList.add("scrollable-table-container");
 
   const table = document.createElement("table");
   table.classList.add("scorecard-table");
@@ -690,39 +734,41 @@ async function generateScorecard(courseName, teeColor, golfers, roundNumber, cou
   submitButton.classList.add("submit-round-btn");
   submitButton.dataset.round = roundNumber;
 
- 
-  
-  submitButton.addEventListener("click", function() {
+  submitButton.addEventListener("click", function () {
     let allScoresFilled = true;
 
-
     Object.keys(tournamentScores).forEach((golfer) => {
-      document.querySelectorAll(`input[data-round="${roundNumber}"][data-golfer="${golfer}"]`)
+      document
+        .querySelectorAll(
+          `input[data-round="${roundNumber}"][data-golfer="${golfer}"]`
+        )
         .forEach((input) => {
           if (!input.value || input.value === "") {
             allScoresFilled = false;
-            
-          } 
+          }
         });
     });
 
-    
     if (!allScoresFilled) {
       alert("Please enter score for all holes before submitting the round.");
-      return; 
+      return;
     }
 
-    let tournamentStrokesAbovePar = 0; 
+    let tournamentStrokesAbovePar = 0;
 
     Object.keys(tournamentScores).forEach((golfer) => {
-      document.querySelectorAll(`input[data-round="${roundNumber}"][data-golfer="${golfer}"]`)
+      document
+        .querySelectorAll(
+          `input[data-round="${roundNumber}"][data-golfer="${golfer}"]`
+        )
         .forEach((input) => {
           const hole = input.dataset.hole;
           const score = parseInt(input.value, 10) || "-";
           const golfer = input.dataset.golfer;
 
           if (!tournamentScores[golfer]) tournamentScores[golfer] = {};
-          if (!tournamentScores[golfer][roundNumber]) tournamentScores[golfer][roundNumber] = [];
+          if (!tournamentScores[golfer][roundNumber])
+            tournamentScores[golfer][roundNumber] = [];
           tournamentScores[golfer][roundNumber][hole - 1] = score;
 
           let holeIndex = parseInt(hole, 10) - 1;
@@ -756,11 +802,8 @@ async function generateScorecard(courseName, teeColor, golfers, roundNumber, cou
           }
 
           input.parentNode.replaceChild(span, input);
-
-          
         });
-       
-      
+
       const outTotalElement = document.querySelector(
         `.out-total[data-round="${roundNumber}"][data-golfer="${golfer}"]`
       );
@@ -780,42 +823,47 @@ async function generateScorecard(courseName, teeColor, golfers, roundNumber, cou
       if (roundTotalElement) {
         roundTotalElement.textContent += ` (${roundTotalElement.dataset.strokesAbovePar})`;
       }
-      
+
       Object.keys(tournamentScores).forEach((golfer) => {
-        document.querySelectorAll(`.tournament-total[data-golfer="${golfer}"] .hidden-strokes`).forEach((span) => {
-          span.classList.remove("hidden-strokes");
-        });
+        document
+          .querySelectorAll(
+            `.tournament-total[data-golfer="${golfer}"] .hidden-strokes`
+          )
+          .forEach((span) => {
+            span.classList.remove("hidden-strokes");
+          });
       });
-     
-      
-      document.querySelectorAll(`.round-total[data-round="${roundNumber}"][data-golfer="${golfer}"]`).forEach((roundElement) => {
-   
-        tournamentStrokesAbovePar += parseInt(roundElement.dataset.strokesAbovePar) || 0;
-    });
-    
-     
+
+      document
+        .querySelectorAll(
+          `.round-total[data-round="${roundNumber}"][data-golfer="${golfer}"]`
+        )
+        .forEach((roundElement) => {
+          tournamentStrokesAbovePar +=
+            parseInt(roundElement.dataset.strokesAbovePar) || 0;
+        });
+
       submitButton.disabled = true;
       submitButton.textContent = "Round Submitted";
       submitButton.classList.add("submitted");
-      const nextRoundInputs = document.querySelectorAll(`input[data-round="${roundNumber + 1}"]`);
-      nextRoundInputs.forEach(input => input.disabled = false);
+      const nextRoundInputs = document.querySelectorAll(
+        `input[data-round="${roundNumber + 1}"]`
+      );
+      nextRoundInputs.forEach((input) => (input.disabled = false));
 
       updateLeaderboard();
-     
-      
+
       emptyLeaderboard.style.display = "none";
       leaderboardContainer.style.display = "block";
     });
 
-    if (areAllRoundsSubmitted()){
+    if (areAllRoundsSubmitted()) {
       saveTournamentToHistory();
     }
-});
-
-  scorecardContainer.appendChild(table);
+  });
+  scrollableTableContainer.appendChild(table);
+  scorecardContainer.appendChild(scrollableTableContainer);
   scorecardContainer.appendChild(submitButton);
-
-  
 
   return scorecardContainer;
 }
@@ -845,7 +893,6 @@ function updateTotals(event, tee) {
   const outStrokesAbovePar = outTotal - outPar;
   const inStrokesAbovePar = inTotal - inPar;
   const roundStrokesAbovePar = roundTotal - totalPar;
-
 
   const outTotalElement = document.querySelector(
     `.out-total[data-golfer="${golfer}"][data-round="${round}"]`
@@ -893,64 +940,65 @@ function updateTotals(event, tee) {
   for (let roundKey in tournamentScores[golfer]) {
     const roundScores = tournamentScores[golfer][roundKey];
 
-   
     if (isRoundComplete(roundScores)) {
       const roundTotal = roundScores.reduce((sum, val) => sum + val, 0);
       tournamentTotal += roundTotal;
 
-     
-      const roundStrokesAbovePar = document.querySelector(
-        `.round-total[data-golfer="${golfer}"][data-round="${roundKey}"]`
-      )?.dataset.strokesAbovePar || 0;
+      const roundStrokesAbovePar =
+        document.querySelector(
+          `.round-total[data-golfer="${golfer}"][data-round="${roundKey}"]`
+        )?.dataset.strokesAbovePar || 0;
 
-     
       tournamentStrokesAbovePar += parseFloat(roundStrokesAbovePar) || 0;
     }
   }
 
-
-document.querySelectorAll(`.tournament-total[data-golfer="${golfer}"]`).forEach((element) => {
-  if (element) {
-    element.textContent = `${tournamentTotal}`;
-    const strokesSpan = document.createElement("span");
-    strokesSpan.classList.add("hidden-strokes");
-    strokesSpan.textContent = tournamentStrokesAbovePar === 0
-        ? " (E)"
-        : tournamentStrokesAbovePar > 0
-        ? ` (+${tournamentStrokesAbovePar})`
-        : ` (${tournamentStrokesAbovePar})`;
+  document
+    .querySelectorAll(`.tournament-total[data-golfer="${golfer}"]`)
+    .forEach((element) => {
+      if (element) {
+        element.textContent = `${tournamentTotal}`;
+        const strokesSpan = document.createElement("span");
+        strokesSpan.classList.add("hidden-strokes");
+        strokesSpan.textContent =
+          tournamentStrokesAbovePar === 0
+            ? " (E)"
+            : tournamentStrokesAbovePar > 0
+            ? ` (+${tournamentStrokesAbovePar})`
+            : ` (${tournamentStrokesAbovePar})`;
         element.appendChild(strokesSpan);
-  }
-});
+      }
+    });
 }
 function isRoundComplete(roundScores) {
   return (
-    roundScores.length === 18 && 
-    roundScores.every((score) => !isNaN(score) && 
-    roundScores.every((score) => score !== null) 
-  ));
+    roundScores.length === 18 &&
+    roundScores.every(
+      (score) => !isNaN(score) && roundScores.every((score) => score !== null)
+    )
+  );
 }
 
 async function createTournament() {
   scorecardContainer.innerHTML = "";
   const tournamentName = document.getElementById("tournament-name").value;
   const golfers = Array.from(
-    document.querySelectorAll("#tournament-golfers-container .golfer-checkbox:checked")
+    document.querySelectorAll(
+      "#tournament-golfers-container .golfer-checkbox:checked"
+    )
   ).map((checkbox) => checkbox.value);
   const tees = document.getElementById("tournament-tees").value;
   const rounds = parseInt(document.getElementById("tournament-rounds").value);
   const country = document.getElementById("tournament-country-selection").value;
   let course;
 
-  if (country === "canada"){
+  if (country === "canada") {
     course = document.getElementById("tournament-course").value;
     console.log("Canada Course Selected:", course);
-  } else if (country === "usa"){
+  } else if (country === "usa") {
     course = document.getElementById("course-search").value.split(" - ")[0];
     console.log("USA Course Selected:", course);
   }
-
-  
 
   golfers.forEach((golfer) => {
     if (!tournamentScores[golfer]) tournamentScores[golfer] = {};
@@ -958,17 +1006,22 @@ async function createTournament() {
       tournamentScores[golfer][i] = new Array(18).fill(0);
     }
   });
-  
 
-const tournamentTitle = document.createElement("h2");
-tournamentTitle.textContent = tournamentName;
-scorecardContainer.appendChild(tournamentTitle);
+  const tournamentTitle = document.createElement("h2");
+  tournamentTitle.textContent = tournamentName;
+  scorecardContainer.appendChild(tournamentTitle);
 
   for (let i = 1; i <= rounds; i++) {
     const roundHeading = document.createElement("h3");
     roundHeading.textContent = `Round ${i}:`;
     roundHeading.classList.add("round-heading");
-    const scorecard = await generateScorecard(course, tees, golfers, i, country);
+    const scorecard = await generateScorecard(
+      course,
+      tees,
+      golfers,
+      i,
+      country
+    );
     scorecardContainer.appendChild(roundHeading);
     scorecardContainer.appendChild(scorecard);
   }
@@ -976,18 +1029,20 @@ scorecardContainer.appendChild(tournamentTitle);
   tournamentForm.classList.toggle("hidden");
 }
 
-startTournamentBtn.addEventListener("click", async function(event) {
+startTournamentBtn.addEventListener("click", async function (event) {
   event.preventDefault();
-  
-  const weatherResult = document.getElementById('weather-result');
-  const weatherLookupContainer = document.querySelector('.weather-lookup-container');
-  if (weatherResult.style.display === 'none') {
-    weatherResult.style.display = 'block';
-    weatherLookupContainer.style.display = 'block';
-} else {
-    weatherResult.style.display = 'none';
-    weatherLookupContainer.style.display = 'none'; 
-}
+
+  const weatherResult = document.getElementById("weather-result");
+  const weatherLookupContainer = document.querySelector(
+    ".weather-lookup-container"
+  );
+  if (weatherResult.style.display === "none") {
+    weatherResult.style.display = "block";
+    weatherLookupContainer.style.display = "block";
+  } else {
+    weatherResult.style.display = "none";
+    weatherLookupContainer.style.display = "none";
+  }
 
   if (tournamentForm.checkValidity()) {
     resetScorecard();
@@ -997,7 +1052,6 @@ startTournamentBtn.addEventListener("click", async function(event) {
   } else {
     tournamentForm.reportValidity();
   }
-  
 });
 
 function updateLeaderboard() {
@@ -1012,17 +1066,20 @@ function updateLeaderboard() {
   let leaderboard = [];
   let totalRounds = 0;
 
-  
   for (let golfer in tournamentScores) {
     let totalScore = 0;
     let roundScores = [];
     let strokesAbovePar = [];
 
     for (let round in tournamentScores[golfer]) {
-      let roundTotal = tournamentScores[golfer][round].reduce((sum, score) => sum + score, 0);
-      let roundStrokesAbovePar = document.querySelector(
-        `.round-total[data-golfer="${golfer}"][data-round="${round}"]`
-      ).dataset.strokesAbovePar || 0;
+      let roundTotal = tournamentScores[golfer][round].reduce(
+        (sum, score) => sum + score,
+        0
+      );
+      let roundStrokesAbovePar =
+        document.querySelector(
+          `.round-total[data-golfer="${golfer}"][data-round="${round}"]`
+        ).dataset.strokesAbovePar || 0;
 
       roundScores.push(roundTotal || 0);
       strokesAbovePar.push(roundStrokesAbovePar);
@@ -1030,12 +1087,10 @@ function updateLeaderboard() {
     }
 
     totalRounds = roundScores.length;
-    leaderboard.push({ golfer, roundScores, strokesAbovePar,totalScore });
+    leaderboard.push({ golfer, roundScores, strokesAbovePar, totalScore });
   }
 
- 
   leaderboard.sort((a, b) => a.totalScore - b.totalScore);
-
 
   const table = document.createElement("table");
   table.classList.add("leaderboard-table");
@@ -1043,50 +1098,57 @@ function updateLeaderboard() {
   let headerRow = table.insertRow();
   headerRow.innerHTML = "<th>Rank</th><th>Golfer</th>";
 
-  
   for (let i = 1; i <= totalRounds; i++) {
     headerRow.innerHTML += `<th>R${i}</th>`;
   }
 
   headerRow.innerHTML += "<th>Total</th>";
 
- 
   leaderboard.forEach((entry, index) => {
     let row = table.insertRow();
     row.innerHTML = `<td>${index + 1}</td><td>${entry.golfer}</td>`;
 
     entry.roundScores.forEach((score, i) => {
       let strokesAbovePar = entry.strokesAbovePar[i];
-      row.innerHTML += `<td>${score} (${strokesAbovePar >= 0 ? `${strokesAbovePar}` : strokesAbovePar})</td>`;
+      row.innerHTML += `<td>${score} (${
+        strokesAbovePar >= 0 ? `${strokesAbovePar}` : strokesAbovePar
+      })</td>`;
     });
     let totalStrokesAbovePar = entry.strokesAbovePar.reduce((a, b) => {
       return (parseFloat(a) || 0) + (parseFloat(b) || 0);
     }, 0);
-    row.innerHTML += `<td>${entry.totalScore} (${totalStrokesAbovePar === 0 ? 'E' : (totalStrokesAbovePar > 0 ? `+${totalStrokesAbovePar}` : totalStrokesAbovePar)})</td>`;
+    row.innerHTML += `<td>${entry.totalScore} (${
+      totalStrokesAbovePar === 0
+        ? "E"
+        : totalStrokesAbovePar > 0
+        ? `+${totalStrokesAbovePar}`
+        : totalStrokesAbovePar
+    })</td>`;
   });
 
   leaderboardContainer.appendChild(table);
 }
 
-function resetScorecard(){
+function resetScorecard() {
   if (scorecardContainer) {
     scorecardContainer.innerHTML = "";
-}}
+  }
+}
 
 function saveTournamentToHistory() {
   const scorecardData = scorecardContainer.innerHTML;
   const leaderboardData = leaderboardContainer.innerHTML;
-  const scorecardWithoutName = scorecardData.replace(/<h2>.*<\/h2>/, '');
+  const scorecardWithoutName = scorecardData.replace(/<h2>.*<\/h2>/, "");
   const datePlayed = document.getElementById("tournament-date").value;
-  const course = document.getElementById("tournament-course").value;
   const tees = document.getElementById("tournament-tees").value;
   const country = document.getElementById("tournament-country-selection").value;
 
-  const tournamentHistory = JSON.parse(localStorage.getItem("tournamentHistory")) || [];
+  const tournamentHistory =
+    JSON.parse(localStorage.getItem("tournamentHistory")) || [];
 
   let courseName = "";
 
-  if (country === "canada"){
+  if (country === "canada") {
     const courseKey = document.getElementById("tournament-course").value;
     courseName = courseNames[courseKey] || courseKey;
   } else {
@@ -1108,10 +1170,11 @@ function saveTournamentToHistory() {
 }
 
 function updateHistoryTab() {
-  const emptyHistory = document.getElementById('empty-history');
-  historyList.innerHTML = ""; 
+  const emptyHistory = document.getElementById("empty-history");
+  historyList.innerHTML = "";
 
-  const tournamentHistory = JSON.parse(localStorage.getItem("tournamentHistory")) || [];
+  const tournamentHistory =
+    JSON.parse(localStorage.getItem("tournamentHistory")) || [];
 
   if (tournamentHistory.length === 0) {
     emptyHistory.style.display = "block";
@@ -1120,108 +1183,111 @@ function updateHistoryTab() {
     emptyHistory.style.display = "none";
     historyList.style.display = "block";
   }
-  
+
   tournamentHistory.forEach((tournament, index) => {
-      
+    const tournamentItem = document.createElement("div");
+    tournamentItem.classList.add("tournament-item");
 
-      const tournamentItem = document.createElement("div");
-      tournamentItem.classList.add("tournament-item");
+    const leaderboard = document.createElement("div");
+    leaderboard.classList.add("leaderboard-preview");
+    leaderboard.innerHTML = tournament.leaderboard;
+    tournamentItem.appendChild(leaderboard);
 
-      const leaderboard = document.createElement("div");
-      leaderboard.classList.add("leaderboard-preview");
-      leaderboard.innerHTML = tournament.leaderboard;
-      tournamentItem.appendChild(leaderboard);
+    const formattedDate = formatDate(tournament.datePlayed);
 
-      const formattedDate = formatDate(tournament.datePlayed);
+    const scorecard = document.createElement("div");
+    scorecard.classList.add("scorecard-details");
+    scorecard.innerHTML = tournament.scorecard;
+    scorecard.style.display = "none";
 
-      const scorecard = document.createElement("div");
-      scorecard.classList.add("scorecard-details");
-      scorecard.innerHTML = tournament.scorecard;
-      scorecard.style.display = "none";
-
-      const detailsSection = document.createElement("div");
-      detailsSection.classList.add("tournament-details");
-      detailsSection.innerHTML = `
-            <span><strong>Date Played:</strong> ${formattedDate}</span>
+    const detailsSection = document.createElement("div");
+    detailsSection.classList.add("tournament-details");
+    detailsSection.innerHTML = `
+            <span><strong>Start Date:</strong> ${formattedDate}</span>
             <span><strong>Course:</strong> ${tournament.course}</span>
             <span><strong>Tees:</strong> ${tournament.tees}</span>
             `;
-      detailsSection.style.display = "none";
-      tournamentItem.appendChild(detailsSection);
-      tournamentItem.appendChild(scorecard);
+    detailsSection.style.display = "none";
+    tournamentItem.appendChild(detailsSection);
+    tournamentItem.appendChild(scorecard);
 
-      
-      const viewDetailsBtn = document.createElement("button");
-      viewDetailsBtn.textContent = "View Full Tournament Scorecard";
-      viewDetailsBtn.classList.add("view-details-btn");
+    const viewDetailsBtn = document.createElement("button");
+    viewDetailsBtn.textContent = "View Full Tournament Scorecard";
+    viewDetailsBtn.classList.add("view-details-btn");
 
-      viewDetailsBtn.addEventListener("click", () => {
-        const isVisible = scorecard.style.display === "block";
-        scorecard.style.display = isVisible ? "none" : "block";
-        detailsSection.style.display = isVisible ? "none" : "block";
-        viewDetailsBtn.textContent = isVisible
-          ? "View Full Tournament Scorecard"
-          : "Close Full Tournament Scorecard";
-      });
+    viewDetailsBtn.addEventListener("click", () => {
+      const isVisible = scorecard.style.display === "block";
+      scorecard.style.display = isVisible ? "none" : "block";
+      detailsSection.style.display = isVisible ? "none" : "block";
+      viewDetailsBtn.textContent = isVisible
+        ? "View Full Tournament Scorecard"
+        : "Close Full Tournament Scorecard";
+    });
 
-      const deleteBtn = document.createElement("button");
-      deleteBtn.classList.add("delete-tournament-btn");
+    const deleteBtn = document.createElement("button");
+    deleteBtn.classList.add("delete-tournament-btn");
 
-      const trashIcon = document.createElement("img");
-      trashIcon.src = "images/delete.png";
-      trashIcon.alt = "Delete";
-      trashIcon.classList.add("trash-icon");
+    const trashIcon = document.createElement("img");
+    trashIcon.src = "images/delete.png";
+    trashIcon.alt = "Delete";
+    trashIcon.classList.add("trash-icon");
 
-      deleteBtn.appendChild(trashIcon);
-      deleteBtn.addEventListener("click", () => {
-        confirmDeleteTournament(index);
-      });
-      
-      tournamentItem.appendChild(viewDetailsBtn);
-      tournamentItem.appendChild(deleteBtn);
-      historyList.appendChild(tournamentItem);
+    deleteBtn.appendChild(trashIcon);
+    deleteBtn.addEventListener("click", () => {
+      confirmDeleteTournament(index);
+    });
+
+    tournamentItem.appendChild(viewDetailsBtn);
+    tournamentItem.appendChild(deleteBtn);
+    historyList.appendChild(tournamentItem);
   });
 }
 document.addEventListener("DOMContentLoaded", updateHistoryTab);
 
-function deleteTournament(index){
-  let tournamentHistory = JSON.parse(localStorage.getItem("tournamentHistory")) || [];
+function deleteTournament(index) {
+  let tournamentHistory =
+    JSON.parse(localStorage.getItem("tournamentHistory")) || [];
   tournamentHistory.splice(index, 1);
   localStorage.setItem("tournamentHistory", JSON.stringify(tournamentHistory));
   updateHistoryTab();
 }
 
-function confirmDeleteTournament(index){
-  const confirmation = confirm("Are you sure you want to delete this tournament? This action cannot be undone.");
-  if (confirmation){
+function confirmDeleteTournament(index) {
+  const confirmation = confirm(
+    "Are you sure you want to delete this tournament? This action cannot be undone."
+  );
+  if (confirmation) {
     deleteTournament(index);
   }
 }
-function areAllRoundsSubmitted() { 
+function areAllRoundsSubmitted() {
   const submitButtons = document.querySelectorAll(".submit-round-btn");
-  return submitButtons.length > 0 && Array.from(submitButtons).every(button => button.disabled);
+  return (
+    submitButtons.length > 0 &&
+    Array.from(submitButtons).every((button) => button.disabled)
+  );
 }
 
-function saveGolfers(){
+function saveGolfers() {
   localStorage.setItem("golfers", JSON.stringify(golfers));
 }
-function loadGolfers(){
+function loadGolfers() {
   const storedGolfers = JSON.parse(localStorage.getItem("golfers")) || [];
   storedGolfers.forEach((golfer) => addGolfer(golfer, false));
 }
 document.addEventListener("DOMContentLoaded", loadGolfers);
 
-function saveRounds(){
+function saveRounds() {
   localStorage.setItem("rounds", JSON.stringify(rounds));
 }
-function loadRounds(){
+function loadRounds() {
   const storedRounds = JSON.parse(localStorage.getItem("rounds")) || [];
 
   storedRounds.forEach((round, index) => {
     rounds.push(round);
     displayRound(round, index);
   });
-  if (rounds.length > 0){
+  if (rounds.length > 0) {
     const roundsDisplay = document.getElementById("rounds-display");
     roundsDisplay.style.display = "block";
   }
@@ -1239,7 +1305,9 @@ function displayRound(round, index) {
     selectedCourseData = courseData[round.courseValue];
     selectedTeeData = selectedCourseData?.tees[round.tees];
   } else {
-    const transformedCourse = JSON.parse(localStorage.getItem("transformedCourses") || "{}");
+    const transformedCourse = JSON.parse(
+      localStorage.getItem("transformedCourses") || "{}"
+    );
     if (transformedCourse[round.courseValue]) {
       course = round.courseValue;
       selectedCourseData = transformedCourse[round.courseValue];
@@ -1261,14 +1329,21 @@ function displayRound(round, index) {
     <strong>Date Played:</strong> ${formattedDate}<br>
     <strong>Course:</strong> ${course}<br>
     <strong>Tees:</strong> ${round.tees}<br>
-    <strong>Score:</strong> ${round.score} (${strokesAbovePar > 0 ? "+" + strokesAbovePar : strokesAbovePar < 0 ? strokesAbovePar : "E"})`;
+    <strong>Score:</strong> ${round.score} (${
+    strokesAbovePar > 0
+      ? "+" + strokesAbovePar
+      : strokesAbovePar < 0
+      ? strokesAbovePar
+      : "E"
+  })`;
 
   const deleteBtn = document.createElement("img");
   deleteBtn.src = "images/delete.png";
   deleteBtn.alt = "Delete";
   deleteBtn.classList.add("delete-btn");
-  deleteBtn.addEventListener("click", () => deleteRound(index, round.golferName));
-
+  deleteBtn.addEventListener("click", () =>
+    deleteRound(index, round.golferName)
+  );
 
   roundItem.appendChild(deleteBtn);
   roundsList.appendChild(roundItem);
@@ -1279,7 +1354,12 @@ function displayRound(round, index) {
 }
 
 function deleteRound(index, golferName) {
-  if (!confirm("Are you sure you want to delete this round? This action cannot be undone.")) return;
+  if (
+    !confirm(
+      "Are you sure you want to delete this round? This action cannot be undone."
+    )
+  )
+    return;
 
   rounds.splice(index, 1);
 
@@ -1305,15 +1385,19 @@ function refreshRoundsDisplay() {
   }
 }
 
-
 function saveHandicaps() {
-  const validHandicaps = golferHandicaps.filter(golfer => isFinite(golfer.handicap));
+  const validHandicaps = golferHandicaps.filter((golfer) =>
+    isFinite(golfer.handicap)
+  );
   localStorage.setItem("golferHandicaps", JSON.stringify(validHandicaps));
 }
 
 function loadHandicaps() {
-  const storedHandicaps = JSON.parse(localStorage.getItem("golferHandicaps")) || [];
-  golferHandicaps = storedHandicaps.filter(golfer => isFinite(golfer.handicap));
+  const storedHandicaps =
+    JSON.parse(localStorage.getItem("golferHandicaps")) || [];
+  golferHandicaps = storedHandicaps.filter((golfer) =>
+    isFinite(golfer.handicap)
+  );
 
   if (golferHandicaps.length > 0) {
     updateRankingsTable();
@@ -1322,18 +1406,19 @@ function loadHandicaps() {
 
 document.addEventListener("DOMContentLoaded", loadHandicaps);
 
-
 async function fetchAndTransformCourse(courseName) {
   const response = await fetch("https://golf-api-backend.vercel.app/courses");
   const data = await response.json();
 
-  const course = data.courses.find(course => course.course_name === courseName);
+  const course = data.courses.find(
+    (course) => course.course_name === courseName
+  );
 
   if (course) {
     const combinedTees = [...course.tees.male, ...course.tees.female];
 
     const transformedCourse = {
-      [course.club_name]: { 
+      [course.club_name]: {
         tees: combinedTees.reduce((acc, tee) => {
           acc[tee.tee_name] = {
             yardage: tee.total_yards,
@@ -1342,13 +1427,18 @@ async function fetchAndTransformCourse(courseName) {
             slopeRating: tee.slope_rating,
           };
           return acc;
-        }, {})
-      }
+        }, {}),
+      },
     };
-    let transformedCourses = JSON.parse(localStorage.getItem("transformedCourses") || "{}");
-      transformedCourses[course.club_name] = transformedCourse[course.club_name];
-      localStorage.setItem("transformedCourses", JSON.stringify(transformedCourses));
-      
+    let transformedCourses = JSON.parse(
+      localStorage.getItem("transformedCourses") || "{}"
+    );
+    transformedCourses[course.club_name] = transformedCourse[course.club_name];
+    localStorage.setItem(
+      "transformedCourses",
+      JSON.stringify(transformedCourses)
+    );
+
     return transformedCourse;
   } else {
     console.log("Course not found");
@@ -1358,7 +1448,9 @@ async function fetchAndTransformCourseTournament(courseName) {
   try {
     const response = await fetch("https://golf-api-backend.vercel.app/courses");
     const data = await response.json();
-    const apiResponse = data.courses.find((course) => course.course_name === courseName);
+    const apiResponse = data.courses.find(
+      (course) => course.course_name === courseName
+    );
 
     if (!apiResponse) {
       console.error("Course data not found for USA course:", courseName);
@@ -1372,7 +1464,6 @@ async function fetchAndTransformCourseTournament(courseName) {
         const teeName = teeData.tee_name;
         transformedCourse[teeName] = [];
 
-     
         for (let i = 0; i < 9; i++) {
           transformedCourse[teeName].push({
             holeNumber: i + 1,
@@ -1418,64 +1509,140 @@ async function fetchAndTransformCourseTournament(courseName) {
   }
 }
 
-document.getElementById('get-weather').addEventListener('click', function() {
-  const city = document.getElementById('weather-course').value;
-  const date = document.getElementById('weather-date').value;
+document.getElementById("get-weather").addEventListener("click", function () {
+  const courseName = document.getElementById("weather-course").value.trim();
+  const date = document.getElementById("weather-date").value;
 
-  if (!city || !date) {
-      alert("Please enter both a course/city and a date.");
-      return;
+  if (!courseName || !date) {
+    alert("Please enter both a course and a date.");
+    return;
   }
+
   const formattedDate = formatDate(date);
+  const apiKey = "679a4435a4c0499eb5c131838251303";
 
-  const apiKey = '679a4435a4c0499eb5c131838251303';
-  const apiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(city)}&dt=${date}`;
+  if (courseLocations[courseName]) {
+    const city = courseLocations[courseName];
 
-  fetch(apiUrl)
+    const weatherApiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(city)}&dt=${date}`;
+
+    fetch(weatherApiUrl)
       .then(response => response.json())
       .then(data => {
-          if (data.error) {
-              document.getElementById('weather-result').innerHTML = `Error: ${data.error.message}`;
-          } else {
+        if (data.error) {
+          document.getElementById("weather-result").innerHTML = `Error: ${data.error.message}`;
+        } else {
+          const weather = data.forecast.forecastday[0].day;
+          const condition = weather.condition.text;
+          const iconUrl = `https:${weather.condition.icon}`;
+
+          const weatherInfo = `
+            <h3 style="text-align: center;">Weather Forecast for ${city} on ${formattedDate}</h3>
+            <div style="text-align: center;">
+              <img src="${iconUrl}" alt="${condition}" style="width: 100px; height: 100px;">
+            </div>
+            <div style="text-align: center; font-size: 48px; font-weight: bold;">
+              ${weather.avgtemp_c} °C
+            </div>
+            <p style="text-align: center;">${weather.condition.text}</p>
+            <p style="text-align: center;"><strong>Wind Speed:</strong> ${weather.maxwind_kph} km/h</p>
+          `;
+
+          document.getElementById("weather-result").innerHTML = weatherInfo;
+          document.getElementById("weather-result").style.display = "block";
+        }
+      })
+      .catch(error => {
+        document.getElementById("weather-result").innerHTML = `Error fetching weather data: ${error.message}`;
+      });
+
+    return;
+  }
+
+  const courseApiUrl = `https://golf-api-backend.vercel.app/courses`;
+
+  fetch(courseApiUrl)
+    .then(response => response.json())
+    .then(courseData => {
+      if (courseData.courses) {
+        const course = courseData.courses.find(c => c.club_name === courseName);
+
+        if (!course) {
+          alert("Course not found.");
+          return;
+        }
+
+        const city = course.location.city;
+
+        if (!city) {
+          alert("Course weather information not available for this course.");
+          return;
+        }
+
+        const weatherApiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(city)}&dt=${date}`;
+
+        fetch(weatherApiUrl)
+          .then(response => response.json())
+          .then(data => {
+            if (data.error) {
+              document.getElementById("weather-result").innerHTML = `Error: ${data.error.message}`;
+            } else {
               const weather = data.forecast.forecastday[0].day;
               const condition = weather.condition.text;
               const iconUrl = `https:${weather.condition.icon}`;
 
               const weatherInfo = `
-                   <h3 style="text-align: center;">Weather Forecast for ${city} on ${formattedDate}</h3>
-                    <div style="text-align: center;">
-                      <img src="${iconUrl}" alt="${condition}" style="width: 100px; height: 100px;">
-                  </div>
-                  <div style="text-align: center; font-size: 48px; font-weight: bold;">
-                      ${weather.avgtemp_c}°C
-                  </div>
-                  <p style="text-align: center;">${weather.condition.text}</p>
-                  <p style="text-align: center;"><strong>Wind Speed:</strong> ${weather.maxwind_kph} km/h</p>
+                <h3 style="text-align: center;">Weather Forecast for ${city} on ${formattedDate}</h3>
+                <div style="text-align: center;">
+                  <img src="${iconUrl}" alt="${condition}" style="width: 100px; height: 100px;">
+                </div>
+                <div style="text-align: center; font-size: 48px; font-weight: bold;">
+                  ${weather.avgtemp_c} °C
+                </div>
+                <p style="text-align: center;">${weather.condition.text}</p>
+                <p style="text-align: center;"><strong>Wind Speed:</strong> ${weather.maxwind_kph} km/h</p>
               `;
-              document.getElementById('weather-result').innerHTML = weatherInfo;
-              document.getElementById('weather-result').style.display = 'block';
-          }
-      })
-      .catch(error => {
-          document.getElementById('weather-result').innerHTML = `Error fetching weather data: ${error.message}`;
-      });
+
+              document.getElementById("weather-result").innerHTML = weatherInfo;
+              document.getElementById("weather-result").style.display = "block";
+            }
+          })
+          .catch(error => {
+            document.getElementById("weather-result").innerHTML = `Error fetching weather data: ${error.message}`;
+          });
+      }
+    })
+    .catch(error => {
+      document.getElementById("weather-result").innerHTML = `Error fetching course data.`;
+    });
 });
 
+
 function formatDate(dateString) {
-  const [year, month, day] = dateString.split('-');
-  
+  const [year, month, day] = dateString.split("-");
+
   const date = new Date(Date.UTC(year, month - 1, day));
 
-  const adjustedDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
-  
+  const adjustedDate = new Date(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate()
+  );
+
   const formattedDay = adjustedDate.getUTCDate();
-  const formattedMonth = adjustedDate.toLocaleString("default", { month: "long" });
+  const formattedMonth = adjustedDate.toLocaleString("default", {
+    month: "long",
+  });
   const formattedYear = adjustedDate.getUTCFullYear();
 
-  const suffix = (formattedDay % 10 === 1 && formattedDay !== 11) ? "st" :
-                (formattedDay % 10 === 2 && formattedDay !== 12) ? "nd" :
-                (formattedDay % 10 === 3 && formattedDay !== 13) ? "rd" : "th";
+  const suffix =
+    formattedDay % 10 === 1 && formattedDay !== 11
+      ? "st"
+      : formattedDay % 10 === 2 && formattedDay !== 12
+      ? "nd"
+      : formattedDay % 10 === 3 && formattedDay !== 13
+      ? "rd"
+      : "th";
 
   return `${formattedMonth} ${formattedDay}${suffix}, ${formattedYear}`;
 }
-

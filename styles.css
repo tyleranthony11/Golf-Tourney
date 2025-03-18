@@ -856,11 +856,15 @@ main {
 #course-results:empty {
     display: none;
 }
-
+.scrollable-table-container {
+    overflow-x: auto;
+    width: 100%;
+    white-space: nowrap;
+  }
 #scorecard-container {
     display: none;
     margin: 20px auto;
-    max-width: 1000px;
+    width: 100%;
     padding: 20px;
     min-width: fit-content;
     background-color: #f9f9f9;
@@ -872,10 +876,12 @@ main {
 
 .scorecard-table {
     width: 100%;
+    table-layout: auto;
     border-collapse: collapse;
     margin-top: 20px;
     background-color: #fff;
     border-radius: 8px;
+    min-width: 1200px;
    
 }
 
@@ -883,6 +889,8 @@ main {
     border: 1px solid #ddd;
     padding: 12px;
     text-align: center;
+    overflow: hidden;
+    
     
 }
 

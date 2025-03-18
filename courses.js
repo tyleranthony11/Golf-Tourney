@@ -1269,4 +1269,17 @@ const courseData = {
     },
   };
 
-  export { courseData, courseNames, scorecardData};
+  const courseLocations = {
+  "Bally Haly Country Club": "St. John's",
+  "Blomidon Golf Club": "Corner Brook",
+  "Gander Golf Club": "Gander",
+  "Glendenning Golf": "St. John's",
+  "Grand Falls Golf Club": "Grand Falls-Windsor",
+  "Grande Meadows Golf Club": "Frenchman's Cove",
+  "Humber Valley Resort": "Humber Valley",
+  "Pippy Park Golf Club": "St. John's",
+  "Terra Nova Golf Resort": "Port Blandford",
+  "The Wilds Golf Resort": "Holyrood",
+  };
+
+  export { courseData, courseNames, scorecardData, courseLocations};
