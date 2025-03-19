@@ -225,16 +225,24 @@
     </form>
     </div>
     <div class="weather-column">
-    <div class="weather-lookup-container">
+    <div class="weather-lookup-container" id="weather-tool">
         <h2 class="weather-header">
             <img src="images/weather.webp" alt="weather-icon" class="weather-icon">
             Course Weather Lookup Tool
         </h2>
         <p>Enter a golf course and date to check the weather forecast.</p>
+        <div class="form-row">
         <label for="weather-course">Golf Course:</label>
-        <input type="text" id="weather-course" placeholder="Enter course">
+        <input type="text" id="weather-course" placeholder="Enter course"></div>
+        <div class="form-row">
         <label for="weather-date">Date:</label>
-        <input type="date" id="weather-date">
+        <input type="date" id="weather-date"></div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const today = new Date().toISOString().split('T')[0];
+                    document.getElementById("weather-date").value = today;
+            });
+        </script>
         <button id="get-weather">Get Weather</button>
     </div>
     <div id="weather-result"></div>

@@ -1512,6 +1512,8 @@ async function fetchAndTransformCourseTournament(courseName) {
 document.getElementById("get-weather").addEventListener("click", function () {
   const courseName = document.getElementById("weather-course").value.trim();
   const date = document.getElementById("weather-date").value;
+  const weatherTool = document.getElementById("weather-tool");
+  const weatherResult = document.getElementById("weather-result");
 
   if (!courseName || !date) {
     alert("Please enter both a course and a date.");
@@ -1530,7 +1532,7 @@ document.getElementById("get-weather").addEventListener("click", function () {
       .then(response => response.json())
       .then(data => {
         if (data.error) {
-          document.getElementById("weather-result").innerHTML = `Error: ${data.error.message}`;
+          weatherResult.innerHTML = `Error: ${data.error.message}`;
         } else {
           const weather = data.forecast.forecastday[0].day;
           const condition = weather.condition.text;
@@ -1542,18 +1544,20 @@ document.getElementById("get-weather").addEventListener("click", function () {
               <img src="${iconUrl}" alt="${condition}" style="width: 100px; height: 100px;">
             </div>
             <div style="text-align: center; font-size: 48px; font-weight: bold;">
-              ${weather.avgtemp_c} °C
+              ${weather.avgtemp_c} <sup>°C</sup>
             </div>
             <p style="text-align: center;">${weather.condition.text}</p>
             <p style="text-align: center;"><strong>Wind Speed:</strong> ${weather.maxwind_kph} km/h</p>
+            <button id="search-new-weather">Search for New Course Weather</button>
           `;
 
-          document.getElementById("weather-result").innerHTML = weatherInfo;
-          document.getElementById("weather-result").style.display = "block";
+          weatherResult.innerHTML = weatherInfo;
+          weatherResult.style.display = "block";
+          weatherTool.style.display = "none";
         }
       })
       .catch(error => {
-        document.getElementById("weather-result").innerHTML = `Error fetching weather data: ${error.message}`;
+        weatherResult.innerHTML = `Error fetching weather data: ${error.message}`;
       });
 
     return;
@@ -1585,7 +1589,7 @@ document.getElementById("get-weather").addEventListener("click", function () {
           .then(response => response.json())
           .then(data => {
             if (data.error) {
-              document.getElementById("weather-result").innerHTML = `Error: ${data.error.message}`;
+              weatherResult.innerHTML = `Error: ${data.error.message}`;
             } else {
               const weather = data.forecast.forecastday[0].day;
               const condition = weather.condition.text;
@@ -1597,26 +1601,33 @@ document.getElementById("get-weather").addEventListener("click", function () {
                   <img src="${iconUrl}" alt="${condition}" style="width: 100px; height: 100px;">
                 </div>
                 <div style="text-align: center; font-size: 48px; font-weight: bold;">
-                  ${weather.avgtemp_c} °C
+                  ${weather.avgtemp_c} <sup>°C</sup>
                 </div>
                 <p style="text-align: center;">${weather.condition.text}</p>
                 <p style="text-align: center;"><strong>Wind Speed:</strong> ${weather.maxwind_kph} km/h</p>
               `;
 
-              document.getElementById("weather-result").innerHTML = weatherInfo;
-              document.getElementById("weather-result").style.display = "block";
+              weatherResult.innerHTML = weatherInfo;
+              weatherResult.style.display = "block";
+              weatherTool.style.display = "none";
             }
           })
           .catch(error => {
-            document.getElementById("weather-result").innerHTML = `Error fetching weather data: ${error.message}`;
+            weatherResult.innerHTML = `Error fetching weather data: ${error.message}`;
           });
       }
     })
     .catch(error => {
-      document.getElementById("weather-result").innerHTML = `Error fetching course data.`;
+      weatherResult.innerHTML = `Error fetching course data.`;
     });
 });
 
+document.getElementById("weather-result").addEventListener("click", function (event) {
+  if (event.target && event.target.id === "search-new-weather") {
+    document.getElementById("weather-tool").style.display = "block";  
+    document.getElementById("weather-result").style.display = "none";  
+  }
+});
 
 function formatDate(dateString) {
   const [year, month, day] = dateString.split("-");
