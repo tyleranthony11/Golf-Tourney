@@ -598,7 +598,7 @@ createTournamentBtn.addEventListener("click", () => {
   const weatherLookupContainer = document.querySelector(
     ".weather-lookup-container"
   );
-  weatherResult.style.display = "block";
+  weatherResult.style.display = "none";
   weatherLookupContainer.style.display = "block";
 });
 
@@ -700,7 +700,19 @@ async function generateScorecard(
       input.dataset.golfer = golfer;
       input.dataset.round = roundNumber;
       input.disabled = roundNumber > 1;
-      input.addEventListener("input", (event) => updateTotals(event, tee));
+      input.addEventListener("input", (event) => {
+        updateTotals(event, tee);
+        const allInputs = document.querySelectorAll(`input[data-golfer="${golfer}"][data-round="${roundNumber}"]`);
+        const index = Array.from(allInputs).indexOf(event.target);
+        const value = event.target.value;
+        if (value.length === 1 && value === "1"){
+          return;
+        }
+        if (parseInt(value, 10) >= 2 && index !== -1 && index < allInputs.length - 1){
+          allInputs[index + 1].focus();
+        }
+      });
+  
       td.appendChild(input);
       golferRow.appendChild(td);
       if (i === 9 || i === 18) {
@@ -736,6 +748,7 @@ async function generateScorecard(
 
   submitButton.addEventListener("click", function () {
     let allScoresFilled = true;
+    let allScoresValid = true;
 
     Object.keys(tournamentScores).forEach((golfer) => {
       document
@@ -746,11 +759,21 @@ async function generateScorecard(
           if (!input.value || input.value === "") {
             allScoresFilled = false;
           }
+
+          const score = input.value.trim();
+          if (!/^\d+$/.test(score)){
+            allScoresValid = false;
+          }
         });
     });
 
     if (!allScoresFilled) {
       alert("Please enter score for all holes before submitting the round.");
+      return;
+    }
+
+    if (!allScoresValid){
+      alert("Please enter valid scores. Negative or decimal numbers are not allowed.");
       return;
     }
 

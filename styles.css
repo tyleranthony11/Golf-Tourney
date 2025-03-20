@@ -983,7 +983,19 @@ main {
         box-sizing: border-box;
     }
 }
-
+@media (max-width: 768px) { 
+    .tournament-item {
+      display: block;
+      overflow-x: auto; 
+      width: 100%;
+      box-sizing: border-box;
+    }
+  
+    .scorecard-details table {
+      min-width: 600px; 
+      
+    }
+  }
 .scorecard-table th, .scorecard-table td {
     border: 1px solid #ddd;
     padding: 12px;
