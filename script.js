@@ -141,7 +141,7 @@ document
       courseContainer.innerHTML = `
       <input type="text" id="course-search" placeholder="Search for a US course..." autocomplete="off">
       <div id="course-results" class="dropdown-results"></div>
-    `;
+      `;
 
       setupCourseSearch();
       courseDropdown.style.display = "none";
