@@ -101,7 +101,7 @@
             </div><br>
 
             <div>
-                
+                <strong><label for="golfer-name-dropdown">Select Golfer:</label></strong>
                 <select id="golfer-name-dropdown" required>
                     <option value="" aria-required="">Select Golfer</option>
                 </select>
@@ -237,6 +237,7 @@
         <div class="form-row">
         <label for="weather-date">Date:</label>
         <input type="date" id="weather-date"></div>
+        <small style="display: block; margin-top: 5px;">* Only weather forecasts up to 3 days ahead are supported.</small>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 const today = new Date().toISOString().split('T')[0];

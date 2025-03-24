@@ -1538,6 +1538,17 @@ document.getElementById("get-weather").addEventListener("click", function () {
     return;
   }
 
+  const today = new Date();
+  const maxDate = new Date();
+  maxDate.setDate(today.getDate() + 3);
+
+  const selectedDate = new Date(date);
+
+  if (selectedDate > maxDate){
+    alert("You can only check the weather forecast up to 3 days ahead.");
+    return;
+  }
+
   const formattedDate = formatDate(date);
   const apiKey = "679a4435a4c0499eb5c131838251303";
 
