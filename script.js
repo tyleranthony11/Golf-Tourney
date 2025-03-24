@@ -594,12 +594,10 @@ createTournamentBtn.addEventListener("click", () => {
     }
   }
   tournamentForm.style.display = "flex";
-  const weatherResult = document.getElementById("weather-result");
-  const weatherLookupContainer = document.querySelector(
-    ".weather-lookup-container"
+  const weatherContainer = document.querySelector(
+    ".weather-column"
   );
-  weatherResult.style.display = "none";
-  weatherLookupContainer.style.display = "block";
+  weatherContainer.style.display = "";
 });
 
 async function generateScorecard(
@@ -1055,19 +1053,15 @@ async function createTournament() {
 startTournamentBtn.addEventListener("click", async function (event) {
   event.preventDefault();
 
-  const weatherResult = document.getElementById("weather-result");
-  const weatherLookupContainer = document.querySelector(
-    ".weather-lookup-container"
-  );
-  if (weatherResult.style.display === "none") {
-    weatherResult.style.display = "block";
-    weatherLookupContainer.style.display = "block";
-  } else {
-    weatherResult.style.display = "none";
-    weatherLookupContainer.style.display = "none";
-  }
-
   if (tournamentForm.checkValidity()) {
+    const weatherColumn = document.querySelector(".weather-column");
+
+    if (weatherColumn.style.display !== "none") {
+      weatherColumn.style.display = "none";
+    } else {
+      weatherColumn.style.display = "flex";
+    }
+
     resetScorecard();
     createTournament();
     tournamentForm.style.display = "none";
@@ -1076,6 +1070,7 @@ startTournamentBtn.addEventListener("click", async function (event) {
     tournamentForm.reportValidity();
   }
 });
+
 
 function updateLeaderboard() {
   const leaderboardContainer = document.getElementById("leaderboard-container");
