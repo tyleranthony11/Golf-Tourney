@@ -966,14 +966,14 @@ main {
 }
 
 .scorecard-table {
-    min-width: 100%;
     width: 100%;
-    max-width: fit-content;
+    min-width: 100%; 
+    max-width: 1600px; 
     border-collapse: collapse;
     background-color: #fff;
     border-radius: 8px;
     margin: 0 auto;
-    
+    overflow-x: auto;
 }
 
 @media (max-width: 1600px){
@@ -1219,9 +1219,8 @@ input.hole-score:disabled {
 #history-list {
     display: none;
     margin: 20px auto;
-    max-width: 1000px;
-    padding: 20px;
-    min-width: fit-content;
+    max-width: 1300px;
+    padding: 50px;
     background-color: #f9f9f9;
     box-sizing: border-box;
     border-radius: 10px;
@@ -1236,6 +1235,8 @@ input.hole-score:disabled {
     border-radius: 8px;
     border: 1px solid #ddd;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    width: 100%;
 }
 
 .delete-tournament-btn{
@@ -1302,7 +1303,7 @@ input.hole-score:disabled {
     background-color: white;
     position: absolute;
     width: 100%;
-    max-width: 400px; /* Add this line to limit the width */
+    max-width: 400px;
     z-index: 1000;
     display: block;
 }
