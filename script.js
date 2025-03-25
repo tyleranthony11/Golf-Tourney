@@ -1198,7 +1198,7 @@ function updateHistoryTab() {
     emptyHistory.style.display = "block";
     historyList.style.display = "none";
   } else {
-    emptyHistory.style.display = "none";
+    emptyHistory.style.display = "block";
     historyList.style.display = "block";
   }
 
@@ -1211,26 +1211,25 @@ function updateHistoryTab() {
     leaderboard.innerHTML = tournament.leaderboard;
     tournamentItem.appendChild(leaderboard);
 
-    const formattedDate = formatDate(tournament.datePlayed);
-
     const scorecard = document.createElement("div");
     scorecard.classList.add("scorecard-details");
     scorecard.innerHTML = tournament.scorecard;
     scorecard.style.display = "none";
 
+    const formattedDate = formatDate(tournament.datePlayed);
     const detailsSection = document.createElement("div");
     detailsSection.classList.add("tournament-details");
     detailsSection.innerHTML = `
-            <span><strong>Start Date:</strong> ${formattedDate}</span>
-            <span><strong>Course:</strong> ${tournament.course}</span>
-            <span><strong>Tees:</strong> ${tournament.tees}</span>
-            `;
+      <span><strong>Start Date:</strong> ${formattedDate}</span>
+      <span><strong>Course:</strong> ${tournament.course}</span>
+      <span><strong>Tees:</strong> ${tournament.tees}</span>
+    `;
     detailsSection.style.display = "none";
-    tournamentItem.appendChild(detailsSection);
     tournamentItem.appendChild(scorecard);
+    tournamentItem.appendChild(detailsSection);
 
     const viewDetailsBtn = document.createElement("button");
-    viewDetailsBtn.textContent = "View Full Tournament Scorecard";
+    viewDetailsBtn.textContent = "View Full Tournament Details";
     viewDetailsBtn.classList.add("view-details-btn");
 
     viewDetailsBtn.addEventListener("click", () => {
@@ -1238,8 +1237,8 @@ function updateHistoryTab() {
       scorecard.style.display = isVisible ? "none" : "block";
       detailsSection.style.display = isVisible ? "none" : "block";
       viewDetailsBtn.textContent = isVisible
-        ? "View Full Tournament Scorecard"
-        : "Close Full Tournament Scorecard";
+        ? "View Full Tournament Details"
+        : "Close Full Tournament Details";
     });
 
     const deleteBtn = document.createElement("button");
@@ -1260,6 +1259,7 @@ function updateHistoryTab() {
     historyList.appendChild(tournamentItem);
   });
 }
+
 document.addEventListener("DOMContentLoaded", updateHistoryTab);
 
 function deleteTournament(index) {
