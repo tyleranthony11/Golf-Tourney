@@ -95,6 +95,11 @@ document.getElementById("hamburgerMenu").addEventListener("click", function () {
   document.getElementById("navLinks").classList.toggle("show");
 });
 
+document.addEventListener("click", function (event) {
+  if (!navLinks.contains(event.target) && !document.getElementById("hamburgerMenu").contains(event.target)) {
+    navLinks.classList.remove("show");
+  }
+});
 const navLinks = document.getElementById("navLinks");
 const links = navLinks.getElementsByTagName("a");
 
@@ -1259,7 +1264,6 @@ function updateHistoryTab() {
     historyList.appendChild(tournamentItem);
   });
 }
-
 document.addEventListener("DOMContentLoaded", updateHistoryTab);
 
 function deleteTournament(index) {
