@@ -978,7 +978,7 @@ main {
 
 @media (max-width: 1600px){
     #scorecard-container {
-        min-width: 600px;
+        min-width: 100%;
         padding-right: 80px;
         box-sizing: border-box;
     }

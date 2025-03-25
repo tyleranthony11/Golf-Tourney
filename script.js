@@ -1203,7 +1203,7 @@ function updateHistoryTab() {
     emptyHistory.style.display = "block";
     historyList.style.display = "none";
   } else {
-    emptyHistory.style.display = "block";
+    emptyHistory.style.display = "none";
     historyList.style.display = "block";
   }
 
