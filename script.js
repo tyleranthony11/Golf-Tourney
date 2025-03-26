@@ -1530,6 +1530,53 @@ async function fetchAndTransformCourseTournament(courseName) {
     return null;
   }
 }
+document.addEventListener("DOMContentLoaded", function () {
+  const input = document.getElementById("weather-course");
+  const autocompleteList = document.getElementById("autocomplete-list");
+
+  const manualCourses = Object.values(courseNames);
+
+  input.addEventListener("input", function () {
+      const query = input.value.trim().toLowerCase();
+      if (!query) {
+          autocompleteList.innerHTML = "";
+          return;
+      }
+
+      let matches = manualCourses.filter(course => course.toLowerCase().includes(query));
+
+      fetch("https://golf-api-backend.vercel.app/courses")
+          .then(response => response.json())
+          .then(data => {
+              if (data.courses) {
+                  const apiCourses = data.courses.map(c => c.club_name);
+                  matches = matches.concat(apiCourses.filter(course => course.toLowerCase().includes(query)));
+              }
+
+              autocompleteList.innerHTML = "";
+
+              matches.forEach(course => {
+                  const div = document.createElement("div");
+                  div.innerHTML = course;
+                  div.addEventListener("click", function () {
+                      input.value = course;
+                      autocompleteList.innerHTML = "";
+                  });
+                  autocompleteList.appendChild(div);
+              });
+          })
+          .catch(error => {
+              console.error("Error fetching courses from API:", error);
+          });
+  });
+
+  document.addEventListener("click", function (e) {
+      if (!input.contains(e.target) && !autocompleteList.contains(e.target)) {
+          autocompleteList.innerHTML = "";
+      }
+  });
+});
+
 
 document.getElementById("get-weather").addEventListener("click", function () {
   const courseName = document.getElementById("weather-course").value.trim();
@@ -1548,7 +1595,7 @@ document.getElementById("get-weather").addEventListener("click", function () {
 
   const selectedDate = new Date(date);
 
-  if (selectedDate > maxDate){
+  if (selectedDate > maxDate) {
     alert("You can only check the weather forecast up to 3 days ahead.");
     return;
   }
@@ -1556,9 +1603,7 @@ document.getElementById("get-weather").addEventListener("click", function () {
   const formattedDate = formatDate(date);
   const apiKey = "679a4435a4c0499eb5c131838251303";
 
-  if (courseLocations[courseName]) {
-    const city = courseLocations[courseName];
-
+  function fetchWeather(city) {
     const weatherApiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(city)}&dt=${date}`;
 
     fetch(weatherApiUrl)
@@ -1587,12 +1632,22 @@ document.getElementById("get-weather").addEventListener("click", function () {
           weatherResult.innerHTML = weatherInfo;
           weatherResult.style.display = "block";
           weatherTool.style.display = "none";
+
+          document.getElementById("search-new-weather").addEventListener("click", function () {
+            weatherResult.innerHTML = "";
+            weatherTool.style.display = "block";
+            weatherResult.style.display = "none";
+          });
         }
       })
       .catch(error => {
         weatherResult.innerHTML = `Error fetching weather data: ${error.message}`;
       });
+  }
 
+  if (courseLocations[courseName]) {
+    const city = courseLocations[courseName];
+    fetchWeather(city);
     return;
   }
 
@@ -1616,44 +1671,12 @@ document.getElementById("get-weather").addEventListener("click", function () {
           return;
         }
 
-        const weatherApiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(city)}&dt=${date}`;
-
-        fetch(weatherApiUrl)
-          .then(response => response.json())
-          .then(data => {
-            if (data.error) {
-              weatherResult.innerHTML = `Error: ${data.error.message}`;
-            } else {
-              const weather = data.forecast.forecastday[0].day;
-              const condition = weather.condition.text;
-              const iconUrl = `https:${weather.condition.icon}`;
-
-              const weatherInfo = `
-                <h3 style="text-align: center;">Weather Forecast for ${city} on ${formattedDate}</h3>
-                <div style="text-align: center;">
-                  <img src="${iconUrl}" alt="${condition}" style="width: 100px; height: 100px;">
-                </div>
-                <div style="text-align: center; font-size: 48px; font-weight: bold;">
-                  ${weather.avgtemp_c} <sup>°C</sup>
-                </div>
-                <p style="text-align: center;">${weather.condition.text}</p>
-                <p style="text-align: center;"><strong>Wind Speed:</strong> ${weather.maxwind_kph} km/h</p>
-              `;
-
-              weatherResult.innerHTML = weatherInfo;
-              weatherResult.style.display = "block";
-              weatherTool.style.display = "none";
-            }
-          })
-          .catch(error => {
-            weatherResult.innerHTML = `Error fetching weather data: ${error.message}`;
-          });
+        fetchWeather(city);
       }
-    })
-    .catch(error => {
-      weatherResult.innerHTML = `Error fetching course data.`;
     });
 });
+
+
 
 document.getElementById("weather-result").addEventListener("click", function (event) {
   if (event.target && event.target.id === "search-new-weather") {

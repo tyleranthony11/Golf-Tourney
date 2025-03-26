@@ -791,6 +791,19 @@ main {
     color: #2c3e50;
     box-sizing: border-box;
 }
+#autocomplete-list {
+    text-align: left;
+    margin-left: 130px;
+}
+
+#autocomplete-list div {
+    padding: 3px;
+    cursor: pointer;
+}
+
+#autocomplete-list div:hover {
+    background-color: #f0f0f0;
+}
 
 @media (max-width: 768px) {
     .tournament-weather-container {
