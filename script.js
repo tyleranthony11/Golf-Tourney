@@ -1535,6 +1535,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const autocompleteList = document.getElementById("autocomplete-list");
 
   const manualCourses = Object.values(courseNames);
+  let timeout;
 
   input.addEventListener("input", function () {
       const query = input.value.trim().toLowerCase();
@@ -1542,6 +1543,10 @@ document.addEventListener("DOMContentLoaded", function () {
           autocompleteList.innerHTML = "";
           return;
       }
+
+      clearTimeout(timeout);
+
+      timeout = setTimeout(function () {
 
       let matches = manualCourses.filter(course => course.toLowerCase().includes(query));
 
@@ -1552,6 +1557,8 @@ document.addEventListener("DOMContentLoaded", function () {
                   const apiCourses = data.courses.map(c => c.club_name);
                   matches = matches.concat(apiCourses.filter(course => course.toLowerCase().includes(query)));
               }
+
+              matches = matches.slice(0, 5);
 
               autocompleteList.innerHTML = "";
 
@@ -1568,6 +1575,7 @@ document.addEventListener("DOMContentLoaded", function () {
           .catch(error => {
               console.error("Error fetching courses from API:", error);
           });
+        }, 1000);
   });
 
   document.addEventListener("click", function (e) {
@@ -1595,7 +1603,7 @@ document.getElementById("get-weather").addEventListener("click", function () {
 
   const selectedDate = new Date(date);
 
-  if (selectedDate > maxDate) {
+  if (selectedDate > maxDate){
     alert("You can only check the weather forecast up to 3 days ahead.");
     return;
   }
@@ -1603,7 +1611,9 @@ document.getElementById("get-weather").addEventListener("click", function () {
   const formattedDate = formatDate(date);
   const apiKey = "679a4435a4c0499eb5c131838251303";
 
-  function fetchWeather(city) {
+  if (courseLocations[courseName]) {
+    const city = courseLocations[courseName];
+
     const weatherApiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(city)}&dt=${date}`;
 
     fetch(weatherApiUrl)
@@ -1643,11 +1653,7 @@ document.getElementById("get-weather").addEventListener("click", function () {
       .catch(error => {
         weatherResult.innerHTML = `Error fetching weather data: ${error.message}`;
       });
-  }
 
-  if (courseLocations[courseName]) {
-    const city = courseLocations[courseName];
-    fetchWeather(city);
     return;
   }
 
@@ -1671,11 +1677,48 @@ document.getElementById("get-weather").addEventListener("click", function () {
           return;
         }
 
-        fetchWeather(city);
-      }
-    });
-});
+        const weatherApiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(city)}&dt=${date}`;
 
+        fetch(weatherApiUrl)
+          .then(response => response.json())
+          .then(data => {
+            if (data.error) {
+              weatherResult.innerHTML = `Error: ${data.error.message}`;
+            } else {
+              const weather = data.forecast.forecastday[0].day;
+              const condition = weather.condition.text;
+              const iconUrl = `https:${weather.condition.icon}`;
+
+              const weatherInfo = `
+                <h3 style="text-align: center;">Weather Forecast for ${city} on ${formattedDate}</h3>
+                <div style="text-align: center;">
+                  <img src="${iconUrl}" alt="${condition}" style="width: 100px; height: 100px;">
+                </div>
+                <div style="text-align: center; font-size: 48px; font-weight: bold;">
+                  ${weather.avgtemp_c} <sup>°C</sup>
+                </div>
+                <p style="text-align: center;">${weather.condition.text}</p>
+                <p style="text-align: center;"><strong>Wind Speed:</strong> ${weather.maxwind_kph} km/h</p>
+                <button id="search-new-weather">Search for New Course Weather</button>
+              `;
+
+              weatherResult.innerHTML = weatherInfo;
+              weatherResult.style.display = "block";
+              weatherTool.style.display = "none";
+
+              document.getElementById("search-new-weather").addEventListener("click", function () {
+                weatherResult.innerHTML = ""; 
+                weatherTool.style.display = "block"; 
+                weatherResult.style.display = "none"; 
+              });
+            }
+          })
+          .catch(error => {
+            weatherResult.innerHTML = `Error fetching weather data: ${error.message}`;
+          });
+      }
+    })
+});
 
 
 document.getElementById("weather-result").addEventListener("click", function (event) {
