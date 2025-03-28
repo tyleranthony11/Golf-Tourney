@@ -855,7 +855,7 @@ main {
     width: 100%;
     box-sizing: border-box;
     padding: 20px;  
-    gap: 5px;
+    gap: 15px;
 
 }
 .golfer-checkbox {
@@ -865,12 +865,13 @@ main {
     transform: translateY(2px);
 }
 #tournament-golfers-container label {
-    display: flex;
+    display: inline-block;
     align-items: center;
     gap: 10px; 
     font-size: 16px;
     cursor: pointer;
     width: auto;
+    white-space: nowrap;
 }
 #tournament-scorecard {
     width: 100%;
