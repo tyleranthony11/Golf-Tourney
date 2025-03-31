@@ -643,7 +643,6 @@ main {
     flex-wrap: wrap;
     padding: 20px;
     align-items: flex-start;
-    width: 100%;
     max-width: 1400px;
     margin: 0 auto;
 }
@@ -928,7 +927,7 @@ main {
 
 #tournament-form input,
 #tournament-form select {
-    width: 90%;
+    width: 100%;
     max-width: 400px;
     padding: 12px;
     margin: 10px auto;
@@ -938,6 +937,7 @@ main {
     font-size: 16px;
     background-color: #f1f1f1;
     transition: border-color 0.3s ease, box-shadow 0.3s;
+    box-sizing: border-box;
 }
 #tournament-form select:focus,
 #tournament-form input:focus {
