@@ -896,47 +896,6 @@ async function generateScorecard(
   return scorecardContainer;
 }
 
-function loadRoundData(roundNumber) {
-  const savedData = localStorage.getItem(`tournamentScores_round${roundNumber}`);
-  if (savedData) {
-    const tournamentScores = JSON.parse(savedData);
-    Object.keys(tournamentScores).forEach((golfer) => {
-      tournamentScores[golfer][roundNumber].forEach((score, index) => {
-        const input = document.querySelector(
-          `input[data-round="${roundNumber}"][data-golfer="${golfer}"][data-hole="${index + 1}"]`
-        );
-        if (input) {
-          input.value = score;
-          input.disabled = true;
-
-          updateTotals({ target: input }, tee);
-        }
-      });
-
-      const outTotalElement = document.querySelector(
-        `.out-total[data-round="${roundNumber}"][data-golfer="${golfer}"]`
-      );
-      const inTotalElement = document.querySelector(
-        `.in-total[data-round="${roundNumber}"][data-golfer="${golfer}"]`
-      );
-      const roundTotalElement = document.querySelector(
-        `.round-total[data-round="${roundNumber}"][data-golfer="${golfer}"]`
-      );
-
-      if (outTotalElement) outTotalElement.textContent = calculateTotal(tournamentScores[golfer][roundNumber], 0, 9);
-      if (inTotalElement) inTotalElement.textContent = calculateTotal(tournamentScores[golfer][roundNumber], 9, 18);
-      if (roundTotalElement) roundTotalElement.textContent = calculateTotal(tournamentScores[golfer][roundNumber], 0, 18);
-    });
-
-    const submitButton = document.querySelector(`.submit-round-btn[data-round="${roundNumber}"]`);
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.textContent = "Round Submitted";
-      submitButton.classList.add("submitted");
-    }
-  }
-}
-
 function updateTotals(event, tee) {
   const input = event.target;
   const hole = parseInt(input.dataset.hole) - 1;
@@ -1643,12 +1602,19 @@ document.getElementById("get-weather").addEventListener("click", function () {
 
   const today = new Date();
   const maxDate = new Date();
+  const minDate = new Date();
   maxDate.setDate(today.getDate() + 3);
+  minDate.setDate(today.getDate() - 3);
 
   const selectedDate = new Date(date);
 
   if (selectedDate > maxDate){
     alert("You can only check the weather forecast up to 3 days ahead.");
+    return;
+  }
+
+  if (selectedDate < minDate){
+    alert("You can only check the weather forecast up to 2 days in the past.")
     return;
   }
 
