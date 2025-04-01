@@ -1334,3 +1334,49 @@ input.hole-score:disabled {
 .hidden-strokes {
     display: none;
 }
+.introjs-tooltip .introjs-nextbutton, 
+.introjs-tooltip .introjs-prevbutton {
+    font-family: 'Poppins', Arial, sans-serif;
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    transition: transform 0.2s ease;
+    text-shadow: none;
+    color: white !important;
+}
+.introjs-tooltip .introjs-tooltiptext {
+    font-family: 'Poppins', Arial, sans-serif !important;
+}
+
+.introjs-tooltip .introjs-nextbutton {
+    background-color: #04AA6D;
+}
+
+.introjs-tooltip .introjs-prevbutton {
+    background-color: #888;
+}
+
+.introjs-tooltip .introjs-nextbutton:hover, 
+.introjs-tooltip .introjs-prevbutton:hover {
+    transform: scale(1.05);
+}
+
+.introjs-tooltip .introjs-nextbutton:hover, 
+.introjs-tooltip .introjs-nextbutton:focus {
+    background-color: #04AA6D;
+    box-shadow: none;
+}
+
+.introjs-tooltip .introjs-prevbutton:hover, 
+.introjs-tooltip .introjs-prevbutton:focus {
+    background-color: #888;
+    box-shadow: none;
+}
+
+.introjs-helperLayer {
+    background-color: rgba(255, 255, 255, 0.7);
+    border: 2px solid #fff;
+}

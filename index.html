@@ -6,7 +6,7 @@
     <title>Golf Tournament App</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css">
 </head>
 <body>
     <main>
@@ -290,6 +290,46 @@
    
     
     </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js"></script>
     <script src="script.js" type="module"></script>
+    <script>
+        if (!localStorage.getItem("tourSeen")){
+        introJs().setOptions({
+            steps:[{
+                title: 'Welcome to Golf Tourney!',
+                intro: "Let\u2019s walk you through the key features of the app. Click \"Next\" to begin the tour."
+            },
+            {
+                element:document.getElementById("new-golfer-input"),
+                intro: 'Start by registering all golfers here.'
+            },
+            {
+                element:document.getElementById("postRoundTab"),
+                intro: 'Post scores from recent rounds here.'
+            },
+            {
+                element:document.getElementById("handicapRankingsTab"),
+                intro: "Once scores are posted, view each golfer\u2019s calculated handicap in this tab."
+            },
+            {
+                element:document.getElementById("tournamentScorecardTab"),
+                intro: 'Create tournaments and generate scorecards to track each rounds progress'
+            },
+            {
+                element:document.getElementById("tournamentLeaderboardTab"),
+                intro: 'After rounds are submitted, see a simplified leaderboard for your tournament here.'
+            },
+            {
+                element:document.getElementById("historyTab"),
+                intro: 'All completed tournaments scorecard and leaderboard will be stored for easy viewing here.'
+            },
+            
+        ],
+       
+        }).start();
+        localStorage.setItem("tourSeen", "true");
+    }
+    </script>
 </body>
+
 </html>
