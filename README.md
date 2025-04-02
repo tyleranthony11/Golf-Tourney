@@ -36,7 +36,7 @@ Golf Tourney is a web application designed to manage golf tournaments, playerhan
   ## Contributing
   Contributions are welcome! Since Canadian courses are manually added in courses.js, feel free to add more courses or improve existing ones. Other contributions could include user-friendly features for better round tracking, tournament tracking, or general improvements. Open issues or submit pull requests to enhance the application.
 
-  License
+  ## License
   This project is licensed under the MIT License
 
 
