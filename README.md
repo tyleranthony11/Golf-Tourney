@@ -1,4 +1,4 @@
-Golf Tourney
+# Golf Tourney
 
 Overview
 Golf Tourney is a web application designed to manage golf tournaments, playerhandicaps and track round scores. It also includes a weather lookup tool to view course conditions. The app supports manually entered Canadian courses and over 25,000 USA courses retrieved from Golf API.
