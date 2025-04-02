@@ -33,7 +33,7 @@ Golf Tourney is a web application designed to manage golf tournaments, playerhan
   - Golf API for fetching USA courses
   - Weather API for weather lookup
  
-  Contributing
+  ## Contributing
   Contributions are welcome! Since Canadian courses are manually added in courses.js, feel free to add more courses or improve existing ones. Other contributions could include user-friendly features for better round tracking, tournament tracking, or general improvements. Open issues or submit pull requests to enhance the application.
 
   License
