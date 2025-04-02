@@ -1,9 +1,9 @@
 # Golf Tourney
 
-Overview
+## Overview
 Golf Tourney is a web application designed to manage golf tournaments, playerhandicaps and track round scores. It also includes a weather lookup tool to view course conditions. The app supports manually entered Canadian courses and over 25,000 USA courses retrieved from Golf API.
 
-Features
+## Features
 - Golfer Registration: Add golfers through a simple input form (Home tab).
 - Post Round Scores: Submit recent golf scores by selecting the country, golfer, date, course, tees and score (Post Round tab).
 - Handicap Calculation: Automatically calculates golfer handicaps and displays a leaderboard ranked from lowest to highest handicap (Handicap Rankings tab).
@@ -12,14 +12,14 @@ Features
 - Tournament Leaderboard: View the current leaderboard for an active tournament after the first round has been submitted (Tournament Leaderboard tab).
 - Tournament History: Browse completed tournaments and their leaderboards. (History tab).
 
-  Installation
+  ## Installation
   1. Clone the repository:
      git clone https://github.com/tyleranthony11/Golf-Tournament-App.git
   2. Navigate to the project directory:
      cd Golf-Tournament-App
   3. Open the index.html file in your browser.
  
-  Usage
+  ## Usage
   1. Register golfers in the Home tab.
   2. Post scores in the Post Round tab.
   3. View handicap rankings in the Handicap Rankings tab.
@@ -27,7 +27,7 @@ Features
   5. Track ongoing tournament scores in the Tournament Leaderboard tab.
   6. Browse past tournament in the History tab.
  
-  Technologies Used
+  ## Technologies Used
   - HTML, CSS & JavaScript
   - Local storage for data persistence
   - Golf API for fetching USA courses
