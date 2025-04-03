@@ -1,7 +1,7 @@
 # Golf Tourney
 
 ## Overview
-Golf Tourney is a web application designed to manage golf tournaments, playerhandicaps and track round scores. It also includes a weather lookup tool to view course conditions. The app supports manually entered Canadian courses and over 25,000 USA courses retrieved from Golf API.
+Golf Tourney is a web application designed to manage golf tournaments, player handicaps and track round scores. It also includes a weather lookup tool to view course conditions. The app supports manually entered Canadian courses and over 25,000 USA courses retrieved from Golf API.
 
 ## Features
 - Golfer Registration: Add golfers through a simple input form (Home tab).
@@ -41,6 +41,6 @@ Golf Tourney is a web application designed to manage golf tournaments, playerhan
   Contributions are welcome! Since Canadian courses are manually added in courses.js, feel free to add more courses or improve existing ones. Other contributions could include user-friendly features for better round tracking, tournament tracking, or general improvements. Open issues or submit pull requests to enhance the application.
 
   ## License
-  This project is licensed under the MIT License
+  This project is licensed under the MIT License.
 
 
