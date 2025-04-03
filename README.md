@@ -12,12 +12,16 @@ Golf Tourney is a web application designed to manage golf tournaments, playerhan
 - Tournament Leaderboard: View the current leaderboard for an active tournament after the first round has been submitted (Tournament Leaderboard tab).
 - Tournament History: Browse completed tournaments and their leaderboards. (History tab).
 
-  ## Installation
-  1. Clone the repository:
-     git clone https://github.com/tyleranthony11/Golf-Tournament-App.git
-  2. Navigate to the project directory:
-     cd Golf-Tournament-App
-  3. Open the index.html file in your browser.
+ ## Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/tyleranthony11/Golf-Tournament-App.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd Golf-Tournament-App
+   ```
+3. Open the `index.html` file in your browser.
  
   ## Usage
   1. Register golfers in the Home tab.
