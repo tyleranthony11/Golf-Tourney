@@ -1,4 +1,21 @@
-import { courseData, courseNames, scorecardData, courseLocations } from "./courses.js";
+import {
+  courseData,
+  courseNames,
+  scorecardData,
+  courseLocations,
+} from "./courses.js";
+import { formatDate } from "./utils.js";
+import {
+  saveTournamentToHistory,
+  updateHistoryTab,
+  saveGolfers,
+  loadGolfers,
+  saveRounds,
+  loadRounds,
+  saveHandicaps,
+  loadHandicaps,
+} from "./storage.js";
+
 const golferSelect = document.getElementById("golfer-name-dropdown");
 const roundsList = document.getElementById("rounds-list");
 const scoreForm = document.getElementById("score-form");
@@ -18,7 +35,6 @@ const tournamentCourseDropdown = document.getElementById("tournament-course");
 const tournamentTeesDropdown = document.getElementById("tournament-tees");
 const leaderboardContainer = document.getElementById("leaderboard-container");
 const scorecardContainer = document.getElementById("scorecard-container");
-const historyList = document.getElementById("history-list");
 const handicapRankingsContainer = document.getElementById(
   "handicap-rankings-container"
 );
@@ -29,8 +45,8 @@ const emptyHandicapRankings = document.getElementById(
 const emptyLeaderboard = document.getElementById("empty-leaderboard");
 
 let tournamentScores = {};
-const rounds = [];
-const golfers = [];
+let rounds = [];
+let golfers = [];
 let golferHandicaps = [];
 
 document
@@ -96,7 +112,10 @@ document.getElementById("hamburgerMenu").addEventListener("click", function () {
 });
 
 document.addEventListener("click", function (event) {
-  if (!navLinks.contains(event.target) && !document.getElementById("hamburgerMenu").contains(event.target)) {
+  if (
+    !navLinks.contains(event.target) &&
+    !document.getElementById("hamburgerMenu").contains(event.target)
+  ) {
     navLinks.classList.remove("show");
   }
 });
@@ -327,7 +346,7 @@ function addGolfer(golferName) {
     updateGolferDropdowns();
     updateGolferList();
     checkGolfers();
-    saveGolfers();
+    saveGolfers(golfers);
   } else {
     alert("This golfer already exists. Please enter a new golfer.");
   }
@@ -498,7 +517,7 @@ async function updateGolferHandicap(golferName) {
   } else {
     golferHandicaps.push({ name: golferName, handicap });
   }
-  saveHandicaps();
+  saveHandicaps(golferHandicaps);
   updateRankingsTable();
 }
 
@@ -583,8 +602,8 @@ scoreForm.addEventListener("submit", async (event) => {
   rounds.push(round);
   updateGolferHandicap(golferName);
   updateRankingsTable();
-  saveRounds();
-  saveHandicaps();
+  saveRounds(rounds);
+  saveHandicaps(golferHandicaps);
   scoreForm.reset();
 });
 
@@ -599,9 +618,7 @@ createTournamentBtn.addEventListener("click", () => {
     }
   }
   tournamentForm.style.display = "flex";
-  const weatherContainer = document.querySelector(
-    ".weather-column"
-  );
+  const weatherContainer = document.querySelector(".weather-column");
   weatherContainer.style.display = "";
 });
 
@@ -705,17 +722,23 @@ async function generateScorecard(
       input.disabled = roundNumber > 1;
       input.addEventListener("input", (event) => {
         updateTotals(event, tee);
-        const allInputs = document.querySelectorAll(`input[data-golfer="${golfer}"][data-round="${roundNumber}"]`);
+        const allInputs = document.querySelectorAll(
+          `input[data-golfer="${golfer}"][data-round="${roundNumber}"]`
+        );
         const index = Array.from(allInputs).indexOf(event.target);
         const value = event.target.value;
-        if (value.length === 1 && value === "1"){
+        if (value.length === 1 && value === "1") {
           return;
         }
-        if (parseInt(value, 10) >= 2 && index !== -1 && index < allInputs.length - 1){
+        if (
+          parseInt(value, 10) >= 2 &&
+          index !== -1 &&
+          index < allInputs.length - 1
+        ) {
           allInputs[index + 1].focus();
         }
       });
-  
+
       td.appendChild(input);
       golferRow.appendChild(td);
       if (i === 9 || i === 18) {
@@ -764,7 +787,7 @@ async function generateScorecard(
           }
 
           const score = input.value.trim();
-          if (!/^\d+$/.test(score)){
+          if (!/^\d+$/.test(score)) {
             allScoresValid = false;
           }
         });
@@ -775,12 +798,17 @@ async function generateScorecard(
       return;
     }
 
-    if (!allScoresValid){
-      alert("Please enter valid scores. Negative or decimal numbers are not allowed.");
+    if (!allScoresValid) {
+      alert(
+        "Please enter valid scores. Negative or decimal numbers are not allowed."
+      );
       return;
     }
 
-    localStorage.setItem(`tournamentScores_round${roundNumber}`,JSON.stringify(tournamentScores));
+    localStorage.setItem(
+      `tournamentScores_round${roundNumber}`,
+      JSON.stringify(tournamentScores)
+    );
 
     let tournamentStrokesAbovePar = 0;
 
@@ -1023,10 +1051,8 @@ async function createTournament() {
 
   if (country === "canada") {
     course = document.getElementById("tournament-course").value;
-    console.log("Canada Course Selected:", course);
   } else if (country === "usa") {
     course = document.getElementById("course-search").value.split(" - ")[0];
-    console.log("USA Course Selected:", course);
   }
 
   golfers.forEach((golfer) => {
@@ -1078,7 +1104,6 @@ startTournamentBtn.addEventListener("click", async function (event) {
     tournamentForm.reportValidity();
   }
 });
-
 
 function updateLeaderboard() {
   const leaderboardContainer = document.getElementById("leaderboard-container");
@@ -1161,130 +1186,8 @@ function resetScorecard() {
   }
 }
 
-function saveTournamentToHistory() {
-  const scorecardData = scorecardContainer.innerHTML;
-  const leaderboardData = leaderboardContainer.innerHTML;
-  const scorecardWithoutName = scorecardData.replace(/<h2>.*<\/h2>/, "");
-  const datePlayed = document.getElementById("tournament-date").value;
-  const tees = document.getElementById("tournament-tees").value;
-  const country = document.getElementById("tournament-country-selection").value;
-
-  const tournamentHistory =
-    JSON.parse(localStorage.getItem("tournamentHistory")) || [];
-
-  let courseName = "";
-
-  if (country === "canada") {
-    const courseKey = document.getElementById("tournament-course").value;
-    courseName = courseNames[courseKey] || courseKey;
-  } else {
-    courseName = document.getElementById("course-search").value.trim();
-  }
-
-  const tournament = {
-    datePlayed,
-    course: courseName,
-    tees,
-    scorecard: scorecardWithoutName,
-    leaderboard: leaderboardData,
-  };
-
-  tournamentHistory.push(tournament);
-  localStorage.setItem("tournamentHistory", JSON.stringify(tournamentHistory));
-
-  updateHistoryTab();
-}
-
-function updateHistoryTab() {
-  const emptyHistory = document.getElementById("empty-history");
-  historyList.innerHTML = "";
-
-  const tournamentHistory =
-    JSON.parse(localStorage.getItem("tournamentHistory")) || [];
-
-  if (tournamentHistory.length === 0) {
-    emptyHistory.style.display = "block";
-    historyList.style.display = "none";
-  } else {
-    emptyHistory.style.display = "none";
-    historyList.style.display = "block";
-  }
-
-  tournamentHistory.forEach((tournament, index) => {
-    const tournamentItem = document.createElement("div");
-    tournamentItem.classList.add("tournament-item");
-
-    const leaderboard = document.createElement("div");
-    leaderboard.classList.add("leaderboard-preview");
-    leaderboard.innerHTML = tournament.leaderboard;
-    tournamentItem.appendChild(leaderboard);
-
-    const scorecard = document.createElement("div");
-    scorecard.classList.add("scorecard-details");
-    scorecard.innerHTML = tournament.scorecard;
-    scorecard.style.display = "none";
-
-    const formattedDate = formatDate(tournament.datePlayed);
-    const detailsSection = document.createElement("div");
-    detailsSection.classList.add("tournament-details");
-    detailsSection.innerHTML = `
-      <span><strong>Start Date:</strong> ${formattedDate}</span>
-      <span><strong>Course:</strong> ${tournament.course}</span>
-      <span><strong>Tees:</strong> ${tournament.tees}</span>
-    `;
-    detailsSection.style.display = "none";
-    tournamentItem.appendChild(scorecard);
-    tournamentItem.appendChild(detailsSection);
-
-    const viewDetailsBtn = document.createElement("button");
-    viewDetailsBtn.textContent = "View Full Tournament Details";
-    viewDetailsBtn.classList.add("view-details-btn");
-
-    viewDetailsBtn.addEventListener("click", () => {
-      const isVisible = scorecard.style.display === "block";
-      scorecard.style.display = isVisible ? "none" : "block";
-      detailsSection.style.display = isVisible ? "none" : "block";
-      viewDetailsBtn.textContent = isVisible
-        ? "View Full Tournament Details"
-        : "Close Full Tournament Details";
-    });
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.classList.add("delete-tournament-btn");
-
-    const trashIcon = document.createElement("img");
-    trashIcon.src = "images/delete.png";
-    trashIcon.alt = "Delete";
-    trashIcon.classList.add("trash-icon");
-
-    deleteBtn.appendChild(trashIcon);
-    deleteBtn.addEventListener("click", () => {
-      confirmDeleteTournament(index);
-    });
-
-    tournamentItem.appendChild(viewDetailsBtn);
-    tournamentItem.appendChild(deleteBtn);
-    historyList.appendChild(tournamentItem);
-  });
-}
 document.addEventListener("DOMContentLoaded", updateHistoryTab);
 
-function deleteTournament(index) {
-  let tournamentHistory =
-    JSON.parse(localStorage.getItem("tournamentHistory")) || [];
-  tournamentHistory.splice(index, 1);
-  localStorage.setItem("tournamentHistory", JSON.stringify(tournamentHistory));
-  updateHistoryTab();
-}
-
-function confirmDeleteTournament(index) {
-  const confirmation = confirm(
-    "Are you sure you want to delete this tournament? This action cannot be undone."
-  );
-  if (confirmation) {
-    deleteTournament(index);
-  }
-}
 function areAllRoundsSubmitted() {
   const submitButtons = document.querySelectorAll(".submit-round-btn");
   return (
@@ -1293,31 +1196,10 @@ function areAllRoundsSubmitted() {
   );
 }
 
-function saveGolfers() {
-  localStorage.setItem("golfers", JSON.stringify(golfers));
-}
-function loadGolfers() {
-  const storedGolfers = JSON.parse(localStorage.getItem("golfers")) || [];
-  storedGolfers.forEach((golfer) => addGolfer(golfer, false));
-}
-document.addEventListener("DOMContentLoaded", loadGolfers);
-
-function saveRounds() {
-  localStorage.setItem("rounds", JSON.stringify(rounds));
-}
-function loadRounds() {
-  const storedRounds = JSON.parse(localStorage.getItem("rounds")) || [];
-
-  storedRounds.forEach((round, index) => {
-    rounds.push(round);
-    displayRound(round, index);
-  });
-  if (rounds.length > 0) {
-    const roundsDisplay = document.getElementById("rounds-display");
-    roundsDisplay.style.display = "block";
-  }
-}
-document.addEventListener("DOMContentLoaded", loadRounds);
+document.addEventListener("DOMContentLoaded", () => {
+  loadGolfers(addGolfer);
+  loadRounds(rounds, displayRound);
+});
 
 function displayRound(round, index) {
   const roundsDisplay = document.getElementById("rounds-display");
@@ -1388,7 +1270,7 @@ function deleteRound(index, golferName) {
 
   rounds.splice(index, 1);
 
-  saveRounds();
+  saveRounds(rounds);
 
   updateGolferHandicap(golferName);
 
@@ -1410,26 +1292,9 @@ function refreshRoundsDisplay() {
   }
 }
 
-function saveHandicaps() {
-  const validHandicaps = golferHandicaps.filter((golfer) =>
-    isFinite(golfer.handicap)
-  );
-  localStorage.setItem("golferHandicaps", JSON.stringify(validHandicaps));
-}
-
-function loadHandicaps() {
-  const storedHandicaps =
-    JSON.parse(localStorage.getItem("golferHandicaps")) || [];
-  golferHandicaps = storedHandicaps.filter((golfer) =>
-    isFinite(golfer.handicap)
-  );
-
-  if (golferHandicaps.length > 0) {
-    updateRankingsTable();
-  }
-}
-
-document.addEventListener("DOMContentLoaded", loadHandicaps);
+document.addEventListener("DOMContentLoaded", () => {
+  loadHandicaps(golferHandicaps, updateRankingsTable);
+});
 
 async function fetchAndTransformCourse(courseName) {
   const response = await fetch("https://golf-api-backend.vercel.app/courses");
@@ -1541,53 +1406,57 @@ document.addEventListener("DOMContentLoaded", function () {
   let timeout;
 
   input.addEventListener("input", function () {
-      const query = input.value.trim().toLowerCase();
-      if (!query) {
-          autocompleteList.innerHTML = "";
-          return;
-      }
+    const query = input.value.trim().toLowerCase();
+    if (!query) {
+      autocompleteList.innerHTML = "";
+      return;
+    }
 
-      clearTimeout(timeout);
+    clearTimeout(timeout);
 
-      timeout = setTimeout(function () {
-
-      let matches = manualCourses.filter(course => course.toLowerCase().includes(query));
+    timeout = setTimeout(function () {
+      let matches = manualCourses.filter((course) =>
+        course.toLowerCase().includes(query)
+      );
 
       fetch("https://golf-api-backend.vercel.app/courses")
-          .then(response => response.json())
-          .then(data => {
-              if (data.courses) {
-                  const apiCourses = data.courses.map(c => c.club_name);
-                  matches = matches.concat(apiCourses.filter(course => course.toLowerCase().includes(query)));
-              }
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.courses) {
+            const apiCourses = data.courses.map((c) => c.club_name);
+            matches = matches.concat(
+              apiCourses.filter((course) =>
+                course.toLowerCase().includes(query)
+              )
+            );
+          }
 
-              matches = matches.slice(0, 5);
+          matches = matches.slice(0, 5);
 
+          autocompleteList.innerHTML = "";
+
+          matches.forEach((course) => {
+            const div = document.createElement("div");
+            div.innerHTML = course;
+            div.addEventListener("click", function () {
+              input.value = course;
               autocompleteList.innerHTML = "";
-
-              matches.forEach(course => {
-                  const div = document.createElement("div");
-                  div.innerHTML = course;
-                  div.addEventListener("click", function () {
-                      input.value = course;
-                      autocompleteList.innerHTML = "";
-                  });
-                  autocompleteList.appendChild(div);
-              });
-          })
-          .catch(error => {
-              console.error("Error fetching courses from API:", error);
+            });
+            autocompleteList.appendChild(div);
           });
-        }, 1000);
+        })
+        .catch((error) => {
+          console.error("Error fetching courses from API:", error);
+        });
+    }, 1000);
   });
 
   document.addEventListener("click", function (e) {
-      if (!input.contains(e.target) && !autocompleteList.contains(e.target)) {
-          autocompleteList.innerHTML = "";
-      }
+    if (!input.contains(e.target) && !autocompleteList.contains(e.target)) {
+      autocompleteList.innerHTML = "";
+    }
   });
 });
-
 
 document.getElementById("get-weather").addEventListener("click", function () {
   const courseName = document.getElementById("weather-course").value.trim();
@@ -1608,13 +1477,13 @@ document.getElementById("get-weather").addEventListener("click", function () {
 
   const selectedDate = new Date(date);
 
-  if (selectedDate > maxDate){
+  if (selectedDate > maxDate) {
     alert("You can only check the weather forecast up to 3 days ahead.");
     return;
   }
 
-  if (selectedDate < minDate){
-    alert("You can only check the weather forecast up to 2 days in the past.")
+  if (selectedDate < minDate) {
+    alert("You can only check the weather forecast up to 2 days in the past.");
     return;
   }
 
@@ -1624,11 +1493,13 @@ document.getElementById("get-weather").addEventListener("click", function () {
   if (courseLocations[courseName]) {
     const city = courseLocations[courseName];
 
-    const weatherApiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(city)}&dt=${date}`;
+    const weatherApiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(
+      city
+    )}&dt=${date}`;
 
     fetch(weatherApiUrl)
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         if (data.error) {
           weatherResult.innerHTML = `Error: ${data.error.message}`;
         } else {
@@ -1653,14 +1524,16 @@ document.getElementById("get-weather").addEventListener("click", function () {
           weatherResult.style.display = "block";
           weatherTool.style.display = "none";
 
-          document.getElementById("search-new-weather").addEventListener("click", function () {
-            weatherResult.innerHTML = "";
-            weatherTool.style.display = "block";
-            weatherResult.style.display = "none";
-          });
+          document
+            .getElementById("search-new-weather")
+            .addEventListener("click", function () {
+              weatherResult.innerHTML = "";
+              weatherTool.style.display = "block";
+              weatherResult.style.display = "none";
+            });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         weatherResult.innerHTML = `Error fetching weather data: ${error.message}`;
       });
 
@@ -1670,10 +1543,12 @@ document.getElementById("get-weather").addEventListener("click", function () {
   const courseApiUrl = `https://golf-api-backend.vercel.app/courses`;
 
   fetch(courseApiUrl)
-    .then(response => response.json())
-    .then(courseData => {
+    .then((response) => response.json())
+    .then((courseData) => {
       if (courseData.courses) {
-        const course = courseData.courses.find(c => c.club_name === courseName);
+        const course = courseData.courses.find(
+          (c) => c.club_name === courseName
+        );
 
         if (!course) {
           alert("Course not found.");
@@ -1687,11 +1562,13 @@ document.getElementById("get-weather").addEventListener("click", function () {
           return;
         }
 
-        const weatherApiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(city)}&dt=${date}`;
+        const weatherApiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(
+          city
+        )}&dt=${date}`;
 
         fetch(weatherApiUrl)
-          .then(response => response.json())
-          .then(data => {
+          .then((response) => response.json())
+          .then((data) => {
             if (data.error) {
               weatherResult.innerHTML = `Error: ${data.error.message}`;
             } else {
@@ -1716,53 +1593,27 @@ document.getElementById("get-weather").addEventListener("click", function () {
               weatherResult.style.display = "block";
               weatherTool.style.display = "none";
 
-              document.getElementById("search-new-weather").addEventListener("click", function () {
-                weatherResult.innerHTML = ""; 
-                weatherTool.style.display = "block"; 
-                weatherResult.style.display = "none"; 
-              });
+              document
+                .getElementById("search-new-weather")
+                .addEventListener("click", function () {
+                  weatherResult.innerHTML = "";
+                  weatherTool.style.display = "block";
+                  weatherResult.style.display = "none";
+                });
             }
           })
-          .catch(error => {
+          .catch((error) => {
             weatherResult.innerHTML = `Error fetching weather data: ${error.message}`;
           });
       }
-    })
+    });
 });
 
-
-document.getElementById("weather-result").addEventListener("click", function (event) {
-  if (event.target && event.target.id === "search-new-weather") {
-    document.getElementById("weather-tool").style.display = "block";  
-    document.getElementById("weather-result").style.display = "none";  
-  }
-});
-
-function formatDate(dateString) {
-  const [year, month, day] = dateString.split("-");
-
-  const date = new Date(Date.UTC(year, month - 1, day));
-
-  const adjustedDate = new Date(
-    date.getUTCFullYear(),
-    date.getUTCMonth(),
-    date.getUTCDate()
-  );
-
-  const formattedDay = adjustedDate.getUTCDate();
-  const formattedMonth = adjustedDate.toLocaleString("default", {
-    month: "long",
+document
+  .getElementById("weather-result")
+  .addEventListener("click", function (event) {
+    if (event.target && event.target.id === "search-new-weather") {
+      document.getElementById("weather-tool").style.display = "block";
+      document.getElementById("weather-result").style.display = "none";
+    }
   });
-  const formattedYear = adjustedDate.getUTCFullYear();
-
-  const suffix =
-    formattedDay % 10 === 1 && formattedDay !== 11
-      ? "st"
-      : formattedDay % 10 === 2 && formattedDay !== 12
-      ? "nd"
-      : formattedDay % 10 === 3 && formattedDay !== 13
-      ? "rd"
-      : "th";
-
-  return `${formattedMonth} ${formattedDay}${suffix}, ${formattedYear}`;
-}
