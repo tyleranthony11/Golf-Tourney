@@ -3,6 +3,7 @@ import {
   courseNames,
   scorecardData,
   courseLocations,
+  supportedCountries
 } from "./courses.js";
 import { formatDate } from "./utils.js";
 import {
@@ -156,12 +157,12 @@ document
 
     courseDropdown.innerHTML = "";
 
-    if (country === "canada") {
+    if (country === supportedCountries.canada) {
       courseDropdown.innerHTML = "<option value=''>Select a Course</option>";
       populateCourseDropdown(courseDropdown);
       courseDropdown.style.display = "block";
       courseContainer.innerHTML = "";
-    } else if (country === "usa") {
+    } else if (country === supportedCountries.usa) {
       courseContainer.innerHTML = `
       <input type="text" id="course-search" placeholder="Search for a US course..." autocomplete="off">
       <div id="course-results" class="dropdown-results"></div>
@@ -184,13 +185,13 @@ document
 
     tournamentCourseDropdown.innerHTML = "";
 
-    if (country === "canada") {
+    if (country === supportedCountries.canada) {
       tournamentCourseDropdown.innerHTML =
         "<option value=''>Select a Course</option>";
       populateCourseDropdown(tournamentCourseDropdown);
       tournamentCourseDropdown.style.display = "block";
       tournamentCourseContainer.innerHTML = "";
-    } else if (country === "usa") {
+    } else if (country === supportedCountries.usa) {
       tournamentCourseContainer.innerHTML = `
     <input type="text" id="course-search" placeholder="Search for a US course..." autocomplete="off">
     <div id="course-results" class="dropdown-results"></div>
@@ -530,7 +531,7 @@ scoreForm.addEventListener("submit", async (event) => {
   const score = Number(document.getElementById("score").value);
   let roundItem, round;
 
-  if (country === "canada") {
+  if (country === supportedCountries.canada) {
     const courseValue = document.getElementById("course").value;
     const course = courseNames[courseValue];
     const tees =
@@ -557,7 +558,7 @@ scoreForm.addEventListener("submit", async (event) => {
     })`;
 
     round = { golferName, datePlayed, courseValue, tees, score };
-  } else if (country === "usa") {
+  } else if (country === supportedCountries.usa) {
     const courseInput = document.getElementById("course-search").value;
     const courseName = courseInput.split(" - ")[0].trim();
 
@@ -631,10 +632,10 @@ async function generateScorecard(
 ) {
   let course, tee;
 
-  if (country === "canada") {
+  if (country === supportedCountries.canada) {
     course = scorecardData[courseName];
     tee = course[teeColor];
-  } else if (country === "usa") {
+  } else if (country === supportedCountries.usa) {
     course = await fetchAndTransformCourseTournament(courseName);
     tee = course[teeColor];
     console.log("Fetching and transforming USA course data");
@@ -1049,9 +1050,9 @@ async function createTournament() {
   const country = document.getElementById("tournament-country-selection").value;
   let course;
 
-  if (country === "canada") {
+  if (country === supportedCountries.canada) {
     course = document.getElementById("tournament-course").value;
-  } else if (country === "usa") {
+  } else if (country === supportedCountries.usa) {
     course = document.getElementById("course-search").value.split(" - ")[0];
   }
 

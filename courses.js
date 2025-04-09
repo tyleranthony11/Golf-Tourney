@@ -1283,4 +1283,9 @@ const courseData = {
   "The Wilds Golf Resort": "Holyrood",
   };
 
-  export { courseData, courseNames, scorecardData, courseLocations};
+  const supportedCountries = {
+    canada: "canada",
+    usa: "usa"
+  };
+
+  export { courseData, courseNames, scorecardData, courseLocations, supportedCountries};
