@@ -1,3 +1,4 @@
+// Converts date from the default form "2025-01-01" to "January 1st, 2025" for readibility 
 function formatDate(dateString) {
   const [year, month, day] = dateString.split("-");
 

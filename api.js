@@ -1,4 +1,6 @@
 import { populateTeesDropdownUSA, populateTournamentTeesDropdownUSA } from "./script.js";
+
+// allows for searching of USA courses in Post-Score Form
 function setupCourseSearch() {
     const searchInput = document.getElementById("course-search");
     const resultsContainer = document.getElementById("course-results");
@@ -84,6 +86,8 @@ function setupCourseSearch() {
       console.log("Course not found");
     }
   }
+
+  // fetches course from API and converts JSON to same form as manually entered courses
   async function fetchAndTransformCourseTournament(courseName) {
     try {
       const response = await fetch("https://golf-api-backend.vercel.app/courses");

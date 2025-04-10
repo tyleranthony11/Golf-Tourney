@@ -202,16 +202,31 @@ document
     }
   });
 
+// Populates Course dropdown in Post-Score form with Canadian courses
 function populateCourseDropdown(dropdown) {
   dropdown.innerHTML = '<option value="">Select a Course</option>';
   Object.keys(courseData).forEach((courseKey) => {
     const option = document.createElement("option");
     option.value = courseKey;
-    option.textContent = courseNames[courseKey];
+    option.textContent = courseNames[courseKey]; // Display-friendly name 
     dropdown.appendChild(option);
   });
 }
 
+//  Popualates tees for canadian coruses
+function populateTeesDropdown(courseDropdown, teesDropdown) {
+  teesDropdown.innerHTML = "<option value=''>Select Tees Played </option>";
+  const selectedCourse = courseDropdown.value;
+
+  const courseInfo = courseData[selectedCourse];
+  for (const teeName in courseInfo.tees) {
+    const teeData = courseInfo.tees[teeName];
+    const newOption = document.createElement("option");
+    newOption.value = teeName;
+    newOption.textContent = `${teeName} (${teeData.yardage} yds) - Par ${teeData.par}, Rating ${teeData.courseRating}, Slope ${teeData.slopeRating}`;
+    teesDropdown.appendChild(newOption);
+  }
+}
 
 
 export function populateTeesDropdownUSA(course) {
@@ -257,19 +272,7 @@ tournamentCourseDropdown.addEventListener("change", () => {
   populateTeesDropdown(tournamentCourseDropdown, tournamentTeesDropdown);
 });
 
-function populateTeesDropdown(courseDropdown, teesDropdown) {
-  teesDropdown.innerHTML = "<option value=''>Select Tees Played </option>";
-  const selectedCourse = courseDropdown.value;
 
-  const courseInfo = courseData[selectedCourse];
-  for (const teeName in courseInfo.tees) {
-    const teeData = courseInfo.tees[teeName];
-    const newOption = document.createElement("option");
-    newOption.value = teeName;
-    newOption.textContent = `${teeName} (${teeData.yardage} yds) - Par ${teeData.par}, Rating ${teeData.courseRating}, Slope ${teeData.slopeRating}`;
-    teesDropdown.appendChild(newOption);
-  }
-}
 
 function updateGolferDropdowns() {
   const golferContainer = document.getElementById(
@@ -342,6 +345,7 @@ function deleteGolfer(index) {
   saveGolfers();
 }
 
+// Prevents duplicate Golfer Name's
 function checkGolfers() {
   if (golferList.children.length > 0) {
     registeredGolfersDiv.style.display = "block";
@@ -883,6 +887,7 @@ async function generateScorecard(
   return scorecardContainer;
 }
 
+// Calculates the total score and strokes above par in scorecard
 function updateTotals(event, tee) {
   const input = event.target;
   const hole = parseInt(input.dataset.hole) - 1;
@@ -956,6 +961,7 @@ function updateTotals(event, tee) {
   for (let roundKey in tournamentScores[golfer]) {
     const roundScores = tournamentScores[golfer][roundKey];
 
+    // Prevents round submission with incomplete scorecard
     if (isRoundComplete(roundScores)) {
       const roundTotal = roundScores.reduce((sum, val) => sum + val, 0);
       tournamentTotal += roundTotal;
