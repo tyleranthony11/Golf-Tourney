@@ -213,7 +213,7 @@ function populateCourseDropdown(dropdown) {
   });
 }
 
-//  Popualates tees for canadian coruses
+//  Popualates tees for Canadian coruses
 function populateTeesDropdown(courseDropdown, teesDropdown) {
   teesDropdown.innerHTML = "<option value=''>Select Tees Played </option>";
   const selectedCourse = courseDropdown.value;
@@ -263,7 +263,6 @@ export function populateTournamentTeesDropdownUSA(course) {
 }
 
 
-
 courseDropdown.addEventListener("change", () => {
   populateTeesDropdown(courseDropdown, teesDropdown);
 });
@@ -273,7 +272,7 @@ tournamentCourseDropdown.addEventListener("change", () => {
 });
 
 
-
+// updates dropdowns when new golfers are added
 function updateGolferDropdowns() {
   const golferContainer = document.getElementById(
     "tournament-golfers-container"
@@ -345,7 +344,7 @@ function deleteGolfer(index) {
   saveGolfers();
 }
 
-// Prevents duplicate Golfer Name's
+// Prevents adding duplicate golfer names
 function checkGolfers() {
   if (golferList.children.length > 0) {
     registeredGolfersDiv.style.display = "block";
@@ -425,6 +424,7 @@ async function calculateHandicap(golferName) {
   return averageDifferential.toFixed(1);
 }
 
+// updates the handicap ranking table when new scores are posted
 function updateRankingsTable() {
   const rankingsTable = document.getElementById("rankings-table-body");
 
@@ -484,6 +484,7 @@ async function updateGolferHandicap(golferName) {
   updateRankingsTable();
 }
 
+// takes inputs from post score form and creates list of recently played rounds 
 scoreForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const country = document.getElementById("country-selection").value;
