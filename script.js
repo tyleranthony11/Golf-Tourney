@@ -650,7 +650,8 @@ async function generateScorecard(
   yardageRow.classList.add("yardage-row");
   yardageRow.innerHTML = `<td>YDS</td>`;
 
-  for (let i = 0; i < 21; i++) {
+  // adds yardage data for 18 holes, in, out and total
+  for (let i = 0; i < tee.length; i++) {
     const td = document.createElement("td");
     td.textContent = tee[i].yardage;
     yardageRow.appendChild(td);
@@ -661,7 +662,9 @@ async function generateScorecard(
   const parRow = document.createElement("tr");
   parRow.classList.add("par-row");
   parRow.innerHTML = `<td>PAR</td>`;
-  for (let i = 0; i < 21; i++) {
+
+  // adds yardage data for 18 holes, in, out and total
+  for (let i = 0; i < tee.length; i++) {
     const td = document.createElement("td");
     td.textContent = tee[i].par;
     parRow.appendChild(td);
@@ -674,6 +677,7 @@ async function generateScorecard(
     golferRow.classList.add("golfer-row");
     golferRow.innerHTML = `<td>${golfer}</td>`;
 
+    // adds input element for 18 holes
     for (let i = 1; i <= 18; i++) {
       const td = document.createElement("td");
       const input = document.createElement("input");
