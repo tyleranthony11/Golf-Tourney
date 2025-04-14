@@ -1057,6 +1057,12 @@ async function createTournament() {
 startTournamentBtn.addEventListener("click", async function (event) {
   event.preventDefault();
 
+  const selectedGolfers = document.querySelectorAll("#tournament-golfers-container .golfer-checkbox:checked");
+  if (selectedGolfers.length === 0){
+    alert("Please select at least one golfer.");
+    return;
+  }
+
   if (tournamentForm.checkValidity()) {
     const weatherColumn = document.querySelector(".weather-column");
 
