@@ -1270,17 +1270,61 @@ const courseData = {
   };
 
   const courseLocations = {
-  "Bally Haly Country Club - North": "St. John's",
-  "Bally Haly Country Club - South": "St. John's",
-  "Blomidon Golf Club": "Corner Brook",
-  "Gander Golf Club": "Gander",
-  "Glendenning Golf": "St. John's",
-  "Grand Falls Golf Club": "Grand Falls-Windsor",
-  "Grande Meadows Golf Club": "Frenchman's Cove",
-  "Humber Valley Resort": "Humber Valley",
-  "Pippy Park Golf Club": "St. John's",
-  "Terra Nova Golf Resort - Twin Rivers": "Port Blandford",
-  "The Wilds Golf Resort": "Holyrood",
+  "Bally Haly Country Club - North": {
+    city: "St. John's",
+    province: "Newfoundland and Labrador",
+    country: "Canada",
+  },
+  "Bally Haly Country Club - South": {
+    city: "St. John's",
+    province: "Newfoundland and Labrador",
+    country: "Canada",
+  },
+  "Blomidon Golf Club": {
+    city: "Corner Brook",
+    province: "Newfoundland and Labrador",
+    country: "Canada",
+  },
+  "Gander Golf Club": {
+    city: "Gander",
+    province: "Newfoundland and Labrador",
+    country: "Canada",
+  },
+  "Glendenning Golf": {
+    city: "St. John's",
+    province: "Newfoundland and Labrador",
+    country: "Canada",
+  },
+  "Grand Falls Golf Club": {
+    city: "Grand Falls-Windsor",
+    province: "Newfoundland and Labrador",
+    country: "Canada",
+  },
+  "Grand Meadows Golf Club": {
+    city: "Grand Meadows",
+    province: "Newfoundland and Labrador",
+    country: "Canada",
+  },
+  "Humber Valley Resort": {
+    city: "Humber Valley",
+    province: "Newfoundland and Labrador",
+    country: "Canada",
+  },
+  "Pippy Park Golf Club - Admiral's Green": {
+    city: "St. John's",
+    province: "Newfoundland and Labrador",
+    country: "Canada",
+  },
+  "Terra Nova Golf Resort - Twin Rivers": {
+    city: "Port Blandford",
+    province: "Newfoundland and Labrador",
+    country: "Canada",
+  },
+  "The Wilds Golf Resort": {
+    city: "Holyrood",
+    province: "Newfoundland and Labrador",
+    country: "Canada",
+  }
   };
 
   const supportedCountries = {
