@@ -1363,14 +1363,15 @@ document.getElementById("get-weather").addEventListener("click", function () {
   }
 
   const formattedDate = formatDate(date);
-  const apiKey = "679a4435a4c0499eb5c131838251303";
 
   if (courseLocations[courseName]) {
-    const city = courseLocations[courseName];
+    const { city, province, country } = courseLocations[courseName];
 
-    const weatherApiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(
+    const weatherApiUrl = `https://golf-api-backend.vercel.app/weather?city=${encodeURIComponent(
       city
-    )}&dt=${date}`;
+    )}&province=${encodeURIComponent(province)}&country=${encodeURIComponent(
+      country
+    )}&date=${date}`;
 
     fetch(weatherApiUrl)
       .then((response) => response.json())
@@ -1378,27 +1379,28 @@ document.getElementById("get-weather").addEventListener("click", function () {
         if (data.error) {
           weatherResult.innerHTML = `Error: ${data.error.message}`;
         } else {
-          const weather = data.forecast.forecastday[0].day;
-          const condition = weather.condition.text;
-          const iconUrl = `https:${weather.condition.icon}`;
-
+          const temp = data.temperature.celsius;
+          const condition = data.condition.text;
+          const iconUrl = data.condition.icon;
+          const wind = data.wind_speed.kph;
+      
           const weatherInfo = `
             <h3 style="text-align: center;">Weather Forecast for ${city} on ${formattedDate}</h3>
             <div style="text-align: center;">
               <img src="${iconUrl}" alt="${condition}" style="width: 100px; height: 100px;">
             </div>
             <div style="text-align: center; font-size: 48px; font-weight: bold;">
-              ${weather.avgtemp_c} <sup>°C</sup>
+              ${temp} <sup>°C</sup>
             </div>
-            <p style="text-align: center;">${weather.condition.text}</p>
-            <p style="text-align: center;"><strong>Wind Speed:</strong> ${weather.maxwind_kph} km/h</p>
+            <p style="text-align: center;">${condition}</p>
+            <p style="text-align: center;"><strong>Wind Speed:</strong> ${wind} km/h</p>
             <button id="search-new-weather">Search for New Course Weather</button>
           `;
-
+      
           weatherResult.innerHTML = weatherInfo;
           weatherResult.style.display = "block";
           weatherTool.style.display = "none";
-
+      
           document
             .getElementById("search-new-weather")
             .addEventListener("click", function () {
@@ -1431,15 +1433,19 @@ document.getElementById("get-weather").addEventListener("click", function () {
         }
 
         const city = course.location.city;
+        const province = course.location.state;
+        const country = course.location.country;
 
         if (!city) {
           alert("Course weather information not available for this course.");
           return;
         }
 
-        const weatherApiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(
+        const weatherApiUrl = `https://golf-api-backend.vercel.app/weather?city=${encodeURIComponent(
           city
-        )}&dt=${date}`;
+        )}&province=${encodeURIComponent(province)}&country=${encodeURIComponent(
+          country
+        )}&date=${date}`;
 
         fetch(weatherApiUrl)
           .then((response) => response.json())
@@ -1447,27 +1453,28 @@ document.getElementById("get-weather").addEventListener("click", function () {
             if (data.error) {
               weatherResult.innerHTML = `Error: ${data.error.message}`;
             } else {
-              const weather = data.forecast.forecastday[0].day;
-              const condition = weather.condition.text;
-              const iconUrl = `https:${weather.condition.icon}`;
-
+              const temp = data.temperature.celsius;
+              const condition = data.condition.text;
+              const iconUrl = data.condition.icon;
+              const wind = data.wind_speed.kph;
+          
               const weatherInfo = `
                 <h3 style="text-align: center;">Weather Forecast for ${city} on ${formattedDate}</h3>
                 <div style="text-align: center;">
                   <img src="${iconUrl}" alt="${condition}" style="width: 100px; height: 100px;">
                 </div>
                 <div style="text-align: center; font-size: 48px; font-weight: bold;">
-                  ${weather.avgtemp_c} <sup>°C</sup>
+                  ${temp} <sup>°C</sup>
                 </div>
-                <p style="text-align: center;">${weather.condition.text}</p>
-                <p style="text-align: center;"><strong>Wind Speed:</strong> ${weather.maxwind_kph} km/h</p>
+                <p style="text-align: center;">${condition}</p>
+                <p style="text-align: center;"><strong>Wind Speed:</strong> ${wind} km/h</p>
                 <button id="search-new-weather">Search for New Course Weather</button>
               `;
-
+          
               weatherResult.innerHTML = weatherInfo;
               weatherResult.style.display = "block";
               weatherTool.style.display = "none";
-
+          
               document
                 .getElementById("search-new-weather")
                 .addEventListener("click", function () {
